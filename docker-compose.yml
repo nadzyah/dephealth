@@ -1,0 +1,38 @@
+# Local Postgres for development. A deployment uses a managed instance, where
+# encryption at rest and backups are the provider's responsibility and TLS is
+# required on every connection.
+#
+#   make db-up migrate seed
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: dephealth-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?set it in .env}
+      POSTGRES_USER: ${POSTGRES_USER:?set it in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set it in .env}
+    command:
+      - postgres
+      # Refuse to store a password with anything weaker. A role whose password
+      # predates this setting keeps its old digest until the password is reset,
+      # which is what db/checks/privileges.sql reports on.
+      - -c
+      - password_encryption=scram-sha-256
+      # Statements slower than this are logged, which is how the response time
+      # target is held to account rather than assumed.
+      - -c
+      - log_min_duration_statement=250ms
+      - -c
+      - log_connections=on
+    ports:
+      - "${POSTGRES_PORT:-55432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  pgdata:

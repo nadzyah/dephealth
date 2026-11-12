@@ -1,0 +1,15 @@
+# Secrets
+.env
+
+# Rust
+/target/
+
+# Analytical tier: raw downloads and the local DuckDB file are data, not source
+/analytics/data/
+*.duckdb
+*.duckdb.wal
+*.parquet
+
+# Editors and tooling
+*.swp
+.DS_Store
