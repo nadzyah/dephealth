@@ -1,0 +1,9 @@
+-- 0003 down
+DROP TABLE dephealth.risk_factor;
+DROP TABLE dephealth.maintenance_risk;
+DROP TABLE dephealth.adoption_forecast;
+DROP TABLE dephealth.model_metric;
+DROP TABLE dephealth.model;
+DROP TABLE dephealth.risk_factor_catalogue;
+DROP TABLE dephealth.metric_definition;
+DROP TYPE dephealth.model_kind;
