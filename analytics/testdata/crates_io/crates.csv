@@ -1,0 +1,6 @@
+id,name,created_at,updated_at,description,repository
+1,serde,2014-12-05 12:00:00+00,2026-11-05 09:00:00+00,serialisation framework,https://github.com/serde-rs/serde
+2,failure,2017-10-16 12:00:00+00,2019-05-01 09:00:00+00,error handling,https://github.com/rust-lang-nursery/failure.git
+3,gitlab-crate,2020-01-14 12:00:00+00,2025-09-01 09:00:00+00,hosted elsewhere,https://gitlab.com/example/gitlab-crate
+4,urlless-crate,2019-06-02 12:00:00+00,2024-02-01 09:00:00+00,no repository declared,
+5,weird-crate,2021-03-03 12:00:00+00,2025-01-01 09:00:00+00,malformed repository field,not-a-url

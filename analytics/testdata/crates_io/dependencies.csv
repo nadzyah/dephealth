@@ -1,0 +1,5 @@
+id,version_id,crate_id,req,optional,default_features,features,target,kind
+1,11,4,^0.2,f,t,,,0
+2,11,2,^0.1,t,t,,,0
+3,11,3,^2.4,f,t,,,2
+4,20,1,^1.0,f,t,,,0
