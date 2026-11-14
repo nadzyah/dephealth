@@ -1,0 +1,47 @@
+%% Data flow: where the data comes from, how it is processed, where it is
+%% loaded, and where it is deleted.
+flowchart LR
+    subgraph SRC["Sources, public"]
+        direction TB
+        CIO["crates.io<br/>daily database dump<br/>CSV"]
+        GHA["GH Archive<br/>hourly event files<br/>gzipped JSON"]
+    end
+
+    subgraph DUCK["Analytical tier, DuckDB, local to the run"]
+        direction TB
+        RAW["raw<br/>views over the files,<br/>nothing copied"]
+        STG["staging<br/>typed, deduplicated<br/>ACCOUNT LOGINS PRESENT HERE"]
+        MART["mart<br/>fct_download_daily<br/>fct_activity_daily<br/>dim_package, dim_date"]
+        FEAT["feature<br/>trailing windows<br/>30, 90, 180, 365 days"]
+        RAW --> STG --> MART --> FEAT
+    end
+
+    subgraph PG["Serving tier, PostgreSQL"]
+        direction TB
+        TBL["package, download_daily,<br/>activity_feature,<br/>model outputs"]
+        MV["mv_package_current_assessment<br/>refreshed concurrently"]
+        VIEWS["read-only views<br/>disclosure threshold applied"]
+        TBL --> MV --> VIEWS
+    end
+
+    CIO -->|"curl, once per run"| RAW
+    GHA -->|"curl, bounded window"| RAW
+    FEAT -->|"CSV export"| LOAD["db/load/load_features.sql<br/>one transaction, upsert on<br/>the natural key"]
+    LOAD --> TBL
+
+    STG -.->|"dropped by 04_features.sql"| GONE["raw files and staging<br/>deleted at the end of<br/>every run"]
+    RAW -.->|"deleted by run.sh,<br/>bytes recorded on the run"| GONE
+
+    VIEWS --> WEB["web application<br/>and read-only API"]
+
+    classDef source fill:#e8eef7,stroke:#5b7aa8,color:#1b2b3f
+    classDef identifying fill:#fbeaea,stroke:#b06a6a,color:#3d1f1f
+    classDef aggregated fill:#eaf3ec,stroke:#5f9170,color:#1d3324
+    classDef serving fill:#f2ecf7,stroke:#8a6fa8,color:#2e2339
+    classDef gone fill:#eeeeee,stroke:#888888,color:#222222,stroke-dasharray: 5 5
+
+    class CIO,GHA source
+    class RAW,STG identifying
+    class MART,FEAT,LOAD aggregated
+    class TBL,MV,VIEWS,WEB serving
+    class GONE gone

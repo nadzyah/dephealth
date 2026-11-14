@@ -1,0 +1,172 @@
+%% Entity relationship diagram of the dephealth serving schema.
+%% Attributes are the keys and the columns a relationship depends on; the full
+%% column list of every table is in docs/data-dictionary.md.
+erDiagram
+    RESOLUTION_OUTCOME {
+        resolution_status status PK
+        text label
+        boolean is_resolved
+        text remedy
+    }
+    FEATURE_WINDOW {
+        integer days PK
+        text label
+    }
+    METRIC_DEFINITION {
+        text code PK
+        boolean lower_is_better
+        text kpi
+    }
+    RISK_FACTOR_CATALOGUE {
+        text code PK
+        text label
+        boolean higher_is_riskier
+    }
+
+    INGESTION_RUN {
+        bigint id PK
+        data_source source
+        run_status status
+        date data_as_of
+        bigint raw_bytes_discarded
+    }
+    REPOSITORY {
+        bigint id PK
+        text host UK
+        text owner UK
+        text name UK
+        date last_event_on
+    }
+    PACKAGE {
+        bigint id PK
+        text name UK
+        bigint repository_id FK
+        resolution_status resolution_status FK
+        bigint first_seen_run_id FK
+    }
+    PACKAGE_VERSION {
+        bigint id PK
+        bigint package_id FK
+        text version UK
+        timestamptz published_at
+        boolean yanked
+    }
+    PACKAGE_DEPENDENCY {
+        bigint dependent_version_id PK, FK
+        bigint dependency_package_id PK, FK
+        dependency_kind kind PK
+        text requirement
+        boolean optional
+    }
+
+    DOWNLOAD_DAILY {
+        bigint package_id PK, FK
+        date day PK
+        bigint downloads
+        bigint run_id FK
+    }
+    ACTIVITY_FEATURE {
+        bigint package_id PK, FK
+        date as_of PK
+        integer window_days PK, FK
+        integer distinct_contributors
+        integer days_since_last_event
+        numeric top_contributor_share
+        bigint run_id FK
+    }
+
+    MODEL {
+        bigint id PK
+        model_kind kind UK
+        text name UK
+        text version UK
+        boolean is_baseline
+        boolean is_current
+        jsonb hyperparameters
+    }
+    MODEL_METRIC {
+        bigint model_id PK, FK
+        text metric PK, FK
+        numeric value
+    }
+    ADOPTION_FORECAST {
+        bigint id PK
+        bigint package_id FK
+        bigint model_id FK
+        integer horizon_months UK
+        numeric point_downloads
+        boolean insufficient_history
+    }
+    MAINTENANCE_RISK {
+        bigint id PK
+        bigint package_id FK
+        bigint model_id FK
+        integer horizon_days UK
+        numeric probability
+        integer abandonment_window_days
+    }
+    RISK_FACTOR {
+        bigint maintenance_risk_id PK, FK
+        text factor PK, FK
+        numeric observed_value
+        numeric contribution
+    }
+
+    REPORT {
+        bigint id PK
+        bytea token_digest UK
+        bytea manifest_fingerprint
+        date crates_data_as_of
+        date events_data_as_of
+        bigint risk_model_id FK
+        bigint forecast_model_id FK
+        integer entry_count
+        timestamptz withdrawn_at
+    }
+    REPORT_ENTRY {
+        bigint report_id PK, FK
+        integer ordinal PK
+        text package_name
+        text package_version
+        bigint package_id FK
+        boolean resolved
+        resolution_status unresolved_reason FK
+        numeric risk_probability
+    }
+    REPORT_ENTRY_FACTOR {
+        bigint report_id PK, FK
+        integer ordinal PK, FK
+        text factor PK, FK
+        numeric contribution
+    }
+
+    RESOLUTION_OUTCOME ||--o{ PACKAGE : classifies
+    RESOLUTION_OUTCOME ||--o{ REPORT_ENTRY : classifies
+    REPOSITORY |o--o{ PACKAGE : "is the source of"
+    INGESTION_RUN ||--o{ PACKAGE : "first saw"
+    PACKAGE ||--o{ PACKAGE_VERSION : publishes
+    PACKAGE_VERSION ||--o{ PACKAGE_DEPENDENCY : requires
+    PACKAGE ||--o{ PACKAGE_DEPENDENCY : "is required by"
+
+    PACKAGE ||--o{ DOWNLOAD_DAILY : "is downloaded"
+    PACKAGE ||--o{ ACTIVITY_FEATURE : "is worked on"
+    FEATURE_WINDOW ||--o{ ACTIVITY_FEATURE : sizes
+    INGESTION_RUN ||--o{ DOWNLOAD_DAILY : loaded
+    INGESTION_RUN ||--o{ ACTIVITY_FEATURE : derived
+
+    MODEL ||--o{ MODEL_METRIC : "was measured by"
+    METRIC_DEFINITION ||--o{ MODEL_METRIC : defines
+    MODEL ||--o{ ADOPTION_FORECAST : produced
+    MODEL ||--o{ MAINTENANCE_RISK : produced
+    PACKAGE ||--o{ ADOPTION_FORECAST : has
+    PACKAGE ||--o{ MAINTENANCE_RISK : has
+    INGESTION_RUN ||--o{ ADOPTION_FORECAST : "was current for"
+    INGESTION_RUN ||--o{ MAINTENANCE_RISK : "was current for"
+    MAINTENANCE_RISK ||--o{ RISK_FACTOR : "decomposes into"
+    RISK_FACTOR_CATALOGUE ||--o{ RISK_FACTOR : names
+
+    MODEL ||--o{ REPORT : "was in force for"
+    REPORT ||--|{ REPORT_ENTRY : lists
+    PACKAGE |o--o{ REPORT_ENTRY : "was assessed as"
+    REPORT_ENTRY ||--o{ REPORT_ENTRY_FACTOR : explains
+    RISK_FACTOR_CATALOGUE ||--o{ REPORT_ENTRY_FACTOR : names

@@ -1,0 +1,74 @@
+%% Logical schema of the serving database in five blocks.
+%% The arrows are the foreign keys that cross a block boundary; the keys inside
+%% a block are in docs/diagrams/er.mmd and docs/data-dictionary.md.
+flowchart TB
+    subgraph REF["Reference data, fixed"]
+        direction LR
+        RO[resolution_outcome]
+        FW[feature_window]
+        MD[metric_definition]
+        RC[risk_factor_catalogue]
+    end
+
+    subgraph REG["Registry, what is published"]
+        direction LR
+        PKG[package] --> PV[package_version]
+        PV --> PD[package_dependency]
+    end
+
+    subgraph BEH["Behaviour, two sources joined by package"]
+        direction LR
+        DD[(download_daily<br/>partitioned by day)]
+        AF[/activity_feature<br/>the data protection boundary/]
+    end
+
+    subgraph MOD["Models and their output"]
+        direction LR
+        M[model] --> MM[model_metric]
+        M --> AFC[adoption_forecast]
+        M --> MR[maintenance_risk]
+        MR --> RF[risk_factor]
+    end
+
+    subgraph REP["Stored reports, append only"]
+        direction LR
+        R[report] --> RE[report_entry]
+        RE --> REF2[report_entry_factor]
+    end
+
+    IR[ingestion_run]
+
+    RO --> PKG
+    RO --> RE
+    FW --> AF
+    MD --> MM
+    RC --> RF
+    RC --> REF2
+
+    IR --> PKG
+    IR --> DD
+    IR --> AF
+
+    PKG --> DD
+    PKG --> AF
+    PKG --> AFC
+    PKG --> MR
+    PD --> PKG
+    AF --> MR
+    DD --> AFC
+    M --> R
+    PKG --> RE
+
+    classDef reference fill:#e8eef7,stroke:#5b7aa8,color:#1b2b3f
+    classDef registry fill:#eaf3ec,stroke:#5f9170,color:#1d3324
+    classDef behaviour fill:#fdf1e3,stroke:#c08a46,color:#43301a
+    classDef model fill:#f2ecf7,stroke:#8a6fa8,color:#2e2339
+    classDef report fill:#fbeaea,stroke:#b06a6a,color:#3d1f1f
+    classDef run fill:#eeeeee,stroke:#888888,color:#222222
+
+    class RO,FW,MD,RC reference
+    class PKG,PV,PD registry
+    class DD,AF behaviour
+    class M,MM,AFC,MR,RF model
+    class R,RE,REF2 report
+    class IR run
