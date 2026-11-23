@@ -107,6 +107,33 @@ tree: ## resolve one manifest: make tree manifest='{tiny-config@0.3.1}'
 psql: ## open a session as the schema owner
 	@$(PSQL)
 
+# API tier
+
+.PHONY: api
+api: ## run the API against the local database
+	cd api && cargo run
+
+.PHONY: api-test
+api-test: ## run the API unit and integration tests
+	cd api && cargo test
+
+.PHONY: api-check
+api-check: ## lint and format-check the API
+	cd api && cargo fmt --check && cargo clippy --all-targets -- -D warnings
+
+.PHONY: openapi
+openapi: ## regenerate the API specification from the handlers
+	cd api && cargo run --quiet --bin openapi > ../docs/api/openapi.yaml
+	@echo "wrote docs/api/openapi.yaml"
+
+.PHONY: openapi-lint
+openapi-lint: ## validate the API specification, needs npx
+	npx --yes @redocly/cli@1.34.3 lint docs/api/openapi.yaml
+
+.PHONY: sqlx-prepare
+sqlx-prepare: ## refresh the offline query data, so the API builds without a database
+	cd api && cargo sqlx prepare -- --all-targets
+
 # Analytical tier
 
 .PHONY: analytics
