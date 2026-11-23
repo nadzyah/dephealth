@@ -256,4 +256,81 @@ SELECT source, age_days FROM dephealth.v_data_age;
 RESET ROLE;
 \echo 'pass: the public role can read every view it is granted, in full'
 
+-- 14. A stored report does not follow the live score. The whole block is rolled
+--     back, so the change to the live row leaves no trace.
+BEGIN;
+
+SELECT dephealth.create_report(
+    'integrity0000000000000000000000000000000000000000000000000014',
+    'integrity-test-salt',
+    '[{"name":"serde","version":"1.0.228","depth":0}]'::jsonb
+) AS created \gset
+
+UPDATE dephealth.maintenance_risk
+   SET probability = 0.9990
+ WHERE package_id = (SELECT id FROM dephealth.package WHERE name = 'serde')
+   AND model_id = (SELECT id FROM dephealth.model
+                    WHERE kind = 'maintenance_risk' AND is_current);
+
+REFRESH MATERIALIZED VIEW dephealth.mv_package_current_assessment;
+
+DO $$
+DECLARE
+    reported numeric;
+    live     numeric;
+BEGIN
+    SELECT e.risk_probability INTO reported
+      FROM dephealth.v_report_entry e
+      JOIN dephealth.v_report r ON r.id = e.report_id
+     WHERE r.token_digest = dephealth.report_token_digest(
+               'integrity0000000000000000000000000000000000000000000000000014')
+       AND e.package_name = 'serde';
+
+    SELECT risk_probability INTO live
+      FROM dephealth.v_package_assessment WHERE package_name = 'serde';
+
+    IF live <> 0.9990 THEN
+        RAISE EXCEPTION 'the live score did not change, so the test proves nothing'
+            USING ERRCODE = 'assert_failure';
+    END IF;
+
+    IF reported = live THEN
+        RAISE EXCEPTION 'the stored report followed the live score'
+            USING ERRCODE = 'assert_failure';
+    END IF;
+
+    RAISE NOTICE 'pass: a stored report holds the figures of the day it was generated';
+END;
+$$;
+
+ROLLBACK;
+
+-- 15. Report creation refuses a manifest it cannot store, rather than storing
+--     an empty report.
+DO $$
+BEGIN
+    BEGIN
+        PERFORM dephealth.create_report(
+            'integrity0000000000000000000000000000000000000000000000000015',
+            'integrity-test-salt',
+            '[]'::jsonb);
+        RAISE EXCEPTION 'an empty manifest was accepted'
+            USING ERRCODE = 'assert_failure';
+    EXCEPTION WHEN invalid_parameter_value THEN
+        RAISE NOTICE 'pass: a report needs at least one entry';
+    END;
+
+    BEGIN
+        PERFORM dephealth.create_report(
+            'short',
+            'integrity-test-salt',
+            '[{"name":"serde","version":"1.0.228","depth":0}]'::jsonb);
+        RAISE EXCEPTION 'a guessable link token was accepted'
+            USING ERRCODE = 'assert_failure';
+    EXCEPTION WHEN invalid_parameter_value THEN
+        RAISE NOTICE 'pass: a link token below the minimum length is refused';
+    END;
+END;
+$$;
+
 \echo 'all integrity tests passed'
