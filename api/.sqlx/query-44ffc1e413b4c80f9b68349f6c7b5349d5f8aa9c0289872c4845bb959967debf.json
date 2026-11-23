@@ -1,0 +1,42 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        SELECT a.package_name              AS \"package_name!\",\n               a.latest_version,\n               a.risk_probability::float8  AS risk_probability,\n               a.is_resolved               AS \"is_resolved!\"\n          FROM dephealth.v_package_assessment a\n         WHERE $1::text IS NULL OR a.package_name ILIKE $1\n         ORDER BY a.risk_probability DESC NULLS LAST, a.package_name\n         LIMIT $2 OFFSET $3\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "package_name!",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 1,
+        "name": "latest_version",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "risk_probability",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 3,
+        "name": "is_resolved!",
+        "type_info": "Bool"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Int8",
+        "Int8"
+      ]
+    },
+    "nullable": [
+      true,
+      true,
+      null,
+      true
+    ]
+  },
+  "hash": "44ffc1e413b4c80f9b68349f6c7b5349d5f8aa9c0289872c4845bb959967debf"
+}

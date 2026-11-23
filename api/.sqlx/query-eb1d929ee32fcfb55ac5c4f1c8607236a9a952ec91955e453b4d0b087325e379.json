@@ -1,0 +1,50 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        SELECT d.source::text              AS \"source!\",\n               d.data_as_of,\n               d.age_days,\n               d.last_success_at,\n               d.last_attempt_status::text AS last_attempt_status,\n               d.last_attempt_at\n          FROM dephealth.v_data_age d\n         ORDER BY d.source\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "source!",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 1,
+        "name": "data_as_of",
+        "type_info": "Date"
+      },
+      {
+        "ordinal": 2,
+        "name": "age_days",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 3,
+        "name": "last_success_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 4,
+        "name": "last_attempt_status",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 5,
+        "name": "last_attempt_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      null,
+      true,
+      true,
+      true,
+      null,
+      true
+    ]
+  },
+  "hash": "eb1d929ee32fcfb55ac5c4f1c8607236a9a952ec91955e453b4d0b087325e379"
+}

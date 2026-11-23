@@ -1,0 +1,100 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        SELECT r.id                      AS \"id!\",\n               r.created_at              AS \"created_at!\",\n               r.crates_data_as_of       AS \"crates_data_as_of!\",\n               r.events_data_as_of       AS \"events_data_as_of!\",\n               r.abandonment_window_days AS \"abandonment_window_days!\",\n               r.risk_model_name         AS \"risk_model_name!\",\n               r.risk_model_version      AS \"risk_model_version!\",\n               r.forecast_model_name     AS \"forecast_model_name!\",\n               r.forecast_model_version  AS \"forecast_model_version!\",\n               r.entry_count             AS \"entry_count!\",\n               r.resolved_count          AS \"resolved_count!\",\n               r.unresolved_count        AS \"unresolved_count!\",\n               r.withdrawn_at,\n               r.withdrawal_reason\n          FROM dephealth.v_report r\n         WHERE r.token_digest = dephealth.report_token_digest($1)\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id!",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 1,
+        "name": "created_at!",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 2,
+        "name": "crates_data_as_of!",
+        "type_info": "Date"
+      },
+      {
+        "ordinal": 3,
+        "name": "events_data_as_of!",
+        "type_info": "Date"
+      },
+      {
+        "ordinal": 4,
+        "name": "abandonment_window_days!",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 5,
+        "name": "risk_model_name!",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 6,
+        "name": "risk_model_version!",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 7,
+        "name": "forecast_model_name!",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 8,
+        "name": "forecast_model_version!",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 9,
+        "name": "entry_count!",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 10,
+        "name": "resolved_count!",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 11,
+        "name": "unresolved_count!",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 12,
+        "name": "withdrawn_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 13,
+        "name": "withdrawal_reason",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "4d4cf4c3f820471e162d32f074171572789507a3c0f0384fe43ecf833a0dae14"
+}

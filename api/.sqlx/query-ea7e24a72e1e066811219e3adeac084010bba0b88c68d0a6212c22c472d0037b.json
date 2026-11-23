@@ -1,0 +1,47 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        SELECT f.factor                  AS \"code!\",\n               c.label                   AS \"label!\",\n               c.description             AS \"description!\",\n               f.observed_value::float8  AS \"observed_value!\",\n               f.contribution::float8    AS \"contribution!\"\n          FROM dephealth.report_entry_factor f\n          JOIN dephealth.risk_factor_catalogue c ON c.code = f.factor\n         WHERE f.report_id = $1 AND f.ordinal = $2\n         ORDER BY abs(f.contribution) DESC, f.factor\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "code!",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 1,
+        "name": "label!",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "description!",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "observed_value!",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 4,
+        "name": "contribution!",
+        "type_info": "Float8"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int8",
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      null,
+      null
+    ]
+  },
+  "hash": "ea7e24a72e1e066811219e3adeac084010bba0b88c68d0a6212c22c472d0037b"
+}

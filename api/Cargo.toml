@@ -1,0 +1,29 @@
+[package]
+name = "dephealth-api"
+version = "0.1.0"
+edition = "2024"
+# The second binary generates the API specification
+default-run = "dephealth-api"
+
+[dependencies]
+axum = "0.8.9"
+chrono = { version = "0.4.45", default-features = false, features = ["std", "clock", "serde"] }
+hex = "0.4.3"
+rand = "0.10.4"
+semver = "1.0.28"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+sqlx = { version = "0.8", default-features = false, features = ["runtime-tokio", "tls-rustls", "postgres", "chrono", "macros", "migrate", "json"] }
+thiserror = "2.0.21"
+tokio = { version = "1.54.1", features = ["rt-multi-thread", "macros", "signal", "net"] }
+toml = "1.2.2"
+tower-http = { version = "0.7.1", features = ["trace", "cors", "limit", "timeout", "request-id", "set-header"] }
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter", "json"] }
+utoipa = { version = "6.0.0", features = ["axum_extras", "chrono", "yaml"] }
+utoipa-axum = "0.3.0"
+
+[dev-dependencies]
+dotenvy = "0.15.7"
+http-body-util = "0.1.5"
+tower = { version = "0.5.3", features = ["util"] }
