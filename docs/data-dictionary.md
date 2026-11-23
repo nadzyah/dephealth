@@ -880,6 +880,8 @@ The lines of a stored report. The disclosure threshold applies here too, so a re
 | `insufficient_history` | boolean | yes |  |  |
 | `distinct_contributors` | integer | yes |  |  |
 | `days_since_last_event` | integer | yes |  |  |
+| `unresolved_reason` | dephealth.resolution_status | yes |  |  |
+| `contributor_count_withheld` | boolean | yes |  |  |
 
 **Keys and constraints**
 
@@ -896,6 +898,7 @@ The lines of a stored report. The disclosure threshold applies here too, so a re
 |---|---|---|---|
 | `abandonment_window_days()` | function | integer |  |
 | `check_report_counts()` | function | trigger |  |
+| `create_report(in_token text, in_salt text, in_entries jsonb)` | function | bigint | Store one assessment of a submitted manifest. Definer rights, because the caller may not read the models, the live scores or the factor decomposition that the snapshot is taken from. The token is hashed here and never stored. |
 | `disclosed_contributors(distinct_contributors integer)` | function | integer | Applies the disclosure threshold. Returns null between one and the threshold, the only range in which a count describes identifiable people. Every read-only view passes its counts through this. |
 | `disclosed_share(in_share numeric, in_contributors integer)` | function | numeric |  |
 | `finish_ingestion_run(IN in_run_id bigint, IN in_status dephealth.run_status, IN in_data_as_of date DEFAULT NULL::date, IN in_rows_ingested bigint DEFAULT 0, IN in_rows_rejected bigint DEFAULT 0, IN in_raw_bytes_discarded bigint DEFAULT NULL::bigint, IN in_failure_detail text DEFAULT NULL::text)` | procedure |  | Closes a run and, on success, refreshes the serving view. Runs with the owner privileges, since refreshing a materialised view requires ownership. Every identifier inside is schema qualified and the search path is fixed. |
@@ -903,6 +906,7 @@ The lines of a stored report. The disclosure threshold applies here too, so a re
 | `is_abandoned(days_since_last_event integer)` | function | boolean | The abandonment label of the requirements document. The training label and the interface both read it, so the two cannot drift apart. |
 | `k_anonymity_threshold()` | function | integer | Smallest contributor count publishable through a read-only view. A migration rather than a setting, so the value in force on any date is in the schema history. |
 | `manifest_fingerprint(in_entries text[], in_salt text)` | function | bytea | Salted digest of the sorted name@version set of a manifest. Recognises a resubmission without retaining the manifest. The salt is held by the application, not the database. |
+| `previous_report_of(in_token_digest bytea)` | function | bytea | The digest of the report before this one for the same manifest, or nothing if this is the first. Invoker rights, since both rows are readable by whoever may read the report. |
 | `reject_mutation()` | function | trigger |  |
 | `report_token_digest(in_token text)` | function | bytea | SHA-256 of a report link token. A fast digest is correct here and a password digest would not be, since the token is random. |
 | `start_ingestion_run(in_source dephealth.data_source)` | function | bigint | Opens a run and returns its id. Every row a run writes carries that id, so a bad run can be found and removed afterwards. |
