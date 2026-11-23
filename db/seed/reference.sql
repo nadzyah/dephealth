@@ -20,7 +20,19 @@ INSERT INTO dephealth.resolution_outcome (status, label, is_resolved, remedy) VA
     ('repository_unreachable',
      'The declared repository could not be reached',
      false,
-     'The repository has been renamed, made private or deleted since the version was published')
+     'The repository has been renamed, made private or deleted since the version was published'),
+    ('absent_from_snapshot',
+     'Not present in the registry snapshot',
+     false,
+     'The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it'),
+    ('not_a_registry_package',
+     'Not published on the registry',
+     false,
+     'The entry is a path or git dependency, which carries no registry history, so no adoption forecast or maintenance score can be derived for it'),
+    ('awaiting_first_score',
+     'Resolved but not yet scored',
+     false,
+     'The package entered the registry snapshot after the last scoring run. The next run will score it')
 ON CONFLICT (status) DO UPDATE
     SET label = excluded.label,
         is_resolved = excluded.is_resolved,

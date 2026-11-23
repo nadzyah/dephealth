@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  SQLX_VERSION: 0.8.6
+
+jobs:
+  database:
+    name: Database tier
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Write the environment file
+        run: .github/write-env.sh
+
+      # pg_dump refuses to dump a server newer than itself, and the
+      # consolidated DDL is generated with it
+      - name: Install the PostgreSQL 17 client
+        run: .github/install-pg-client.sh
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache sqlx-cli
+        id: sqlx-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/bin/sqlx
+          key: sqlx-cli-${{ env.SQLX_VERSION }}-${{ runner.os }}
+
+      - name: Install sqlx-cli
+        if: steps.sqlx-cache.outputs.cache-hit != 'true'
+        run: |
+          cargo install sqlx-cli \
+            --version "$SQLX_VERSION" \
+            --no-default-features --features rustls,postgres \
+            --locked
+
+      - name: Start the database
+        run: make db-up
+
+      - name: Apply every migration
+        run: make migrate
+
+      # The reverse path is tested rather than assumed. One enumerated type
+      # keeps two values it cannot drop, which 0009 states, so the check is that
+      # no relation and no routine is left behind
+      - name: Revert every migration and reapply
+        run: .github/check-reverse-path.sh
+
+      - name: Create the roles and load the data
+        run: make roles seed
+
+      - name: Run the integrity tests
+        run: make test
+
+      - name: Report data quality findings and audit the privileges
+        run: make verify
+
+      # Both are generated from the live schema, so a migration committed
+      # without regenerating them leaves the repository describing a schema that
+      # does not exist
+      - name: Check the generated DDL and data dictionary are current
+        run: |
+          make ddl dictionary
+          git diff --exit-code -- db/ddl/schema.sql docs/data-dictionary.md
