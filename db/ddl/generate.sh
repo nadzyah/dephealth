@@ -7,6 +7,26 @@ set -euo pipefail
 
 out=db/ddl/schema.sql
 
+# pg_dump formats its output differently from one major version to the next, so
+# a committed file would change with whatever client happened to be installed.
+# Take the one matching the server, which on Debian and Ubuntu is a versioned
+# path, because /usr/bin/pg_dump is a wrapper that picks the newest instead.
+server_major=$(psql "$DATABASE_URL" -At \
+    -c "SELECT current_setting('server_version_num')::int / 10000")
+
+pgdump=${PGDUMP:-pg_dump}
+if [[ -z ${PGDUMP:-} && -x /usr/lib/postgresql/$server_major/bin/pg_dump ]]; then
+    pgdump=/usr/lib/postgresql/$server_major/bin/pg_dump
+fi
+
+client_major=$("$pgdump" --version | sed -E 's/.* ([0-9]+)(\.[0-9]+)?.*/\1/')
+
+if ((client_major < server_major)); then
+    echo "$0: pg_dump $client_major cannot dump a server of $server_major" >&2
+    exit 1
+fi
+
+
 {
     cat <<'HDR'
 --
@@ -22,12 +42,18 @@ out=db/ddl/schema.sql
 -- object rather than part of a schema. Create them before applying this file.
 --
 HDR
-    pg_dump "$DATABASE_URL" \
+    # 17.6 and later wrap the dump in a \restrict directive carrying a random
+    # token, so the file would differ on every run. It guards psql against a
+    # dump that smuggles meta-commands, which a generated file reviewed in this
+    # repository does not need. Each directive is followed by a blank line, and
+    # both go, so the result matches what an earlier client writes.
+    "$pgdump" "$DATABASE_URL" \
         --schema-only \
         --schema=dephealth \
         --no-owner \
         --exclude-table='dephealth._sqlx*' \
-    | sed '/^-- Dumped from/d; /^-- Dumped by/d'
+    | sed '/^-- Dumped from/d; /^-- Dumped by/d
+           /^\\restrict /,+1d; /^\\unrestrict /,+1d'
 } > "$out"
 
-echo "wrote $out ($(wc -l < "$out") lines)"
+echo "wrote $out ($(wc -l < "$out") lines), pg_dump $client_major"
