@@ -11,11 +11,19 @@ renders it, and the running service serves both at `/docs/`.
 | Guide | Subject |
 |---|---|
 | [Getting started](guides/getting-started.md) | Submitting a manifest and reading the ranked result |
-| [First integration](guides/tutorial-first-integration.md) | The complete workflow, as a script |
+| [Integration workflow](guides/tutorial-first-integration.md) | The complete workflow, as a script |
+| [Request lifecycle](guides/request-lifecycle.md) | Middleware, pagination, idempotency, limits and freshness |
+| [Error taxonomy](guides/errors.md) | The problem document, every condition, and its recovery |
+| [Authentication](guides/authentication.md) | The anonymous capability model and the one credentialed operation |
+| [Versioning](guides/versioning.md) | What may change within a version, and what may not |
+| [Documentation strategy](guides/strategy.md) | How this set is produced, validated and bounded |
 
 [`examples/assess.sh`](examples/assess.sh) performs that workflow against a
-local or a deployed service. The components behind the endpoints are drawn in
-[`api-architecture.mmd`](../diagrams/api-architecture.mmd).
+local or a deployed service. [`CHANGELOG.md`](CHANGELOG.md) records every change
+to the surface. The components behind the endpoints are drawn in
+[`api-architecture.mmd`](../diagrams/api-architecture.mmd), and the path of a
+request through them in
+[`api-request-flow.mmd`](../diagrams/api-request-flow.mmd).
 
 ## Conventions
 

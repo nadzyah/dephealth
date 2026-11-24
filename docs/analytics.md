@@ -1,6 +1,6 @@
 # Analytical Tier
 
-DuckDB, one pass per day. It reads the two public sources,
+[DuckDB](https://duckdb.org), one pass per day. It reads the two public sources,
 aggregates them to the package, and hands CSV to Postgres. SQL in
 `analytics/sql`, driven by `analytics/run.sh`.
 

@@ -157,4 +157,5 @@ curl -s -X POST http://localhost:8080/api/v1/assessments \
 }
 ```
 
-The complete set is enumerated in [`openapi.yaml`](../openapi.yaml).
+Every condition, its extension members and what recovers from it are in
+[the error taxonomy](errors.md).

@@ -2,8 +2,10 @@
 
 The client is a single-page application in `web`. It accepts a dependency
 manifest, submits it to the API, and presents the resulting tree ranked by risk
-together with the evidence behind each score. React with TypeScript in strict
-mode, built by Vite.
+together with the evidence behind each score.
+[React](https://www.npmjs.com/package/react) with
+[TypeScript](https://www.npmjs.com/package/typescript) in strict mode, built by
+[Vite](https://www.npmjs.com/package/vite).
 
 ## Architecture
 
@@ -51,7 +53,8 @@ needs, so an aggregating layer would only forward requests.
 
 ## State Management
 
-Local state is the default. The global store, zustand in
+Local state is the default. The global store,
+[zustand](https://www.npmjs.com/package/zustand) in
 `src/store/useAppStore.ts`, holds three things and nothing else: what the
 reader has chosen about appearance, the notices any screen may raise, and the
 links this browser has opened before.
@@ -140,7 +143,9 @@ accessibility verification are documented separately in
 whose content changes in response to one request at a time, which suits a
 declarative component model with no need for a framework-level dependency
 injection or module system. React also has the deepest testing support of the
-three candidates through Testing Library, which matters because the
+three candidates through
+[Testing Library](https://www.npmjs.com/package/@testing-library/react), which
+matters because the
 accessibility claims in this project are asserted in tests rather than
 inspected by eye.
 
@@ -154,9 +159,10 @@ Rollup with per-route chunks in the build. Its environment variable handling
 also makes the demonstration build a configuration change rather than a second
 code path.
 
-**React Router** for routing, configured with `basename` from the build so the
-same bundle works both at a domain root and under a subdirectory, which is what
-the static demonstration deployment needs.
+**[React Router](https://www.npmjs.com/package/react-router-dom)** for routing,
+configured with `basename` from the build so the same bundle works both at a
+domain root and under a subdirectory, which is what the static demonstration
+deployment needs.
 
 **zustand** for global state. The store holds preferences and notices, so the
 reducer, action and effect apparatus of Redux Toolkit would be overhead; its
@@ -171,10 +177,11 @@ the contrast and touch target requirements this project verifies. The
 components here are written against a token layer instead, which is also what
 makes the design system a documented artefact rather than a dependency.
 
-**Vitest with Testing Library** for unit and component tests, and
-**Playwright** for end to end tests across a desktop and a mobile viewport.
-Vitest shares the Vite configuration, so tests resolve modules exactly as the
-application does.
+**[Vitest](https://www.npmjs.com/package/vitest) with Testing Library** for
+unit and component tests, and
+**[Playwright](https://www.npmjs.com/package/@playwright/test)** for end to end
+tests across a desktop and a mobile viewport. Vitest shares the Vite
+configuration, so tests resolve modules exactly as the application does.
 
 ## Testing
 
@@ -189,6 +196,7 @@ accessibility fails the build rather than a review.
 
 ## Quality Controls
 
-ESLint with the React Hooks rules, Prettier, and `tsc -b` run over the whole
-project. `npm run lint`, `npm run format:check` and `npm run typecheck` are the
-commands, and all three are clean.
+[ESLint](https://www.npmjs.com/package/eslint) with the React Hooks rules,
+[Prettier](https://www.npmjs.com/package/prettier), and `tsc -b` run over the
+whole project. `npm run lint`, `npm run format:check` and `npm run typecheck`
+are the commands.

@@ -136,7 +136,8 @@ shape.
 ## Verification
 
 The claims above are tested in `web/e2e/adaptive.spec.ts`, which runs in
-Playwright against the demonstration build:
+[Playwright](https://www.npmjs.com/package/@playwright/test) against the
+demonstration build:
 
 | Test | Assertion |
 |---|---|

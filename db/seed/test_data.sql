@@ -371,8 +371,8 @@ VALUES
     ((SELECT id FROM dephealth.report ORDER BY id LIMIT 1), 2,
      'contributor_count', 2.000, 0.510);
 
--- An earlier assessment of the same manifest. Same fingerprint, so US11 finds
--- it without either manifest being retained. solo-crate was not yet in the
+-- An earlier assessment of the same manifest. Same fingerprint, so the
+-- comparison finds it without either manifest being retained. solo-crate was not yet in the
 -- tree, so the comparison has a new entry and a risen score.
 --   token 3f690d5ce7edb117aa26141593f99bea58a8ce699d94ef17e5bbf60497f8b1cc
 INSERT INTO dephealth.report

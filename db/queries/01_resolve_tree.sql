@@ -1,5 +1,5 @@
 -- Resolve a submitted manifest to its transitive tree, ranked by risk. This is
--- the UC1 query and the one NFR1 applies to.
+-- the query behind the main screen and the one the latency budget applies to.
 --
 --   psql -v manifest="{tiny-config@0.3.1}" -f db/queries/01_resolve_tree.sql
 --
