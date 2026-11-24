@@ -1,5 +1,5 @@
--- Return a stored report from the token in its permanent link. The three UC2
--- outcomes are all reachable here, live, withdrawn, and never existed.
+-- Return a stored report from the token in its permanent link. All three
+-- outcomes are reachable here: live, withdrawn, and never existed.
 --
 --   psql -v token=d225fa755e5477805d29aeecb7198387ea0364c8082f63f6968adfed890eb503 \
 --        -f db/queries/03_report_by_link.sql

@@ -1,4 +1,4 @@
--- US11, what has changed since the previous assessment of the same manifest.
+-- What has changed since the previous assessment of the same manifest.
 -- Matched on the fingerprint, since the manifest is not stored.
 --
 --   psql -v token=d225fa755e5477805d29aeecb7198387ea0364c8082f63f6968adfed890eb503 \
