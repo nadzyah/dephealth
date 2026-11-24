@@ -1,0 +1,51 @@
+.file-drop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-6) var(--space-4);
+    text-align: center;
+
+    background: var(--color-surface-raised);
+    border: 2px dashed var(--color-border-strong);
+    border-radius: var(--radius-lg);
+    transition:
+        border-color 120ms ease,
+        background-color 120ms ease;
+}
+
+.file-drop.over {
+    border-color: var(--color-accent);
+    border-style: solid;
+    background: color-mix(in oklab, var(--color-accent) 8%, var(--color-surface));
+}
+
+.file-drop.invalid {
+    border-color: var(--color-risk-high);
+}
+
+.file-drop svg {
+    color: var(--color-text-muted);
+}
+
+.file-drop-label {
+    font-size: var(--text-lg);
+    font-weight: var(--weight-medium);
+}
+
+.file-drop p {
+    margin: 0;
+    max-width: 38ch;
+}
+
+.file-drop-error {
+    margin: var(--space-2) 0 0;
+    color: var(--color-risk-high);
+    font-size: var(--text-sm);
+}
+
+@media (min-width: 48rem) {
+    .file-drop {
+        padding: var(--space-7) var(--space-6);
+    }
+}

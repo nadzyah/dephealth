@@ -1,0 +1,229 @@
+/*
+ * Base styles and the responsive grid every page is laid out on.
+ *
+ * Breakpoints, as literals because a media query cannot read a custom property:
+ *   under 48rem   phone, one column, navigation at the bottom
+ *   48rem         tablet, two columns, navigation in the header
+ *   64rem         desktop, the full layout and a wider measure
+ *   100rem        very wide, the content stops growing and centres
+ */
+
+@import "./tokens.css";
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    /* Never a px font size here. It would override the reader's own setting and
+       stop every rem length from scaling with it */
+    font-size: 100%;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+}
+
+h1,
+h2,
+h3,
+h4 {
+    margin: 0 0 var(--space-3);
+    line-height: var(--leading-tight);
+    font-weight: var(--weight-bold);
+    text-wrap: balance;
+}
+
+h1 {
+    font-size: var(--text-2xl);
+}
+
+h2 {
+    font-size: var(--text-xl);
+}
+
+h3 {
+    font-size: var(--text-lg);
+}
+
+p {
+    margin: 0 0 var(--space-4);
+    max-width: var(--measure);
+}
+
+a {
+    color: var(--color-accent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+}
+
+code,
+kbd,
+samp {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+}
+
+/* Visible for the keyboard and invisible for the mouse, which is what
+   :focus-visible is for. Two pixels of outline plus an offset stays visible
+   against every surface in both themes */
+:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+
+/* Anything the reader can hit is at least 44px square on a touch screen, which
+   is WCAG 2.5.5. On a pointer device the rule relaxes, since a mouse is precise
+   and the extra height would spread a dense table out for no gain */
+@media (pointer: coarse) {
+    button,
+    [role="button"],
+    a.touchable,
+    input,
+    select,
+    summary {
+        min-height: var(--touch-target);
+        min-width: var(--touch-target);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Layout */
+
+.app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+.container {
+    width: 100%;
+    max-width: var(--layout-max);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+}
+
+main.content {
+    flex: 1;
+    padding-block: var(--space-5);
+
+    /* Clears the bottom navigation on a phone, and respects the home indicator
+       on a device that has one */
+    padding-bottom: calc(var(--space-8) + env(safe-area-inset-bottom));
+}
+
+@media (min-width: 48rem) {
+    main.content {
+        padding-block: var(--space-6);
+        padding-bottom: var(--space-6);
+    }
+}
+
+/* The grid. Columns are named rather than numbered, so a component asks for the
+   shape it needs and the breakpoint decides what that means */
+.grid {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 48rem) {
+    .grid.two {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid.three {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 64rem) {
+    .grid.three {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid.sidebar {
+        grid-template-columns: minmax(0, 2fr) minmax(16rem, 1fr);
+        align-items: start;
+    }
+}
+
+/* Cards that fit as many columns as the width allows, without a breakpoint for
+   each count. This is what keeps a 4K or ultrawide window from stretching two
+   cards across a metre of glass */
+.grid.auto {
+    grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+}
+
+.stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.stack.tight {
+    gap: var(--space-2);
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.row.between {
+    justify-content: space-between;
+}
+
+/* Utilities */
+
+.muted {
+    color: var(--color-text-muted);
+}
+
+.small {
+    font-size: var(--text-sm);
+}
+
+.numeric {
+    font-variant-numeric: tabular-nums;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Lets a long package name or token break instead of forcing a horizontal
+   scrollbar on a narrow screen */
+.wrap-anywhere {
+    overflow-wrap: anywhere;
+}

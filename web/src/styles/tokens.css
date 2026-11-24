@@ -1,0 +1,162 @@
+/*
+ * Design tokens. One palette, one type scale, one spacing scale, used by every
+ * component and every breakpoint.
+ *
+ * Each text colour is checked against the surfaces it appears on by
+ * src/styles/contrast.test.ts, which fails below the 4.5:1 that WCAG 2.1 AA
+ * requires of body text. Nothing here is a judgement about how it looks.
+ *
+ * Lengths are relative. A length in px would ignore the reader's own font size
+ * and would not grow when the page is zoomed.
+ */
+
+:root {
+    color-scheme: light;
+
+    /* Surfaces */
+    --color-surface: #ffffff;
+    --color-surface-raised: #f4f6f8;
+
+    /* Text */
+    --color-text: #14181f;
+    --color-text-muted: #555f6e;
+    --color-text-inverse: #ffffff;
+
+    /* Accent and state. The three risk colours are also distinguished by
+       label and position, so colour is never the only carrier */
+    --color-accent: #1a5490;
+    --color-accent-contrast: #ffffff;
+    --color-risk-high: #a02b1c;
+    --color-risk-medium: #7a5200;
+    --color-risk-low: #1a6236;
+
+    /* Lines. The strong one is for the edge of a control, which WCAG 1.4.11
+       holds to 3:1, while the plain one only separates blocks */
+    --color-border: #d4dae1;
+    --color-border-strong: #555f6e;
+
+    /* Chart marks, which are a separate question from text. A mark needs 3:1
+       against the surface and enough separation from its neighbour for a reader
+       with a colour vision deficiency. Red against green fails that badly, so
+       the pair is red against blue, checked with the palette validator at
+       deuteran delta E 18 rather than 6.6 */
+    --chart-series: #1a5490;
+    --chart-positive: #a02b1c;
+    --chart-negative: #1a5490;
+    --chart-grid: #e4e8ed;
+
+    /* Type scale */
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.375rem;
+    --text-2xl: 1.75rem;
+    --text-3xl: 2.25rem;
+
+    --leading-tight: 1.25;
+    --leading-normal: 1.55;
+
+    --weight-normal: 400;
+    --weight-medium: 500;
+    --weight-bold: 650;
+
+    --font-sans:
+        ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+        sans-serif;
+    --font-mono:
+        ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+    /* Spacing */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.5rem;
+    --space-6: 2rem;
+    --space-7: 3rem;
+    --space-8: 4rem;
+
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+
+    --shadow-sm: 0 1px 2px rgb(20 24 31 / 8%);
+    --shadow-md: 0 2px 8px rgb(20 24 31 / 12%);
+
+    /* The smallest a touch target may be, which WCAG 2.5.5 puts at 44px.
+       Expressed in rem so it grows with the reader's font size */
+    --touch-target: 2.75rem;
+
+    /* A line of text long enough to read and short enough to track */
+    --measure: 68ch;
+
+    --layout-max: 75rem;
+    --gutter: var(--space-4);
+}
+
+/*
+ * Dark theme. Applied by preference, or by the data-theme attribute when the
+ * reader has chosen, which is what the switch in the header sets.
+ *
+ * The breakpoints are 48rem for tablet and 64rem for desktop. They cannot live
+ * in custom properties, because a media query is evaluated before the cascade,
+ * so they appear as literals in global.css and in each component.
+ */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        color-scheme: dark;
+
+        --color-surface: #12161c;
+        --color-surface-raised: #1b212a;
+
+        --color-text: #e8ecf2;
+        --color-text-muted: #a8b2c0;
+        --color-text-inverse: #12161c;
+
+        --color-accent: #7db3e8;
+        --color-accent-contrast: #12161c;
+        --color-risk-high: #f08a7a;
+        --color-risk-medium: #e0a93c;
+        --color-risk-low: #64c98c;
+
+        --color-border: #2c3540;
+        --color-border-strong: #a8b2c0;
+
+        --chart-series: #7db3e8;
+        --chart-positive: #d8705c;
+        --chart-negative: #5a96cf;
+        --chart-grid: #232b35;
+
+        --shadow-sm: 0 1px 2px rgb(0 0 0 / 40%);
+        --shadow-md: 0 2px 8px rgb(0 0 0 / 50%);
+    }
+}
+
+:root[data-theme="dark"] {
+    color-scheme: dark;
+
+    --color-surface: #12161c;
+    --color-surface-raised: #1b212a;
+
+    --color-text: #e8ecf2;
+    --color-text-muted: #a8b2c0;
+    --color-text-inverse: #12161c;
+
+    --color-accent: #7db3e8;
+    --color-accent-contrast: #12161c;
+    --color-risk-high: #f08a7a;
+    --color-risk-medium: #e0a93c;
+    --color-risk-low: #64c98c;
+
+    --color-border: #2c3540;
+    --color-border-strong: #a8b2c0;
+
+    --chart-series: #7db3e8;
+    --chart-positive: #d8705c;
+    --chart-negative: #5a96cf;
+    --chart-grid: #232b35;
+
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 40%);
+    --shadow-md: 0 2px 8px rgb(0 0 0 / 50%);
+}

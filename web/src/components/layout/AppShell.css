@@ -1,0 +1,145 @@
+.skip-link {
+    position: absolute;
+    left: var(--space-2);
+    top: -3rem;
+    z-index: 20;
+    padding: var(--space-2) var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    transition: top 120ms ease;
+}
+
+.skip-link:focus {
+    top: var(--space-2);
+}
+
+.app-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: color-mix(in oklab, var(--color-surface) 92%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.app-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    min-height: 3.25rem;
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-text);
+    font-weight: var(--weight-bold);
+    text-decoration: none;
+}
+
+.brand-mark {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 3px;
+    background: var(--color-accent);
+}
+
+/* Hidden on a phone, where the bar at the bottom carries the same links */
+.primary-nav {
+    display: none;
+    gap: var(--space-1);
+}
+
+.nav-link {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    text-decoration: none;
+}
+
+.nav-link:hover {
+    background: var(--color-surface-raised);
+    color: var(--color-text);
+}
+
+.nav-link.active {
+    background: var(--color-surface-raised);
+    color: var(--color-text);
+}
+
+.app-footer {
+    border-top: 1px solid var(--color-border);
+    padding-block: var(--space-4);
+    padding-bottom: calc(var(--space-8) + env(safe-area-inset-bottom));
+}
+
+.app-footer .row {
+    gap: var(--space-3);
+}
+
+/* The phone bar. Fixed, so it stays under the thumb, and inset for a home
+   indicator. It is hidden when a virtual keyboard is open, because the viewport
+   meta asks the browser to resize the content rather than pan it, and a bar
+   pinned over a focused field is the usual way this goes wrong */
+.bottom-nav {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 10;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+.bottom-nav-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    min-height: var(--touch-target);
+    padding: var(--space-2) var(--space-1);
+    color: var(--color-text-muted);
+    font-size: var(--text-xs);
+    text-decoration: none;
+}
+
+.bottom-nav-link.active {
+    color: var(--color-accent);
+}
+
+@media (min-width: 48rem) {
+    .primary-nav {
+        display: flex;
+    }
+
+    .bottom-nav {
+        display: none;
+    }
+
+    .app-footer {
+        padding-bottom: var(--space-4);
+    }
+}
+
+/* A phone held sideways has very little height, so the sticky header gives its
+   space back to the content */
+@media (max-width: 47.99rem) and (orientation: landscape) {
+    .app-header {
+        position: static;
+    }
+
+    .app-header-inner {
+        min-height: 2.75rem;
+    }
+}

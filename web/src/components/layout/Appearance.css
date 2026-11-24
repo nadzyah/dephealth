@@ -1,0 +1,126 @@
+.appearance {
+    position: relative;
+}
+
+.appearance > summary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 2.25rem;
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    list-style: none;
+}
+
+.appearance > summary::-webkit-details-marker {
+    display: none;
+}
+
+.appearance > summary:hover {
+    background: var(--color-surface-raised);
+}
+
+/* The label is for a wide window. On a phone the icon alone keeps the header
+   from wrapping onto two lines */
+.appearance-summary-label {
+    display: none;
+}
+
+.appearance-panel {
+    position: absolute;
+    right: 0;
+    top: calc(100% + var(--space-2));
+    z-index: 15;
+    width: max-content;
+    min-width: 13rem;
+    padding: var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.appearance-panel fieldset {
+    margin: 0 0 var(--space-3);
+    padding: 0;
+    border: 0;
+}
+
+.appearance-panel fieldset:last-child {
+    margin-bottom: 0;
+}
+
+.appearance-panel legend {
+    padding: 0 0 var(--space-2);
+    color: var(--color-text-muted);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.appearance-choices {
+    display: flex;
+    gap: var(--space-1);
+}
+
+.appearance-choice {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1);
+    min-height: var(--touch-target);
+    flex: 1;
+    padding: var(--space-1) var(--space-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    cursor: pointer;
+}
+
+.appearance-choice:has(input:checked) {
+    border-color: var(--color-accent);
+    background: color-mix(in oklab, var(--color-accent) 12%, var(--color-surface));
+    font-weight: var(--weight-medium);
+}
+
+/* The native control is kept and stretched over the choice rather than removed
+   from the page, so the radio group behaves like one for the keyboard and a
+   pointer anywhere on the choice lands on the input itself */
+.appearance-choice {
+    position: relative;
+}
+
+.appearance-choice input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.appearance-choice:has(input:focus-visible) {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+@media (min-width: 64rem) {
+    .appearance-summary-label {
+        display: inline;
+    }
+}
+
+/* On a phone the panel spans the width instead of hanging off the right edge */
+@media (max-width: 29.99rem) {
+    .appearance-panel {
+        position: fixed;
+        inset-inline: var(--space-3);
+        width: auto;
+        top: 3.5rem;
+    }
+}

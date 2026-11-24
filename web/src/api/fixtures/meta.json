@@ -1,0 +1,27 @@
+{
+  "service": "dephealth",
+  "version": "0.1.0",
+  "method": {
+    "abandonment_window_days": 180,
+    "contributor_disclosure_threshold": 5,
+    "abandonment_definition": "A package is treated as abandoned at the end of the first interval of consecutive days containing no development event from any contributor on its repository. Packages still active at the end of the observation window are right censored rather than labelled healthy."
+  },
+  "sources": [
+    {
+      "source": "crates_io_dump",
+      "data_as_of": "2026-11-22",
+      "age_days": 1,
+      "last_success_at": "2026-11-23T14:20:38.449902Z",
+      "last_attempt_status": "succeeded",
+      "last_attempt_at": "2026-11-23T13:20:38.449902Z"
+    },
+    {
+      "source": "gh_archive",
+      "data_as_of": "2026-11-22",
+      "age_days": 1,
+      "last_success_at": "2026-11-23T17:20:38.449902Z",
+      "last_attempt_status": "succeeded",
+      "last_attempt_at": "2026-11-23T14:20:38.449902Z"
+    }
+  ]
+}

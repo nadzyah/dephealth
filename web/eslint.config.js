@@ -1,0 +1,36 @@
+import js from "@eslint/js";
+import globals from "globals";
+import reactHooks from "eslint-plugin-react-hooks";
+import reactRefresh from "eslint-plugin-react-refresh";
+import tseslint from "typescript-eslint";
+import { defineConfig, globalIgnores } from "eslint/config";
+
+export default defineConfig([
+    globalIgnores(["dist", "coverage", "playwright-report", "test-results"]),
+    {
+        files: ["**/*.{ts,tsx}"],
+        extends: [
+            js.configs.recommended,
+            tseslint.configs.recommended,
+            reactHooks.configs["recommended-latest"],
+            reactRefresh.configs.vite,
+        ],
+        languageOptions: {
+            ecmaVersion: 2022,
+            globals: globals.browser,
+        },
+        rules: {
+            // A parameter kept for the signature and deliberately unused is
+            // marked with a leading underscore, which is the usual convention
+            "@typescript-eslint/no-unused-vars": [
+                "error",
+                { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+            ],
+        },
+    },
+    {
+        // Node runs these, not the browser
+        files: ["*.config.ts", "e2e/**/*.ts"],
+        languageOptions: { globals: globals.node },
+    },
+]);

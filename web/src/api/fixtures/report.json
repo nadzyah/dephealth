@@ -1,0 +1,570 @@
+{
+  "assessed_on": "2026-11-23",
+  "created_at": "2026-11-23T21:19:23.034096Z",
+  "data_as_of": {
+    "registry": "2026-11-22",
+    "events": "2026-11-22"
+  },
+  "method": {
+    "abandonment_window_days": 180,
+    "risk_model": {
+      "name": "cox_proportional_hazards",
+      "version": "1"
+    },
+    "forecast_model": {
+      "name": "theta",
+      "version": "1"
+    }
+  },
+  "counts": {
+    "entries": 39,
+    "resolved": 4,
+    "unresolved": 35
+  },
+  "entries": [
+    {
+      "ordinal": 1,
+      "package_name": "failure",
+      "package_version": "0.1.8",
+      "depth": 0,
+      "relation": "direct",
+      "resolved": true,
+      "risk": {
+        "probability": 0.971,
+        "horizon_days": 365
+      },
+      "forecast": {
+        "point_downloads": 31400.0,
+        "horizon_months": 12,
+        "insufficient_history": false
+      },
+      "activity": {
+        "distinct_contributors": 0,
+        "days_since_last_event": 1920,
+        "contributor_count_withheld": false
+      }
+    },
+    {
+      "ordinal": 2,
+      "package_name": "clap",
+      "package_version": "4.5.49",
+      "depth": 0,
+      "relation": "direct",
+      "resolved": true,
+      "risk": {
+        "probability": 0.094,
+        "horizon_days": 365
+      },
+      "forecast": {
+        "point_downloads": 527000.0,
+        "horizon_months": 12,
+        "insufficient_history": false
+      },
+      "activity": {
+        "distinct_contributors": 18,
+        "days_since_last_event": 5,
+        "contributor_count_withheld": false
+      }
+    },
+    {
+      "ordinal": 3,
+      "package_name": "serde",
+      "package_version": "1.0.228",
+      "depth": 0,
+      "relation": "direct",
+      "resolved": true,
+      "risk": {
+        "probability": 0.031,
+        "horizon_days": 365
+      },
+      "forecast": {
+        "point_downloads": 1294000.0,
+        "horizon_months": 12,
+        "insufficient_history": false
+      },
+      "activity": {
+        "distinct_contributors": 42,
+        "days_since_last_event": 2,
+        "contributor_count_withheld": false
+      }
+    },
+    {
+      "ordinal": 4,
+      "package_name": "tokio",
+      "package_version": "1.48.0",
+      "depth": 0,
+      "relation": "direct",
+      "resolved": true,
+      "risk": {
+        "probability": 0.022,
+        "horizon_days": 365
+      },
+      "forecast": {
+        "point_downloads": 1086000.0,
+        "horizon_months": 12,
+        "insufficient_history": false
+      },
+      "activity": {
+        "distinct_contributors": 65,
+        "days_since_last_event": 1,
+        "contributor_count_withheld": false
+      }
+    },
+    {
+      "ordinal": 5,
+      "package_name": "addr2line",
+      "package_version": "0.27.1",
+      "depth": 2,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 6,
+      "package_name": "adler2",
+      "package_version": "2.0.1",
+      "depth": 3,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 7,
+      "package_name": "anstream",
+      "package_version": "0.6.21",
+      "depth": 2,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 8,
+      "package_name": "anstyle",
+      "package_version": "1.0.14",
+      "depth": 2,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 9,
+      "package_name": "anstyle-parse",
+      "package_version": "0.2.7",
+      "depth": 3,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 10,
+      "package_name": "anstyle-query",
+      "package_version": "1.1.5",
+      "depth": 3,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 11,
+      "package_name": "anstyle-wincon",
+      "package_version": "3.0.11",
+      "depth": 3,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 12,
+      "package_name": "backtrace",
+      "package_version": "0.3.77",
+      "depth": 1,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 13,
+      "package_name": "cfg-if",
+      "package_version": "1.0.5",
+      "depth": 2,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 14,
+      "package_name": "clap_builder",
+      "package_version": "4.5.49",
+      "depth": 1,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 15,
+      "package_name": "clap_lex",
+      "package_version": "0.7.7",
+      "depth": 2,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 16,
+      "package_name": "colorchoice",
+      "package_version": "1.0.5",
+      "depth": 3,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 17,
+      "package_name": "failure_derive",
+      "package_version": "0.1.8",
+      "depth": 1,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 18,
+      "package_name": "gimli",
+      "package_version": "0.34.0",
+      "depth": 3,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 19,
+      "package_name": "is_terminal_polyfill",
+      "package_version": "1.70.2",
+      "depth": 3,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 20,
+      "package_name": "libc",
+      "package_version": "0.2.191",
+      "depth": 2,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 21,
+      "package_name": "local-helper",
+      "package_version": "0.1.0",
+      "depth": 0,
+      "relation": "direct",
+      "resolved": false,
+      "unresolved": {
+        "reason": "not_a_registry_package",
+        "label": "Not published on the registry",
+        "remedy": "The entry is a path or git dependency, which carries no registry history, so no adoption forecast or maintenance score can be derived for it"
+      }
+    },
+    {
+      "ordinal": 22,
+      "package_name": "memchr",
+      "package_version": "2.8.3",
+      "depth": 3,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 23,
+      "package_name": "miniz_oxide",
+      "package_version": "0.9.1",
+      "depth": 2,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 24,
+      "package_name": "object",
+      "package_version": "0.40.0",
+      "depth": 2,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 25,
+      "package_name": "once_cell_polyfill",
+      "package_version": "1.70.2",
+      "depth": 4,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 26,
+      "package_name": "pin-project-lite",
+      "package_version": "0.2.18",
+      "depth": 1,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 27,
+      "package_name": "proc-macro2",
+      "package_version": "1.0.107",
+      "depth": 2,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 28,
+      "package_name": "quote",
+      "package_version": "1.0.47",
+      "depth": 2,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 29,
+      "package_name": "rustc-demangle",
+      "package_version": "0.1.28",
+      "depth": 2,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 30,
+      "package_name": "serde_core",
+      "package_version": "1.0.228",
+      "depth": 1,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 31,
+      "package_name": "serde_derive",
+      "package_version": "1.0.228",
+      "depth": 2,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 32,
+      "package_name": "strsim",
+      "package_version": "0.11.1",
+      "depth": 2,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 33,
+      "package_name": "syn",
+      "package_version": "1.0.109",
+      "depth": 2,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 34,
+      "package_name": "synstructure",
+      "package_version": "0.12.6",
+      "depth": 2,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 35,
+      "package_name": "unicode-ident",
+      "package_version": "1.0.27",
+      "depth": 3,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 36,
+      "package_name": "unicode-xid",
+      "package_version": "0.2.6",
+      "depth": 3,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 37,
+      "package_name": "utf8parse",
+      "package_version": "0.2.2",
+      "depth": 3,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 38,
+      "package_name": "windows-link",
+      "package_version": "0.2.1",
+      "depth": 2,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    },
+    {
+      "ordinal": 39,
+      "package_name": "windows-sys",
+      "package_version": "0.61.2",
+      "depth": 4,
+      "relation": "indirect",
+      "resolved": false,
+      "unresolved": {
+        "reason": "absent_from_snapshot",
+        "label": "Not present in the registry snapshot",
+        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+      }
+    }
+  ],
+  "link": "/r/demo"
+}

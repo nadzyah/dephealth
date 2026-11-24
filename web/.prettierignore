@@ -1,0 +1,9 @@
+dist
+coverage
+node_modules
+playwright-report
+test-results
+
+# Captured from the running service, so formatting them would obscure the diff
+# when they are recaptured
+src/api/fixtures

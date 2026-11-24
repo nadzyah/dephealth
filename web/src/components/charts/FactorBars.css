@@ -1,0 +1,72 @@
+.factor-bars {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.factor-head,
+.factor-foot {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+}
+
+.factor-label {
+    font-weight: var(--weight-medium);
+}
+
+/* The baseline sits in the middle, a bar grows away from it, and the direction
+   is therefore visible in the geometry as well as the colour */
+.factor-track {
+    position: relative;
+    height: 0.75rem;
+    margin-block: var(--space-1);
+    background: var(--color-surface-raised);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.factor-baseline {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--color-border-strong);
+}
+
+.factor-bar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+
+    /* 4px rounded ends on the away side, square against the baseline */
+    border-radius: 0 4px 4px 0;
+}
+
+.factor-bar.raised {
+    left: 50%;
+    background: var(--chart-positive);
+}
+
+.factor-bar.lowered {
+    right: 50%;
+    border-radius: 4px 0 0 4px;
+    background: var(--chart-negative);
+}
+
+.raised-text {
+    color: var(--color-risk-high);
+}
+
+.lowered-text {
+    color: var(--color-risk-low);
+}
+
+.factor-label {
+    cursor: help;
+}

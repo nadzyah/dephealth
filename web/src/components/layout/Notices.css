@@ -1,0 +1,90 @@
+/* Above the bottom navigation on a phone, bottom right on a wider screen */
+.notices {
+    position: fixed;
+    z-index: 20;
+    inset-inline: var(--space-3);
+    bottom: calc(var(--touch-target) + var(--space-3) + env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    pointer-events: none;
+}
+
+.notice {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-strong);
+    border-left-width: 4px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    pointer-events: auto;
+    animation: notice-in 160ms ease-out;
+}
+
+.notice.error {
+    border-left-color: var(--color-risk-high);
+}
+
+.notice.error svg {
+    color: var(--color-risk-high);
+}
+
+.notice.success {
+    border-left-color: var(--color-risk-low);
+}
+
+.notice.success svg {
+    color: var(--color-risk-low);
+}
+
+.notice.info {
+    border-left-color: var(--color-accent);
+}
+
+.notice.info svg {
+    color: var(--color-accent);
+}
+
+.notice-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    flex: 1;
+}
+
+.notice-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.75rem;
+    min-height: 1.75rem;
+    padding: 0;
+    background: none;
+    border: 0;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    cursor: pointer;
+}
+
+.notice-close:hover {
+    background: var(--color-surface-raised);
+    color: var(--color-text);
+}
+
+@keyframes notice-in {
+    from {
+        opacity: 0;
+        transform: translateY(0.5rem);
+    }
+}
+
+@media (min-width: 48rem) {
+    .notices {
+        inset-inline: auto var(--space-5);
+        bottom: var(--space-5);
+        max-width: 24rem;
+    }
+}

@@ -1,0 +1,46 @@
+.changes {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.changes li {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-1);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.changes li:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.change-name {
+    font-weight: var(--weight-medium);
+    overflow-wrap: anywhere;
+}
+
+.changes li > .badge {
+    justify-self: start;
+}
+
+.change-delta {
+    margin-left: var(--space-2);
+}
+
+@media (min-width: 48rem) {
+    .changes li {
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        align-items: center;
+        gap: var(--space-4);
+    }
+
+    .change-figures {
+        text-align: right;
+    }
+}

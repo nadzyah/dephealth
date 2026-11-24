@@ -134,6 +134,36 @@ openapi-lint: ## validate the API specification, needs npx
 sqlx-prepare: ## refresh the offline query data, so the API builds without a database
 	cd api && cargo sqlx prepare -- --all-targets
 
+# Browser application
+
+.PHONY: web-install
+web-install: ## install the browser application's dependencies
+	cd web && npm install
+
+.PHONY: web
+web: ## run the browser application against the local API
+	cd web && npm run dev
+
+.PHONY: web-demo
+web-demo: ## build and serve the browser application with no API behind it
+	cd web && npm run build:demo && npm run preview
+
+.PHONY: web-test
+web-test: ## run the browser application's unit tests
+	cd web && npm test
+
+.PHONY: web-e2e
+web-e2e: ## run the browser application's end to end tests
+	cd web && npm run e2e
+
+.PHONY: web-check
+web-check: ## lint, format and type-check the browser application
+	cd web && npm run lint && npm run format:check && npm run typecheck
+
+.PHONY: screenshots
+screenshots: ## capture every screen at every device size
+	cd web && npm run screenshots
+
 # Analytical tier
 
 .PHONY: analytics

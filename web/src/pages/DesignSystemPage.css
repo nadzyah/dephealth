@@ -1,0 +1,115 @@
+.swatches,
+.type-scale,
+.spacing,
+.breakpoints {
+    margin: 0 0 var(--space-4);
+    padding: 0;
+    list-style: none;
+}
+
+.swatches li {
+    display: grid;
+    grid-template-columns: 1.5rem minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-2) var(--space-3);
+    padding-block: var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.swatch {
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+}
+
+.type-scale li {
+    padding-block: var(--space-1);
+    line-height: var(--leading-tight);
+}
+
+.spacing li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding-block: var(--space-1);
+}
+
+.spacing-bar {
+    height: 0.75rem;
+    background: var(--color-accent);
+    border-radius: 2px;
+}
+
+.breakpoints li {
+    padding-block: var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.breakpoints li:last-child {
+    border-bottom: 0;
+}
+
+.states-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: var(--space-4);
+}
+
+.states-table th,
+.states-table td {
+    padding: var(--space-2);
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.states-table thead th {
+    color: var(--color-text-muted);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+@media (min-width: 48rem) {
+    .swatches li {
+        grid-template-columns: 1.5rem 14rem 6rem minmax(0, 1fr);
+    }
+}
+
+/* The state table carries five columns, which no phone has room for, so each
+   row becomes a labelled block like the tree table does */
+@media (max-width: 47.99rem) {
+    .states-table thead {
+        display: none;
+    }
+
+    .states-table,
+    .states-table tbody,
+    .states-table tr,
+    .states-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .states-table tr {
+        margin-bottom: var(--space-3);
+        padding-bottom: var(--space-2);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .states-table td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-3);
+        border: 0;
+    }
+
+    .states-table td::before {
+        content: attr(data-label);
+        color: var(--color-text-muted);
+        font-size: var(--text-xs);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+}
