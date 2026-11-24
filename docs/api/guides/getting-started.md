@@ -1,26 +1,22 @@
 # Getting Started
 
-A first request, and then the one that matters. Nothing here needs an account or
-a key.
+The service requires no account and no key. Withdrawal is the only operation
+that is authenticated.
 
-## What You Need
+## Prerequisites
 
-- A running service. Either the deployed one, or a local one from the repository
-  root:
+A running service, either a deployed one or a local one started from the
+repository root:
 
-  ```bash
-  make db-up migrate roles seed
-  make api
-  ```
+```bash
+docker compose up -d
+```
 
-  The service answers on `http://localhost:8080`. The examples below use that;
-  substitute your own host for a deployed instance.
+It answers on `http://localhost:8080`, which the examples below assume.
+Requests are shown with `curl` and `jq`. A `Cargo.lock` is needed as input, and
+one is committed at `api/tests/fixtures/Cargo.lock`.
 
-- `curl` and, for reading JSON comfortably, `jq`.
-- A `Cargo.lock` from a Rust project. The repository has one you can use at
-  `api/tests/fixtures/Cargo.lock`.
-
-## Is It Up
+## Service Readiness
 
 ```bash
 curl -s http://localhost:8080/health/ready | jq
@@ -38,15 +34,15 @@ curl -s http://localhost:8080/health/ready | jq
 }
 ```
 
-`503` with `"status": "not ready"` means either the database is unreachable or a
-source has never been ingested. Nothing can be assessed in that state, and
-`/api/v1/assessments` will say so rather than return an empty report.
+A `503` with `"status": "not ready"` indicates that the database is unreachable
+or that a source has never been ingested. Nothing can be assessed in that
+state, and `/api/v1/assessments` reports the condition rather than returning an
+empty report.
 
-## What a Score Means
+## Scoring Method
 
-Before using the figures, read what they rest on. One request answers it, and
-the constants come from the database rather than from a document that could
-drift:
+The constants a score rests on are served from the database rather than
+restated in prose, so they cannot drift from the values in use:
 
 ```bash
 curl -s http://localhost:8080/api/v1/meta | jq '.method'
@@ -60,16 +56,16 @@ curl -s http://localhost:8080/api/v1/meta | jq '.method'
 }
 ```
 
-Two consequences follow from that definition and are worth knowing before you
-act on a score. A package that is *finished* rather than abandoned scores as
-being at risk, which in the Rust ecosystem is a real category of small, stable
-crates. And a package maintained somewhere other than its declared repository
-looks inactive. Both are why every entry carries the activity the score was
-computed from.
+Two consequences of that definition bear on interpretation. A package that is
+complete rather than abandoned scores as being at risk, which in the Rust
+ecosystem is a substantial category of small, stable crates. A package
+maintained somewhere other than its declared repository appears inactive. Both
+are why every entry carries the activity its score was computed from.
 
-## Assess a Manifest
+## Submitting a Manifest
 
-Post the lockfile as it is. No multipart, no base64, no wrapper object:
+The lockfile is posted as it is, with no multipart encoding, base64 or wrapper
+object:
 
 ```bash
 curl -s -X POST http://localhost:8080/api/v1/assessments \
@@ -77,8 +73,7 @@ curl -s -X POST http://localhost:8080/api/v1/assessments \
   --data-binary @Cargo.lock | jq
 ```
 
-The answer is `201` with the whole report, and a `link` field that is the only
-copy of your token you will ever be given:
+The response is `201` with the complete report:
 
 ```json
 {
@@ -100,25 +95,26 @@ copy of your token you will ever be given:
 }
 ```
 
-**Keep the link.** Only its digest is stored, so the service cannot give it back
-to you and nobody can enumerate it.
+The `link` field is the only copy of the token that is issued. Only its digest
+is stored, so the service cannot reissue it and the token space cannot be
+enumerated.
 
-The entries are ranked: the ones with a score first, by descending risk, then the
-ones without. `ordinal` is that rank and is stored with the report, so it is the
-same on every later read.
+Entries are ranked with the scored ones first in descending order of risk,
+followed by the unscored. The `ordinal` field records that rank and is stored
+with the report, so it is identical on every subsequent read.
 
-## Read It Again Later
+## Retrieving a Stored Report
 
 ```bash
 TOKEN=9f2c1ab4e6d8705318a0cb4df2e9173c5b6a8de0417fc2938b5e60a7d41c8f23
 curl -s "http://localhost:8080/api/v1/reports/$TOKEN" | jq '.counts'
 ```
 
-The figures are the ones that stood when the report was generated. A later
-ingestion run does not change them, which is the point of storing a report
-rather than recomputing it.
+The figures are those that held when the report was generated. A later
+ingestion run does not alter them, which is the purpose of storing a report
+rather than recomputing it on demand.
 
-## The Evidence Behind One Entry
+## Evidence for an Entry
 
 ```bash
 curl -s "http://localhost:8080/api/v1/reports/$TOKEN/entries/failure" | jq '.factors'
@@ -136,12 +132,13 @@ curl -s "http://localhost:8080/api/v1/reports/$TOKEN/entries/failure" | jq '.fac
 ]
 ```
 
-Ordered by the size of the contribution. A positive contribution raised the risk
-and a negative one lowered it.
+Factors are ordered by the magnitude of their contribution. A positive
+contribution raised the risk and a negative one lowered it.
 
-## When Something Is Wrong
+## Error Responses
 
-Every failure is a problem document. Branch on `type`, not on the prose:
+Every failure is a problem document as specified in RFC 9457. Clients branch on
+`type` rather than on the prose of `title` or `detail`:
 
 ```bash
 curl -s -X POST http://localhost:8080/api/v1/assessments \
@@ -160,10 +157,4 @@ curl -s -X POST http://localhost:8080/api/v1/assessments \
 }
 ```
 
-[Errors](errors.md) lists every one of them.
-
-## Next
-
-[Assess a project and file the evidence](tutorial-first-integration.md) does the
-whole workflow in one script: submit, rank, pull the evidence for the worst
-entries, store the link, and compare a later run with it.
+The complete set is enumerated in [`openapi.yaml`](../openapi.yaml).

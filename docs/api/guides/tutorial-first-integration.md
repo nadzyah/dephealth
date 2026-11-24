@@ -1,29 +1,26 @@
-# Assess a Project and File the Evidence
+# Integration Workflow
 
-A worked integration, in the order a real one happens. By the end you will have
-a script that assesses a repository's lockfile, fails a build when the tree
-carries more risk than you accept, files the permanent link as evidence, and
-reports what changed since the last time it ran.
+A worked integration in the order one occurs: assess a repository's lockfile,
+fail a build when the tree carries more risk than is accepted, file the
+permanent link as evidence, and report what changed since the previous run.
 
-Every step is a single request. The whole thing is sixty lines of shell, given
-in full at the end and runnable from
-[`examples/assess.sh`](../examples/assess.sh).
+Every step is a single request. The result is given in full at the end and is
+committed as [`examples/assess.sh`](../examples/assess.sh).
 
-## Before You Start
+## Prerequisites
 
-You need a service that answers, and nothing else. There is no key to obtain and
-no account to create, which [authentication](authentication.md) explains.
+A service that answers. There is no key to obtain and no account to create.
 
 ```bash
 export DEPHEALTH=http://localhost:8080
 curl -sf "$DEPHEALTH/health/ready" > /dev/null || echo "not ready"
 ```
 
-## Step 1, Decide Whether the Data Is Fresh Enough
+## Data Freshness
 
-An assessment is only as good as the last ingestion run. In a pipeline that
-gates a release, check the age first and decide deliberately rather than
-discovering it later:
+An assessment is only as current as the last ingestion run. A pipeline that
+gates a release establishes the age of the data first rather than discovering it
+afterwards:
 
 ```bash
 AGE=$(curl -s "$DEPHEALTH/api/v1/meta" | jq '[.sources[].age_days] | max')
@@ -33,7 +30,7 @@ if [ "$AGE" -gt 7 ]; then
 fi
 ```
 
-## Step 2, Submit the Lockfile
+## Submitting the Lockfile
 
 ```bash
 REPORT=$(curl -s -X POST "$DEPHEALTH/api/v1/assessments" \
@@ -41,10 +38,9 @@ REPORT=$(curl -s -X POST "$DEPHEALTH/api/v1/assessments" \
     --data-binary @Cargo.lock)
 ```
 
-Two things to handle rather than assume.
-
-A lockfile that does not parse answers `422` and names the line. No partial
-assessment is produced, because a partial tree would understate the exposure:
+Two outcomes require handling. A lockfile that does not parse answers `422` and
+names the line. No partial assessment is produced, since a partial tree would
+understate the exposure:
 
 ```bash
 STATUS=$(curl -s -o /tmp/body -w '%{http_code}' -X POST "$DEPHEALTH/api/v1/assessments" \
@@ -56,14 +52,14 @@ if [ "$STATUS" = "422" ]; then
 fi
 ```
 
-A manifest larger than the service accepts answers `413`, and one submitted while
-no ingestion run has completed answers `503`. Both are worth distinguishing from
-a fault in your own pipeline.
+A manifest larger than the service accepts answers `413`, and one submitted
+before any ingestion run has completed answers `503`. Both are distinguishable
+from a fault in the calling pipeline.
 
-## Step 3, Keep the Link
+## Retaining the Link
 
-The token exists in exactly one place: the response you just received. Only its
-digest is stored, so this is not recoverable.
+The token exists only in the response just received. Only its digest is stored,
+so it is not recoverable:
 
 ```bash
 LINK=$(jq -r .link <<< "$REPORT")
@@ -72,13 +68,13 @@ TOKEN=${LINK##*/}
 echo "$LINK" >> assessments.log
 ```
 
-Treat it as a capability. Whoever holds the link can read the assessment, which
-is the point for filing it as evidence and the reason not to put it in a public
-build log.
+The link is a capability. Whoever holds it can read the assessment, which is
+what makes it usable as filed evidence and the reason it does not belong in a
+public build log.
 
-## Step 4, Gate on the Result
+## Applying a Threshold
 
-The report arrives ranked, so the decision needs no sorting:
+The report arrives ranked, so the decision requires no sorting:
 
 ```bash
 THRESHOLD=0.5
@@ -93,24 +89,25 @@ if [ "$COUNT" -gt 0 ]; then
 fi
 ```
 
-Decide what to do about the entries that carry no score rather than ignoring
-them. They are not "fine": they are unassessed, each with a reason:
+An entry carrying no score is unassessed rather than acceptable, and each one
+states a reason:
 
 ```bash
 jq -r '.entries[] | select(.resolved == false)
        | "\(.package_name): \(.unresolved.label)"' <<< "$REPORT" | sort | uniq -c
 ```
 
-`absent_from_snapshot` is usually a package published after the last run and
-will resolve itself. `not_a_registry_package` is a path or git dependency, which
-has no registry history and never will. `host_unsupported` means the repository
-is not on GitHub, so no activity can be derived. The `remedy` field on each
-entry says what, if anything, you can do.
+`absent_from_snapshot` generally indicates a package published after the last
+run, which resolves itself. `not_a_registry_package` is a path or git
+dependency, which has no registry history and will not acquire one.
+`host_unsupported` means the repository is not on GitHub, so no activity can be
+derived. The `remedy` field on each entry states what action, if any, is
+available.
 
-## Step 5, Pull the Evidence for What You Are Going to Argue About
+## Retrieving Evidence
 
-A number is not an argument. For each entry over the threshold, fetch what moved
-it:
+A score alone does not support an argument. For each entry over the threshold,
+the factors behind it are retrieved individually:
 
 ```bash
 for NAME in $(jq -r '.[].package_name' <<< "$OVER"); do
@@ -122,15 +119,15 @@ for NAME in $(jq -r '.[].package_name' <<< "$OVER"); do
 done
 ```
 
-This is also where you catch the finished-rather-than-abandoned case. An entry
-with a high score, zero events for years and a stable download series is a crate
-that is done, not one in trouble.
+This is also where a complete package is distinguished from an abandoned one.
+An entry with a high score, no events for several years and a stable download
+series is finished rather than in difficulty.
 
-## Step 6, Compare With the Last Run
+## Comparison With the Previous Run
 
-On the second and later runs, ask what changed. The comparison is matched on a
-salted fingerprint of the entry set, so it works without the service having kept
-your manifest:
+On the second and subsequent runs the service reports what changed. The
+comparison is matched on a salted fingerprint of the entry set, so it functions
+without the service having retained the manifest:
 
 ```bash
 CHANGES=$(curl -s -o /tmp/changes -w '%{http_code}' \
@@ -144,14 +141,14 @@ else
 fi
 ```
 
-A `404` here is not a fault. It means this is the first report for this exact set
-of dependencies, which is also true the first time a dependency is added or
+A `404` is not a fault here. It indicates the first report for this exact set of
+dependencies, which is also the case the first time a dependency is added or
 removed.
 
-## Step 7, File It
+## Recording the Result
 
-For an audit, what matters is the link and the date, not the figures. A report
-is immutable, so the link is enough:
+For an audit the link and the date are what matter rather than the figures. A
+report is immutable, so the link is sufficient:
 
 ```bash
 jq -n --arg link "$LINK" --arg on "$(jq -r .assessed_on <<< "$REPORT")" \
@@ -160,28 +157,26 @@ jq -n --arg link "$LINK" --arg on "$(jq -r .assessed_on <<< "$REPORT")" \
   >> compliance.jsonl
 ```
 
-When someone opens that link later they get the assessment as it stood, with the
-date and the age of the data behind it. If it has since been withdrawn they get
-`410` with the reason, which is deliberately different from the `404` of a link
-that never existed: for an audit those two mean different things.
+Opening that link later yields the assessment as it stood, with the date and the
+age of the data behind it. A withdrawn report answers `410` with the reason,
+which is deliberately distinct from the `404` of a link that never existed,
+because for an audit the two differ in meaning.
 
-## The Whole Thing
+## The Complete Script
 
-[`examples/assess.sh`](../examples/assess.sh) is the above as one script, with
-the error handling in place. It exits non-zero when the tree carries an entry
-over the threshold, so it can be a build step as it stands.
+[`examples/assess.sh`](../examples/assess.sh) implements the above with the
+error handling in place. It exits non-zero when an entry exceeds the threshold,
+so it serves as a build step unmodified.
 
 ```bash
 examples/assess.sh Cargo.lock 0.5
 ```
 
-## What Not to Build On
+## Constraints
 
-Two habits will break.
+A report cannot change, so polling one is pointless. Submitting the manifest
+again produces a new report under a new link, while the earlier link remains
+valid as the record of that date.
 
-Do not poll a report expecting it to change. It cannot. Submit again to get
-current figures, which produces a new report under a new link while the old link
-stays valid as the record of the earlier date.
-
-Do not treat the absence of a score as a pass. Count the unresolved entries and
-decide about them explicitly, as step 4 does.
+The absence of a score is not a pass. Unresolved entries are counted and
+decided on explicitly, as above.
