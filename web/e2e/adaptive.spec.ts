@@ -1,10 +1,10 @@
 import { expect, test } from "@playwright/test";
 
 /**
- * The claims the Adaptive UI criterion makes are checkable, so they are checked
- * here rather than asserted in a document: navigation reachable at every width,
- * no horizontal overflow, touch targets at 44 pixels, and a layout that survives
- * an orientation change and browser zoom.
+ * The responsive claims are checkable, so they are checked here rather than
+ * asserted in a document: navigation reachable at every width, no horizontal
+ * overflow, touch targets at 44 pixels, and a layout that survives an
+ * orientation change and browser zoom.
  */
 
 const widths = [

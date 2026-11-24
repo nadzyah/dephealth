@@ -1,8 +1,7 @@
 /**
  * WCAG 2.1 level AA holds body text to 4.5:1 against its background, and the
- * edge of a control to 3:1. The Adaptive UI criterion asks for the first
- * explicitly. These are the numbers, so a palette change that breaks them fails
- * the suite instead of reaching a reviewer.
+ * edge of a control to 3:1. These are the numbers, so a palette change that
+ * breaks them fails the suite instead of reaching a reader.
  */
 
 import { readFileSync } from "node:fs";

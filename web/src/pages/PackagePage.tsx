@@ -41,7 +41,7 @@ export default function PackagePage() {
 
     if (detail.status === "failed" && detail.problem) {
         return (
-            <Failure problem={detail.problem} onRetry={detail.reload}>
+            <Failure problem={detail.problem} onRetry={detail.reload} level={1}>
                 <Link to={`/r/${token}`}>Back to the tree</Link>
             </Failure>
         );

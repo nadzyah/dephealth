@@ -56,15 +56,29 @@ export function Loading({ label }: { label: string }) {
     );
 }
 
+/**
+ * The level the state's own heading takes. A state that is the whole screen
+ * carries its `h1`, and one inside a card sits under the card's heading.
+ * Skipping a level, or leaving a screen without an `h1`, is what a reader
+ * navigating by heading notices first.
+ */
+type HeadingLevel = 1 | 2 | 3;
+
+function StateHeading({ level, children }: { level: HeadingLevel; children: ReactNode }) {
+    const Tag = `h${level}` as "h1" | "h2" | "h3";
+    return <Tag>{children}</Tag>;
+}
+
 interface EmptyProps {
     title: string;
+    level?: HeadingLevel;
     children?: ReactNode;
 }
 
-export function Empty({ title, children }: EmptyProps) {
+export function Empty({ title, level = 3, children }: EmptyProps) {
     return (
         <div className="state">
-            <h3>{title}</h3>
+            <StateHeading level={level}>{title}</StateHeading>
             {children}
         </div>
     );
@@ -73,6 +87,7 @@ export function Empty({ title, children }: EmptyProps) {
 interface FailureProps {
     problem: ApiProblem;
     onRetry?: () => void;
+    level?: HeadingLevel;
     children?: ReactNode;
 }
 
@@ -81,11 +96,11 @@ interface FailureProps {
  * one thing they can do next. The problem identifier is shown because it is what
  * the API reference indexes, which makes a report of a fault actionable.
  */
-export function Failure({ problem, onRetry, children }: FailureProps) {
+export function Failure({ problem, onRetry, level = 3, children }: FailureProps) {
     return (
         <div className="state failure" role="alert">
             <WarningIcon size="1.75em" />
-            <h3>{problem.title}</h3>
+            <StateHeading level={level}>{problem.title}</StateHeading>
             <p>{problem.detail}</p>
             {children}
             <div className="row">

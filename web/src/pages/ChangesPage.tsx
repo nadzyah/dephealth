@@ -49,7 +49,7 @@ export default function ChangesPage() {
 
     if (changes.status === "failed" && changes.problem) {
         return (
-            <Failure problem={changes.problem} onRetry={changes.reload}>
+            <Failure problem={changes.problem} onRetry={changes.reload} level={1}>
                 <Link to={`/r/${token}`}>Back to the tree</Link>
             </Failure>
         );
