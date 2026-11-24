@@ -83,7 +83,7 @@ export const demo = {
                   notFound(
                       "report-not-found",
                       "No such report",
-                      "This is the demo, which holds one stored report. The real service answers the same way for a link that never addressed a report.",
+                      "This demo holds one stored report, at the link on the submission screen.",
                   ),
               ),
 

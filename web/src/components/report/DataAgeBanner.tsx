@@ -30,7 +30,7 @@ export function DataAgeBanner({ registry, events, staleAfterDays = 3 }: DataAgeB
 
     return (
         <aside className={`data-age ${stale ? "stale" : ""}`}>
-            <span className="data-age-title">Data behind these figures</span>
+            <span className="data-age-title">Source Data</span>
             <dl>
                 <div>
                     <dt>Registry</dt>
@@ -49,8 +49,8 @@ export function DataAgeBanner({ registry, events, staleAfterDays = 3 }: DataAgeB
             </dl>
             {stale && (
                 <p className="small">
-                    The last ingestion run is older than {staleAfterDays} days, so these figures may
-                    have moved.
+                    The last ingestion run was more than {staleAfterDays} days ago. These figures
+                    may have moved since.
                 </p>
             )}
         </aside>

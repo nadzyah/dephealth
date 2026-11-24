@@ -11,6 +11,12 @@ function fileOf(name: string, contents: string, size?: number): File {
 }
 
 describe("validateFile", () => {
+    it("names the right file when the manifest is chosen instead of the lockfile", () => {
+        const rejection = validateFile(new File(["[package]"], "Cargo.toml"));
+        expect(rejection?.reason).toBe("wrong-kind");
+        expect(rejection?.message).toContain("Cargo.lock");
+    });
+
     it("accepts a Cargo lockfile", () => {
         expect(validateFile(fileOf("Cargo.lock", "version = 4"))).toBeUndefined();
     });

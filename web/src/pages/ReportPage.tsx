@@ -66,29 +66,26 @@ export default function ReportPage() {
 
     if (report.status === "loading" || report.status === "idle") {
         return (
-            <Card title="Loading the report">
+            <Card title="Report">
                 <TableSkeleton label="Loading the assessed tree" />
             </Card>
         );
     }
 
     if (report.status === "failed" && report.problem) {
-        const withdrawn = report.problem.isGone;
+        const retryable = report.problem.isRetryable;
 
         return (
             <Failure
                 problem={report.problem}
-                onRetry={withdrawn ? undefined : report.reload}
+                onRetry={retryable ? report.reload : undefined}
                 level={1}
             >
-                {withdrawn && (
-                    <p className="small muted">
-                        A withdrawn report keeps its row, so this link is not the same as one that
-                        never addressed a report. The date it was withdrawn and the reason are in
-                        the answer above.
-                    </p>
+                {!retryable && (
+                    <Link to="/" className="button secondary touchable">
+                        Assess a new manifest
+                    </Link>
                 )}
-                <Link to="/">Assess a manifest instead</Link>
             </Failure>
         );
     }
@@ -99,7 +96,7 @@ export default function ReportPage() {
     return (
         <div className="stack">
             <section>
-                <h1>Assessment of {data.counts.entries} dependencies</h1>
+                <h1>Assessment of {data.counts.entries} Dependencies</h1>
                 <p className="muted">
                     Stored on {data.assessed_on}. The figures are the ones that stood when it was
                     generated, so filing this link keeps them.
@@ -132,13 +129,13 @@ export default function ReportPage() {
             </div>
 
             <Card
-                title="The tree"
+                title="Dependency Tree"
                 action={<span className="muted small">Ranked by risk. Scored entries first</span>}
             >
                 <TreeTable entries={data.entries} token={token} />
             </Card>
 
-            <Card title="Method behind these figures">
+            <Card title="Scoring Method">
                 <StatRow>
                     <Stat
                         label="Abandonment window"

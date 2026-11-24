@@ -93,8 +93,9 @@ interface FailureProps {
 
 /**
  * A failure as the reader should see it: what happened, what it means, and the
- * one thing they can do next. The problem identifier is shown because it is what
- * the API reference indexes, which makes a report of a fault actionable.
+ * one thing they can do next. Exactly one action, since a refusal of what was
+ * sent cannot be retried and a condition that may pass has nowhere else to go.
+ * The problem identifier belongs in the response and the log, not on a screen.
  */
 export function Failure({ problem, onRetry, level = 3, children }: FailureProps) {
     return (
@@ -102,14 +103,13 @@ export function Failure({ problem, onRetry, level = 3, children }: FailureProps)
             <WarningIcon size="1.75em" />
             <StateHeading level={level}>{problem.title}</StateHeading>
             <p>{problem.detail}</p>
-            {children}
             <div className="row">
                 {onRetry && (
                     <Button variant="secondary" onClick={onRetry}>
                         Try again
                     </Button>
                 )}
-                <code className="small muted">{problem.slug}</code>
+                {children}
             </div>
         </div>
     );

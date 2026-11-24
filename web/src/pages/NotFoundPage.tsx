@@ -4,12 +4,14 @@ import { Empty } from "../components/ui/States";
 
 export default function NotFoundPage() {
     return (
-        <Empty title="No such page" level={1}>
+        <Empty title="Page Not Found" level={1}>
             <p className="muted">
                 Nothing here answers that address. A report link looks like <code>/r/</code>{" "}
                 followed by its token.
             </p>
-            <Link to="/">Assess a manifest</Link>
+            <Link to="/" className="button secondary touchable">
+                Go to the home page
+            </Link>
         </Empty>
     );
 }

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 
+import { ExternalLink } from "../ui/ExternalLink";
 import { BookIcon, PaletteIcon, TreeIcon, UploadIcon } from "../ui/icons";
 import { Appearance } from "./Appearance";
 import { Notices } from "./Notices";
@@ -56,7 +57,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                         Adoption forecasts and maintenance risk for Cargo dependencies. Diploma
                         project, European Humanities University.
                     </span>
-                    <a href="https://github.com/nadzyah/dephealth">Source</a>
+                    <ExternalLink href="https://github.com/nadzyah/dephealth">Source</ExternalLink>
                 </div>
             </footer>
 

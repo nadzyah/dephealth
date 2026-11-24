@@ -9,7 +9,7 @@ test("a submitted manifest becomes a ranked tree with evidence behind each entry
 }) => {
     await page.goto("/");
 
-    await expect(page.getByRole("heading", { name: "Assess a dependency tree" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Dependency Assessment" })).toBeVisible();
 
     // The control takes a file rather than a path, so the file is supplied in
     // memory rather than from the repository
@@ -35,10 +35,10 @@ test("a submitted manifest becomes a ranked tree with evidence behind each entry
 
     // The report opens at its permanent link
     await expect(page).toHaveURL(/\/r\/demo$/);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("dependencies");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Dependencies");
 
     // The age of both sources travels with the figures
-    await expect(page.getByText("Data behind these figures")).toBeVisible();
+    await expect(page.getByText("Source Data")).toBeVisible();
     await expect(page.getByText("Repository events")).toBeVisible();
 
     // Ranked, so the worst entry is the first row of the body. The header row
@@ -84,6 +84,30 @@ test("a link that addresses no report is refused with a reason, not a blank page
 
     const alert = page.getByRole("alert");
     await expect(alert).toContainText("No such report");
-    await expect(alert).toContainText("report-not-found");
-    await expect(page.getByRole("link", { name: /assess a manifest/i })).toBeVisible();
+
+    // The problem identifier belongs in the response and the log. On the screen
+    // it is a code the reader can neither act on nor look up
+    await expect(alert).not.toContainText("report-not-found");
+
+    // One action. Repeating a request for a link that addresses nothing cannot
+    // change the answer, so no retry is offered beside it
+    await expect(page.getByRole("link", { name: /assess a new manifest/i })).toBeVisible();
+    await expect(page.getByRole("button", { name: /try again/i })).toHaveCount(0);
+});
+
+test("a package in the list opens its current assessment", async ({ page }) => {
+    await page.goto("/packages");
+
+    // The list is the only route to a package that is not in a report, so a row
+    // that does not address one is a dead end
+    const first = page.locator("ul.packages a").first();
+    const name = (await first.innerText()).split(" ")[0];
+    await first.click();
+
+    await expect(page).toHaveURL(new RegExp(`/p/${name}$`));
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(name);
+    await expect(page.getByRole("heading", { name: "Downloads" })).toBeVisible();
+
+    // The screen states which figures these are, since a report holds different ones
+    await expect(page.getByText("The figures on this screen are the current ones")).toBeVisible();
 });

@@ -23,10 +23,11 @@ export default function MethodPage() {
             <section>
                 <h1>Method</h1>
                 <p>
-                    A score here is a statement about a package and the repository behind it, from
-                    consumption data joined with the public activity of contributors. Nothing is
-                    computed while you wait: the models run on a schedule and the application reads
-                    what they stored, which is why every figure arrives with a date.
+                    A score is a statement about a package and the repository behind it, derived
+                    from consumption data joined with the public activity of its contributors.
+                    Nothing is computed during a request. The models run on a schedule and the
+                    application reads their stored output. Every figure therefore carries the date
+                    of the data behind it.
                 </p>
             </section>
 
@@ -38,7 +39,7 @@ export default function MethodPage() {
 
             {meta.status === "ready" && meta.data && (
                 <>
-                    <Card title="The modelled event">
+                    <Card title="Modelled Event">
                         <p>{meta.data.method.abandonment_definition}</p>
                         <StatRow>
                             <Stat
@@ -54,12 +55,12 @@ export default function MethodPage() {
                         </StatRow>
                     </Card>
 
-                    <Card title="Two consequences worth knowing">
+                    <Card title="Interpretation">
                         <p>
-                            A package that is finished rather than abandoned scores as being at risk
-                            under this definition, which in the Rust ecosystem is a real category of
-                            small, stable crates. That is why every detail view shows the activity
-                            the score was computed from and not only the score.
+                            Under this definition a package that is finished rather than abandoned
+                            scores as being at risk. Small, stable crates are a real category in the
+                            Rust ecosystem. Every detail view therefore shows the activity behind a
+                            score and not only the score itself.
                         </p>
                         <p>
                             A package maintained somewhere other than its declared repository
@@ -68,7 +69,7 @@ export default function MethodPage() {
                         </p>
                     </Card>
 
-                    <Card title="Contributor data">
+                    <Card title="Contributor Data">
                         <p>
                             Public development events are personal data. Activity is aggregated to
                             the package before it is stored, the raw event files are discarded, and
@@ -78,7 +79,7 @@ export default function MethodPage() {
                         </p>
                     </Card>
 
-                    <Card title="How old the data is">
+                    <Card title="Data Age">
                         <ul className="stack tight" style={{ listStyle: "none", padding: 0 }}>
                             {meta.data.sources.map((source) => (
                                 <li key={source.source}>

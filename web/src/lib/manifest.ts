@@ -29,6 +29,19 @@ export function validateFile(file: File): FileRejection | undefined {
     }
 
     const name = file.name.toLowerCase();
+
+    // The two files sit side by side and carry similar names, so the one a
+    // submitter is most likely to pick by mistake is named here rather than
+    // sent for the service to refuse
+    if (name === "cargo.toml") {
+        return {
+            reason: "wrong-kind",
+            message:
+                "Cargo.toml is the manifest. Submit Cargo.lock from the same directory, " +
+                "which lists the versions Cargo resolved.",
+        };
+    }
+
     const looksRight =
         ACCEPTED_NAMES.includes(name) ||
         ACCEPTED_EXTENSIONS.some((extension) => name.endsWith(extension));

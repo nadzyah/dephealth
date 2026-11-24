@@ -190,7 +190,7 @@ impl ApiError {
         match self {
             Self::ManifestUnreadable { detail, .. } => detail.clone(),
             Self::ManifestEmpty => {
-                "The file parsed, but no dependency was found to assess. A lockfile with only the workspace members in it has nothing to report on.".into()
+                "No dependency was found to assess. A lockfile that lists only the project's own packages has nothing to report on.".into()
             }
             Self::ManifestTooLarge { entries, limit } => {
                 format!("The manifest holds {entries} entries and this service accepts {limit}.")
@@ -206,10 +206,10 @@ impl ApiError {
                 "The path exists but not for this method. The reference at /docs lists what each endpoint accepts.".into()
             }
             Self::ReportNotFound => {
-                "The link has never addressed a report on this deployment. A report that existed and was withdrawn answers differently, so the two cases can be told apart.".into()
+                "No report exists for this link. A link cannot be recovered once it is lost, so the manifest has to be submitted again.".into()
             }
             Self::ReportWithdrawn { reason, .. } => {
-                format!("The report existed and has been withdrawn: {reason}")
+                format!("This report has been withdrawn: {reason}")
             }
             Self::EntryNotFound { package } => {
                 format!("This report holds no entry named {package}.")

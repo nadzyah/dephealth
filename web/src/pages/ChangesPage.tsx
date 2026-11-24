@@ -41,7 +41,7 @@ export default function ChangesPage() {
 
     if (changes.status === "loading" || changes.status === "idle") {
         return (
-            <Card title="Loading the comparison">
+            <Card title="Comparison">
                 <TableSkeleton label="Loading the comparison" rows={4} />
             </Card>
         );
@@ -49,8 +49,16 @@ export default function ChangesPage() {
 
     if (changes.status === "failed" && changes.problem) {
         return (
-            <Failure problem={changes.problem} onRetry={changes.reload} level={1}>
-                <Link to={`/r/${token}`}>Back to the tree</Link>
+            <Failure
+                problem={changes.problem}
+                onRetry={changes.problem.isRetryable ? changes.reload : undefined}
+                level={1}
+            >
+                {!changes.problem.isRetryable && (
+                    <Link to={`/r/${token}`} className="button secondary touchable">
+                        Back to the tree
+                    </Link>
+                )}
             </Failure>
         );
     }
@@ -64,7 +72,7 @@ export default function ChangesPage() {
                 <p className="small">
                     <Link to={`/r/${token}`}>The tree</Link> / changes
                 </p>
-                <h1>What changed</h1>
+                <h1>Assessment Comparison</h1>
                 <p className="muted">
                     This assessment of {data.assessed_on} against the one of{" "}
                     {data.previous_assessed_on}, for the same set of dependencies.

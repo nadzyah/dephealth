@@ -48,6 +48,14 @@ export class ApiProblem extends Error {
         return this.status === 404;
     }
 
+    /**
+     * Whether the same request could succeed later. A refusal of what was sent
+     * cannot, so offering to repeat it only wastes the reader's time.
+     */
+    get isRetryable(): boolean {
+        return this.status === 0 || this.status >= 500;
+    }
+
     get isGone(): boolean {
         return this.status === 410;
     }
