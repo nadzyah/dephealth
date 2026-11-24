@@ -5,41 +5,10 @@
     margin-bottom: var(--space-3);
 }
 
-.tree-search {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
+/* Here the field shares a row with the filters, so it takes the space they
+   leave and wraps to its own line when there is not enough */
+.tree-controls .search-field {
     flex: 1 1 14rem;
-    padding-inline: var(--space-3);
-    background: var(--color-surface);
-    border: 1px solid var(--color-border-strong);
-    border-radius: var(--radius-md);
-}
-
-.tree-search svg {
-    color: var(--color-text-muted);
-    flex: none;
-}
-
-.tree-search input {
-    flex: 1;
-    min-width: 0;
-    min-height: var(--touch-target);
-    padding: 0;
-    border: 0;
-    background: none;
-    color: inherit;
-    font: inherit;
-    font-size: var(--text-sm);
-}
-
-.tree-search input:focus {
-    outline: none;
-}
-
-.tree-search:focus-within {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
 }
 
 .tree-filters {

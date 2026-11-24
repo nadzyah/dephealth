@@ -76,11 +76,11 @@ The components are grouped by the area that owns them:
 
 | Group | Components |
 |---|---|
-| `ui` | Button, Card, Badge, States (loading, skeleton, empty, failure), icons |
+| `ui` | Button, Card, Badge, SearchField, ExternalLink, States (loading, skeleton, empty, failure), icons |
 | `layout` | AppShell, Appearance, Notices |
 | `report` | TreeTable, DataAgeBanner |
 | `charts` | FactorBars, DownloadChart |
-| Input | FileDrop |
+| Input | FileDrop, SearchField |
 
 Interactive states are defined for rest, hover, active, focus and disabled.
 Focus uses `:focus-visible`, so a keyboard reader sees a ring and a pointer
