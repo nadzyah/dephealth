@@ -15,26 +15,55 @@ forecast and an explanation for each library.
 
 Diploma project at European Humanities University, 2026/27.
 
-This repository holds the database tier. PostgreSQL 17 serves requests and
-DuckDB derives the features from the raw sources. The application comes in a
-later stage.
+PostgreSQL 17 serves requests, DuckDB derives the features from the raw
+sources, an HTTP service in Rust exposes them, and a React client presents
+them.
+
+## Scope
+
+The ingestion and feature pipeline, the schema, the HTTP service and the client
+are implemented. The statistical models are specified in the schema and in
+[the data model](docs/data-model.md) but are not yet fitted, so the scores the
+service returns are fixture data rather than model output.
 
 ## Requirements
 
-- PostgreSQL 17, or Docker to run the bundled one
-- [sqlx-cli](https://crates.io/crates/sqlx-cli) to apply the migrations
+Docker alone is enough to run everything. To work on a tier rather than run it:
+
+- PostgreSQL 17 and [sqlx-cli](https://crates.io/crates/sqlx-cli) for the schema
+- Rust 1.98 for the API
+- Node 22 for the browser application
+- [DuckDB](https://duckdb.org) for the analytical tier
 - `psql` and GNU make
-- [DuckDB](https://duckdb.org) for the analytical tier only
 
 ## Usage
 
+Docker Compose is the default workflow. It starts the database, applies the
+migrations, creates the login roles and runs both the service and the client:
+
 ```
-cp .env.example .env        # then fill it in
-make db-up migrate roles seed
-make test verify
+cp .env.example .env    # then fill it in
+docker compose up -d
 ```
 
-`make` on its own lists the targets.
+The client is then on <http://localhost:5173> and the service on
+<http://localhost:8080>, with its reference at <http://localhost:8080/docs/>.
+The migration and role steps are idempotent, so a later `docker compose up` is
+a no-op for them. The test data is not, so it is loaded once, from a profile of
+its own:
+
+```
+docker compose --profile fixture run --rm seed
+```
+
+## Development
+
+Compose runs the system. The Makefile covers everything that is not running it:
+the test and verification suites, regeneration of the artefacts derived from
+the live schema, the analytical pipeline, and schema authoring. CI invokes the
+same targets, so a result obtained locally is the result CI reports.
+
+`make` lists every target with its purpose.
 
 ## Diagrams
 
@@ -49,8 +78,11 @@ make test verify
   personal data
 - [Data dictionary](docs/data-dictionary.md), every table, column, key,
   constraint, index, routine and grant. Generated from the live schema
-- [Analytical tier](docs/analytics.md), the DuckDB pipeline and its four layers
-- [Roles](db/roles/README.md), the four roles and which component reads what
+- [Analytical tier](docs/analytics.md), the DuckDB pipeline and its layers
+- [API documentation](docs/api/README.md), the generated reference, the guides
+  and the runnable examples
+- [Browser application](web/README.md), configuration, commands and layout
+- [Roles](db/roles/README.md), the group roles and which component reads what
 
 ## Layout
 
@@ -61,6 +93,9 @@ make test verify
 - `db/tests` and `db/checks` integrity tests and the privilege audit
 - `db/load` the load from the analytical tier
 - `analytics` the DuckDB pipeline
+- `api` the HTTP service
+- `web` the browser application
+- `docs` the documentation, including the generated API reference
 
 ## Licence
 
