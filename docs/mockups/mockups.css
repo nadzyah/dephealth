@@ -1,0 +1,369 @@
+/*
+ * Print layout for the mockup document. The components on these pages are
+ * rendered by the application's own stylesheets, imported above this one, so a
+ * change to a token or a component reaches this document without being redrawn.
+ *
+ * Only three rules are mirrored rather than imported: the hover, active and
+ * focus appearances, because a pseudo-class cannot be held open in a printed
+ * page. Each mirrors the component rule and refers to the same tokens.
+ */
+
+@page {
+  size: A4;
+  margin: 14mm 12mm;
+}
+
+body {
+  background: var(--color-surface);
+  font-size: 10.5pt;
+}
+
+/* One sheet per page, in the order the document lists them. A sheet whose
+   content is taller than a page breaks anyway, which is why the plate sizes
+   below are chosen to keep a screen and its annotations together */
+.sheet {
+  break-after: page;
+  break-inside: avoid;
+  padding-bottom: var(--space-4);
+}
+
+.sheet:last-of-type {
+  break-after: auto;
+}
+
+.sheet > header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid var(--color-border-strong);
+}
+
+.sheet > header h2 {
+  margin: 0;
+}
+
+.sheet-number {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.lede {
+  max-width: var(--measure);
+  color: var(--color-text-muted);
+}
+
+/* A labelled specimen. Every component on these pages sits in one, so that
+   nothing in the document is unlabelled */
+.specimen {
+  break-inside: avoid;
+  margin: 0 0 var(--space-5);
+}
+
+.specimen > figcaption {
+  margin-bottom: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+}
+
+.specimen > figcaption span {
+  display: block;
+  font-weight: var(--weight-normal);
+  color: var(--color-text-muted);
+}
+
+.frame {
+  padding: var(--space-4);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.frame.raised {
+  background: var(--color-surface-raised);
+}
+
+/* The state matrix: one column per state of one component */
+.matrix {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-3);
+  align-items: start;
+}
+
+.matrix > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.matrix small {
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  text-transform: lowercase;
+}
+
+/* Mirrors .button.primary:hover, .button.secondary:hover and .button.ghost:hover */
+.mk-hover.button.primary {
+  background: color-mix(in oklab, var(--color-accent) 85%, var(--color-text));
+}
+
+.mk-hover.button.secondary,
+.mk-hover.button.ghost {
+  background: var(--color-surface-raised);
+}
+
+/* Mirrors the active appearance, which the transition reaches on press */
+.mk-active.button {
+  transform: translateY(1px);
+  filter: brightness(0.94);
+}
+
+/* Mirrors :focus-visible from global.css */
+.mk-focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Token tables */
+.tokens {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+.tokens th,
+.tokens td {
+  padding: var(--space-1) var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.tokens th {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
+
+.tokens code {
+  white-space: nowrap;
+}
+
+.tokens .ratio {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.swatch {
+  display: inline-block;
+  width: 2.5rem;
+  height: 1.25rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  vertical-align: middle;
+}
+
+/* A screen sheet: the wide plate and its annotations beside the narrow plates,
+   so that one screen and everything said about it stay on one page */
+.screen {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 62mm;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.screen > div {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.screen .notes {
+  column-count: 1;
+}
+
+/* Device frames for the captured screens */
+.devices {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+/* A plate is as wide as its image and never wider: a long caption wraps inside
+   it rather than pushing the row onto another line */
+.device {
+  break-inside: avoid;
+  flex: 0 0 auto;
+  /* A figure carries a 40px inline margin by default, which would widen every
+     plate by more than a centimetre on each side and wrap the row */
+  margin: 0;
+}
+
+.device.phone {
+  width: 45mm;
+}
+
+.devices.tight .device.phone {
+  width: 42mm;
+}
+
+.device.tablet {
+  width: 60mm;
+}
+
+.device.desktop {
+  width: 118mm;
+}
+
+.device.landscape {
+  width: 88mm;
+}
+
+.device figcaption {
+  margin-bottom: var(--space-1);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+}
+
+.device figcaption span {
+  display: block;
+  font-weight: var(--weight-normal);
+  color: var(--color-text-muted);
+}
+
+.device img {
+  display: block;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  object-fit: cover;
+  object-position: top center;
+}
+
+.device.phone img {
+  width: 45mm;
+  height: 97mm;
+}
+
+.device.tablet img {
+  width: 60mm;
+  height: 86mm;
+}
+
+.device.desktop img {
+  width: 118mm;
+  height: 66mm;
+}
+
+.device.landscape img {
+  width: 88mm;
+  height: 41mm;
+}
+
+/* Four phones across one row rather than three */
+.devices.tight .device.phone img {
+  width: 42mm;
+  height: 91mm;
+}
+
+/* Annotations, numbered so the prose can refer to a part of a screen */
+.notes {
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: note;
+  column-count: 2;
+  column-gap: var(--space-5);
+  font-size: var(--text-xs);
+}
+
+.notes li {
+  position: relative;
+  margin-bottom: var(--space-2);
+  padding-left: var(--space-5);
+  break-inside: avoid;
+}
+
+.notes li::before {
+  counter-increment: note;
+  content: counter(note);
+  position: absolute;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 50%;
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The cover */
+.cover {
+  break-inside: avoid;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  break-after: page;
+}
+
+.cover h1 {
+  font-size: var(--text-3xl);
+  margin-bottom: var(--space-2);
+}
+
+.cover .subject {
+  font-size: var(--text-lg);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-6);
+}
+
+.contents {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-width: var(--measure);
+}
+
+.contents li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-1) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.contents span {
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Screen renders in this document are images, so no animation runs. The two
+   components whose appearance depends on motion are shown mid-animation */
+.still .skeleton,
+.still .state-spinner,
+.still .button-spinner {
+  animation-play-state: paused;
+}
+
+@media screen {
+  body {
+    max-width: 210mm;
+    margin-inline: auto;
+    padding: var(--space-6) var(--space-5);
+  }
+
+  .sheet {
+    margin-bottom: var(--space-8);
+  }
+}

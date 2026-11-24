@@ -88,6 +88,8 @@ same targets, so a result obtained locally is the result CI reports.
   management and the technology choices
 - [Adaptive UI](docs/adaptive-ui.md), breakpoints, the design system, the
   component library and the accessibility verification
+- [Interface design](docs/mockups/index.html), the pages, components, states
+  and device variants, rendered to PDF by `make mockups`
 - [Browser application](web/README.md), configuration, commands and layout
 - [Roles](db/roles/README.md), the group roles and which component reads what
 

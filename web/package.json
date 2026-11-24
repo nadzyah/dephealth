@@ -16,6 +16,7 @@
         "format": "prettier --write .",
         "format:check": "prettier --check .",
         "typecheck": "tsc -b",
+        "mockups": "node scripts/mockups.mjs",
         "screenshots": "npm run build:demo && (npm run preview -- --port 4173 --host 127.0.0.1 &) && sleep 4 && node scripts/screenshots.mjs"
     },
     "dependencies": {

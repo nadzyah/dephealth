@@ -172,6 +172,10 @@ web-check: ## lint, format and type-check the browser application
 screenshots: ## capture every screen at every device size
 	cd web && npm run screenshots
 
+.PHONY: mockups
+mockups: ## render the interface design document to PDF
+	cd web && npm run mockups
+
 # Analytical tier
 
 .PHONY: analytics
