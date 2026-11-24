@@ -1,0 +1,47 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        WITH previous AS (\n            SELECT id FROM dephealth.v_report WHERE token_digest = $2\n        )\n        SELECT coalesce(now_entry.package_name, then_entry.package_name) AS \"package_name!\",\n               then_entry.risk_probability::float8 AS risk_then,\n               now_entry.risk_probability::float8  AS risk_now,\n               round(now_entry.risk_probability - then_entry.risk_probability, 4)::float8\n                                                   AS change,\n               CASE\n                   WHEN then_entry.package_name IS NULL THEN 'new in the tree'\n                   WHEN now_entry.package_name IS NULL  THEN 'no longer in the tree'\n                   WHEN now_entry.risk_probability IS NULL\n                    AND then_entry.risk_probability IS NULL THEN 'still unresolved'\n                   WHEN now_entry.risk_probability > then_entry.risk_probability\n                        THEN 'risk has risen'\n                   WHEN now_entry.risk_probability < then_entry.risk_probability\n                        THEN 'risk has fallen'\n                   ELSE 'unchanged'\n               END                                 AS \"verdict!\"\n          FROM (SELECT e.package_name, e.risk_probability\n                  FROM dephealth.v_report_entry e\n                 WHERE e.report_id = $1) now_entry\n          FULL JOIN (SELECT e.package_name, e.risk_probability\n                       FROM dephealth.v_report_entry e\n                       JOIN previous p ON p.id = e.report_id) then_entry\n                 ON lower(then_entry.package_name) = lower(now_entry.package_name)\n         ORDER BY change DESC NULLS LAST, 1\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "package_name!",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 1,
+        "name": "risk_then",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 2,
+        "name": "risk_now",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 3,
+        "name": "change",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 4,
+        "name": "verdict!",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int8",
+        "Bytea"
+      ]
+    },
+    "nullable": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "hash": "6936f35b7681f416a5546b751fbe80aa38cc1d2cb0797a9116d3065df2d43b56"
+}

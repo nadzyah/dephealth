@@ -1,0 +1,118 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        SELECT e.ordinal                    AS \"ordinal!\",\n               e.package_name               AS \"package_name!\",\n               e.package_version            AS \"package_version!\",\n               e.depth                      AS \"depth!\",\n               e.is_direct                  AS \"is_direct!\",\n               e.resolved                   AS \"resolved!\",\n               e.unresolved_reason::text    AS unresolved_reason,\n               e.unresolved_label,\n               e.unresolved_remedy,\n               e.risk_probability::float8   AS risk_probability,\n               e.risk_horizon_days,\n               e.forecast_point_downloads::float8 AS forecast_point_downloads,\n               e.forecast_horizon_months,\n               e.insufficient_history       AS \"insufficient_history!\",\n               e.distinct_contributors,\n               e.days_since_last_event,\n               e.contributor_count_withheld AS \"contributor_count_withheld!\"\n          FROM dephealth.v_report_entry e\n         WHERE e.report_id = $1\n         ORDER BY e.ordinal\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "ordinal!",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "package_name!",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "package_version!",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "depth!",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 4,
+        "name": "is_direct!",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 5,
+        "name": "resolved!",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 6,
+        "name": "unresolved_reason",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 7,
+        "name": "unresolved_label",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 8,
+        "name": "unresolved_remedy",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 9,
+        "name": "risk_probability",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 10,
+        "name": "risk_horizon_days",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 11,
+        "name": "forecast_point_downloads",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 12,
+        "name": "forecast_horizon_months",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 13,
+        "name": "insufficient_history!",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 14,
+        "name": "distinct_contributors",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 15,
+        "name": "days_since_last_event",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 16,
+        "name": "contributor_count_withheld!",
+        "type_info": "Bool"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int8"
+      ]
+    },
+    "nullable": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      null,
+      true,
+      true,
+      null,
+      true,
+      null,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "62760ddac7fe7e08e2476ea46e8cf1688734e218c49fabc1052d6e0993fc278f"
+}

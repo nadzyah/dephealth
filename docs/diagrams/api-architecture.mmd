@@ -1,0 +1,76 @@
+%% API tier: the layers of a request, and which database role each one reaches
+%% the schema through.
+flowchart TB
+    subgraph CLIENT["Clients"]
+        direction LR
+        WEB["Browser application<br/>React, Vite"]
+        TOOL["Any HTTP client<br/>read-only"]
+        OPS["Operator<br/>bearer token"]
+    end
+
+    subgraph EDGE["Middleware, applied to every request"]
+        direction TB
+        RID["Request id"]
+        TRACE["Tracing"]
+        TIMEOUT["Timeout"]
+        CORS["CORS, configured origins"]
+        NOSNIFF["X-Content-Type-Options"]
+        RID --> TRACE --> TIMEOUT --> CORS --> NOSNIFF
+    end
+
+    subgraph HANDLERS["Handlers, src/http"]
+        direction TB
+        ASSESS["assessments<br/>the only writer"]
+        REPORTS["reports<br/>read, compare, withdraw"]
+        PACKAGES["packages<br/>assessment, series"]
+        META["meta and health"]
+    end
+
+    subgraph DOMAIN["Domain, src/manifest"]
+        PARSE["Lockfile parser<br/>depth by breadth-first walk,<br/>one entry per package"]
+    end
+
+    subgraph DATA["Data access, src/db"]
+        QUERIES["Compile-checked queries<br/>sqlx, offline data committed"]
+    end
+
+    subgraph PGSQL["PostgreSQL, as dephealth_app_login"]
+        direction TB
+        FN["create_report<br/>definer rights,<br/>one transaction"]
+        VIEWS["v_report, v_report_entry,<br/>v_package_assessment,<br/>v_download_series, v_data_age"]
+        HIDDEN["activity_feature, model,<br/>risk_factor, materialised view<br/>NO PRIVILEGE"]
+    end
+
+    WEB --> EDGE
+    TOOL --> EDGE
+    OPS --> EDGE
+    EDGE --> HANDLERS
+
+    ASSESS --> PARSE
+    PARSE --> QUERIES
+    REPORTS --> QUERIES
+    PACKAGES --> QUERIES
+    META --> QUERIES
+
+    QUERIES -->|"write"| FN
+    QUERIES -->|"read"| VIEWS
+    FN -.->|"reads what the caller may not"| HIDDEN
+    VIEWS -.->|"disclosure threshold applied"| HIDDEN
+
+    SPEC["docs/api/openapi.yaml<br/>generated from the handlers"]
+    HANDLERS -.->|"make openapi"| SPEC
+    SPEC -.->|"served at /docs"| WEB
+
+    classDef client fill:#e8eef7,stroke:#5b7aa8,color:#1b2b3f
+    classDef edge fill:#f7f3e8,stroke:#a8945b,color:#3f371b
+    classDef code fill:#eaf3ec,stroke:#5f9170,color:#1d3324
+    classDef store fill:#f2ecf7,stroke:#8a6fa8,color:#2e2339
+    classDef denied fill:#fbeaea,stroke:#b06a6a,color:#3d1f1f
+    classDef generated fill:#eeeeee,stroke:#888888,color:#222222,stroke-dasharray: 5 5
+
+    class WEB,TOOL,OPS client
+    class RID,TRACE,TIMEOUT,CORS,NOSNIFF edge
+    class ASSESS,REPORTS,PACKAGES,META,PARSE,QUERIES code
+    class FN,VIEWS store
+    class HIDDEN denied
+    class SPEC generated

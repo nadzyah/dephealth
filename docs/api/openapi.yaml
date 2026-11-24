@@ -1,0 +1,1108 @@
+openapi: 3.1.0
+info:
+  title: dephealth API
+  description: |-
+    Submit a dependency manifest and receive the tree ranked by the risk that maintenance ceases, with an adoption forecast and the evidence behind every score.
+
+    Nothing is modelled while a request is in flight. Forecasts and risk scores are computed on a schedule and this API reads the stored results, which is why every response states the date of the data it rests on.
+
+    There are no accounts. A generated report is addressed by an unguessable link, and only withdrawal needs a credential.
+  license:
+    name: MIT
+    identifier: MIT
+  version: 0.1.0
+servers:
+- url: /
+  description: The deployment serving this document
+paths:
+  /api/v1/assessments:
+    post:
+      tags:
+      - Assessments
+      summary: Assess a dependency manifest
+      description: |-
+        The only endpoint that writes anything.
+
+        A `Cargo.lock` arrives as `application/toml` or `text/plain`. A client that
+        has resolved its own tree may send the entries as JSON instead. The lockfile
+        holds the resolved transitive set, so nothing is resolved again here. What it
+        does not hold is the kind of each dependency, so a development dependency
+        cannot be told from a normal one and every entry is assessed.
+
+        The manifest is read and discarded. What is kept is the report and a salted
+        fingerprint of the entry set, which is what lets a later submission of the
+        same manifest be recognised without the manifest having been stored.
+      operationId: createAssessment
+      requestBody:
+        description: A Cargo lockfile, or an already resolved entry list
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntryList'
+          application/toml:
+            schema:
+              type: string
+            example: |
+              version = 4
+
+              [[package]]
+              name = "my-service"
+              version = "0.1.0"
+              dependencies = ["serde", "tiny-config"]
+
+              [[package]]
+              name = "serde"
+              version = "1.0.228"
+              source = "registry+https://github.com/rust-lang/crates.io-index"
+
+              [[package]]
+              name = "tiny-config"
+              version = "0.3.1"
+              source = "registry+https://github.com/rust-lang/crates.io-index"
+        required: true
+      responses:
+        '201':
+          description: The assessment was stored
+          headers:
+            Location:
+              schema:
+                type: string
+              description: The report, relative to this server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+        '413':
+          description: Larger than this deployment accepts
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '415':
+          description: Not a form this endpoint accepts
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '422':
+          description: The manifest could not be read, or held nothing to assess. A parse failure carries the line it stopped at. No partial assessment is produced, since a partial tree would understate the exposure
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '503':
+          description: No completed ingestion run or no current model, so there is nothing to report
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /api/v1/meta:
+    get:
+      tags:
+      - Service
+      summary: The method and the age of the data
+      description: |-
+        What a reader needs in order to interpret a score. The definition it rests
+        on, the disclosure threshold, and how old each source is. The constants are
+        read from the database, so this endpoint cannot disagree with the scores it
+        describes.
+      operationId: getMeta
+      responses:
+        '200':
+          description: The method and the state of each source
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meta'
+        '500':
+          description: The request could not be completed
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /api/v1/packages:
+    get:
+      tags:
+      - Packages
+      summary: List packages
+      description: Ordered by descending risk, so the first page is the one worth reading.
+      operationId: listPackages
+      parameters:
+      - name: q
+        in: query
+        description: Matches anywhere in the name, without regard to case.
+        required: false
+        schema:
+          type: string
+        example: serde
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+          default: 50
+          maximum: 200
+          minimum: 1
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+          default: 0
+          minimum: 0
+      responses:
+        '200':
+          description: One page of packages
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackagePage'
+        '400':
+          description: A query parameter is not usable
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /api/v1/packages/{name}:
+    get:
+      tags:
+      - Packages
+      summary: The current assessment of one package
+      description: |-
+        The stored score, the forecast and the age of the data behind both, for a
+        client that is not reading a report.
+
+        A contributor count below the disclosure threshold is withheld rather than
+        rounded, and `contributor_count_withheld` says which happened. A count of
+        zero is published, because it describes nobody.
+      operationId: getPackage
+      parameters:
+      - name: name
+        in: path
+        description: The package name, matched without regard to case
+        required: true
+        schema:
+          type: string
+        example: serde
+      responses:
+        '200':
+          description: The current assessment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assessment'
+        '404':
+          description: No package of that name is in the registry snapshot
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /api/v1/packages/{name}/downloads:
+    get:
+      tags:
+      - Packages
+      summary: The observed download series
+      description: |-
+        The series a package has even when its history is too short for a forecast
+        to be given.
+      operationId: getPackageDownloads
+      parameters:
+      - name: name
+        in: path
+        description: The package name
+        required: true
+        schema:
+          type: string
+        example: serde
+      - name: from
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+        example: 2026-01-01
+      - name: to
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: One point per day, ascending
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DownloadPoint'
+        '400':
+          description: A query parameter is not usable
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '404':
+          description: No package of that name is in the registry snapshot
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /api/v1/reports/{token}:
+    get:
+      tags:
+      - Assessments
+      summary: Read a stored report
+      description: |-
+        Returns the report as it stood when it was generated, which is not the same
+        as the current scores. A report filed as evidence does not change when the
+        next ingestion run overwrites them.
+
+        A link that never addressed a report answers 404, and one whose report has
+        been withdrawn answers 410. The two are kept apart because they have
+        different consequences for an audit.
+      operationId: getReport
+      parameters:
+      - name: token
+        in: path
+        description: |-
+          The token from the permanent link, 64 hexadecimal characters. Only its
+          digest is stored, so a link cannot be recovered from a database dump.
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{64}$
+        example: 9f2c1ab4e6d8705318a0cb4df2e9173c5b6a8de0417fc2938b5e60a7d41c8f23
+      responses:
+        '200':
+          description: The stored report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+        '404':
+          description: The link has never addressed a report here
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '410':
+          description: The report existed and has been withdrawn
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /api/v1/reports/{token}/changes:
+    get:
+      tags:
+      - Assessments
+      summary: Compare a report with the previous assessment of the same manifest
+      description: |-
+        Matched on the salted fingerprint of the entry set, so a resubmission is
+        recognised without the earlier manifest having been kept. A report that is
+        the first of its manifest answers 404.
+      operationId: getReportChanges
+      parameters:
+      - name: token
+        in: path
+        description: |-
+          The token from the permanent link, 64 hexadecimal characters. Only its
+          digest is stored, so a link cannot be recovered from a database dump.
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{64}$
+        example: 9f2c1ab4e6d8705318a0cb4df2e9173c5b6a8de0417fc2938b5e60a7d41c8f23
+      responses:
+        '200':
+          description: What has changed since the earlier assessment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Changes'
+        '404':
+          description: No such report, or no earlier assessment of its manifest
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '410':
+          description: The report has been withdrawn
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /api/v1/reports/{token}/entries/{package}:
+    get:
+      tags:
+      - Assessments
+      summary: Read one entry of a report with its evidence
+      description: |-
+        The entry, the factors that moved its score, the observed download series
+        and the current assessment of the same package.
+
+        The factor decomposition is published as part of a dated report and not on
+        its own, which is why this endpoint is addressed through a report rather than
+        through a package.
+      operationId: getReportEntry
+      parameters:
+      - name: token
+        in: path
+        description: The token from the permanent link.
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{64}$
+      - name: package
+        in: path
+        description: The package name, matched without regard to case.
+        required: true
+        schema:
+          type: string
+        example: tiny-config
+      responses:
+        '200':
+          description: The entry and its evidence
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntryDetail'
+        '404':
+          description: No such report, or no such entry in it
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '410':
+          description: The report has been withdrawn
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /api/v1/reports/{token}/withdrawal:
+    post:
+      tags:
+      - Assessments
+      summary: Withdraw a report
+      description: |-
+        Withdrawal keeps the row and the reason, so a withdrawn report stays
+        distinguishable from a link that never existed. It cannot be reversed.
+
+        This is the only operation with a credential, because there are no accounts
+        and a link alone must not be enough to remove the evidence it addresses. A
+        deployment with no administrative token configured answers 501.
+      operationId: withdrawReport
+      parameters:
+      - name: token
+        in: path
+        description: |-
+          The token from the permanent link, 64 hexadecimal characters. Only its
+          digest is stored, so a link cannot be recovered from a database dump.
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{64}$
+        example: 9f2c1ab4e6d8705318a0cb4df2e9173c5b6a8de0417fc2938b5e60a7d41c8f23
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WithdrawalRequest'
+        required: true
+      responses:
+        '204':
+          description: The report has been withdrawn
+        '400':
+          description: No reason was given
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '401':
+          description: No usable credential
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '404':
+          description: No such report
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '410':
+          description: Already withdrawn
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '501':
+          description: Withdrawal is not enabled here
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+      - adminToken: []
+  /health/live:
+    get:
+      tags:
+      - Service
+      summary: Liveness
+      description: |-
+        Answers as long as the process is running, so an orchestrator does not
+        restart the service for a database it cannot reach.
+      operationId: getLiveness
+      responses:
+        '200':
+          description: The process is running
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Liveness'
+  /health/ready:
+    get:
+      tags:
+      - Service
+      summary: Readiness
+      description: |-
+        Reports whether the database answers and whether every source has been
+        ingested at least once. A source that never has makes the service unready,
+        since an assessment would rest on nothing. This is also the endpoint that
+        external availability monitoring reads.
+      operationId: getReadiness
+      responses:
+        '200':
+          description: Ready to serve assessments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Readiness'
+        '503':
+          description: Not ready
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Readiness'
+components:
+  schemas:
+    Activity:
+      type: object
+      required:
+      - contributor_count_withheld
+      properties:
+        contributor_count_withheld:
+          type: boolean
+          description: True when a count exists but falls below the disclosure threshold.
+        days_since_last_event:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        distinct_contributors:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          description: |-
+            Null when withheld, and zero when the repository genuinely had no
+            contributor in the window.
+    Assessment:
+      type: object
+      required:
+      - package_name
+      - resolution
+      - activity
+      - data_as_of
+      properties:
+        activity:
+          $ref: '#/components/schemas/Activity'
+        data_as_of:
+          $ref: '#/components/schemas/LiveDataAge'
+        forecast:
+          oneOf:
+          - $ref: '#/components/schemas/Forecast'
+          - type: 'null'
+        is_abandoned:
+          type:
+          - boolean
+          - 'null'
+          description: |-
+            Null when no development event has been observed, which is not the same
+            as inactivity.
+        latest_version:
+          type:
+          - string
+          - 'null'
+        package_name:
+          type: string
+          example: serde
+        repository_url:
+          type:
+          - string
+          - 'null'
+        resolution:
+          $ref: '#/components/schemas/Resolution'
+        risk:
+          oneOf:
+          - $ref: '#/components/schemas/Risk'
+          - type: 'null'
+    Change:
+      type: object
+      required:
+      - package_name
+      - verdict
+      properties:
+        change:
+          type:
+          - number
+          - 'null'
+          format: double
+        package_name:
+          type: string
+        risk_now:
+          type:
+          - number
+          - 'null'
+          format: double
+        risk_then:
+          type:
+          - number
+          - 'null'
+          format: double
+        verdict:
+          type: string
+          example: risk has risen
+    Changes:
+      type: object
+      required:
+      - assessed_on
+      - previous_assessed_on
+      - packages
+      properties:
+        assessed_on:
+          type: string
+          format: date
+        packages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Change'
+        previous_assessed_on:
+          type: string
+          format: date
+    Counts:
+      type: object
+      required:
+      - entries
+      - resolved
+      - unresolved
+      properties:
+        entries:
+          type: integer
+          format: int32
+        resolved:
+          type: integer
+          format: int32
+        unresolved:
+          type: integer
+          format: int32
+    DownloadPoint:
+      type: object
+      required:
+      - day
+      - downloads
+      properties:
+        day:
+          type: string
+          format: date
+        downloads:
+          type: integer
+          format: int64
+    EntryDetail:
+      type: object
+      required:
+      - entry
+      - factors
+      - downloads
+      properties:
+        downloads:
+          type: array
+          items:
+            $ref: '#/components/schemas/DownloadPoint'
+        entry:
+          $ref: '#/components/schemas/ReportEntry'
+        factors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Factor'
+          description: Ordered by the size of the contribution, as the report stored them.
+        live:
+          oneOf:
+          - $ref: '#/components/schemas/Assessment'
+            description: |-
+              The current assessment of the same package, which may differ from the
+              stored one.
+          - type: 'null'
+    EntryInput:
+      type: object
+      required:
+      - name
+      - version
+      properties:
+        depth:
+          type: integer
+          format: int32
+          description: Zero for a direct dependency of the submitting project.
+          default: 0
+          minimum: 0
+        from_registry:
+          type: boolean
+          description: |-
+            False for a path or git dependency. Such an entry is never matched by
+            name against a published package, since a local crate may share the name
+            of one.
+          default: true
+        name:
+          type: string
+          example: serde
+        version:
+          type: string
+          example: 1.0.228
+    EntryList:
+      type: object
+      description: An already resolved entry set, for a client that has done its own resolution.
+      required:
+      - entries
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntryInput'
+          minItems: 1
+    Factor:
+      type: object
+      required:
+      - code
+      - label
+      - description
+      - observed_value
+      - contribution
+      - direction
+      properties:
+        code:
+          type: string
+          example: days_since_last_event
+        contribution:
+          type: number
+          format: double
+          description: Positive raised the risk, negative lowered it.
+        description:
+          type: string
+        direction:
+          type: string
+          example: raised the risk
+        label:
+          type: string
+        observed_value:
+          type: number
+          format: double
+    Forecast:
+      type: object
+      required:
+      - insufficient_history
+      properties:
+        horizon_months:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          maximum: 12
+          minimum: 3
+        insufficient_history:
+          type: boolean
+          description: |-
+            True when the package has under twelve months of history, in which case
+            the observed series is given and no forecast.
+        point_downloads:
+          type:
+          - number
+          - 'null'
+          format: double
+    LiveDataAge:
+      type: object
+      properties:
+        events:
+          type:
+          - string
+          - 'null'
+          format: date
+        registry:
+          type:
+          - string
+          - 'null'
+          format: date
+    Liveness:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          example: live
+    Meta:
+      type: object
+      required:
+      - service
+      - version
+      - method
+      - sources
+      properties:
+        method:
+          $ref: '#/components/schemas/Method'
+        service:
+          type: string
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceAge'
+        version:
+          type: string
+    Method:
+      type: object
+      required:
+      - abandonment_window_days
+      - contributor_disclosure_threshold
+      - abandonment_definition
+      properties:
+        abandonment_definition:
+          type: string
+        abandonment_window_days:
+          type: integer
+          format: int32
+          example: 180
+        contributor_disclosure_threshold:
+          type: integer
+          format: int32
+          example: 5
+    ModelRef:
+      type: object
+      required:
+      - name
+      - version
+      properties:
+        name:
+          type: string
+          example: cox_proportional_hazards
+        version:
+          type: string
+          example: '1'
+    PackagePage:
+      type: object
+      required:
+      - items
+      - limit
+      - offset
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackageSummary'
+        limit:
+          type: integer
+          format: int64
+        offset:
+          type: integer
+          format: int64
+    PackageSummary:
+      type: object
+      required:
+      - package_name
+      - is_resolved
+      properties:
+        is_resolved:
+          type: boolean
+        latest_version:
+          type:
+          - string
+          - 'null'
+        package_name:
+          type: string
+        risk_probability:
+          type:
+          - number
+          - 'null'
+          format: double
+    Problem:
+      type: object
+      description: |-
+        An error, as RFC 9457 describes one. `type` is a stable identifier a client
+        may branch on, while the prose in `title` and `detail` is not. Some problems
+        carry further fields, which the reference gives per endpoint.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        detail:
+          type: string
+        status:
+          type: integer
+          format: int32
+          minimum: 0
+        title:
+          type: string
+        type:
+          type: string
+          example: /problems/report-not-found
+    Readiness:
+      type: object
+      required:
+      - status
+      - database
+      - sources
+      - sources_never_ingested
+      properties:
+        database:
+          type: string
+          example: reachable
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceAge'
+        sources_never_ingested:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+          example: ready
+    Report:
+      type: object
+      required:
+      - assessed_on
+      - created_at
+      - data_as_of
+      - method
+      - counts
+      - entries
+      properties:
+        assessed_on:
+          type: string
+          format: date
+        counts:
+          $ref: '#/components/schemas/Counts'
+        created_at:
+          type: string
+          format: date-time
+        data_as_of:
+          $ref: '#/components/schemas/ReportDataAge'
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportEntry'
+          description: Ranked, scored entries first and then by descending risk.
+        link:
+          type:
+          - string
+          - 'null'
+          description: |-
+            Returned only when the report is created, since the token is not
+            recoverable afterwards.
+        method:
+          $ref: '#/components/schemas/ReportMethod'
+        withdrawn:
+          oneOf:
+          - $ref: '#/components/schemas/Withdrawal'
+          - type: 'null'
+    ReportDataAge:
+      type: object
+      required:
+      - registry
+      - events
+      properties:
+        events:
+          type: string
+          format: date
+        registry:
+          type: string
+          format: date
+    ReportEntry:
+      type: object
+      required:
+      - ordinal
+      - package_name
+      - package_version
+      - depth
+      - relation
+      - resolved
+      properties:
+        activity:
+          oneOf:
+          - $ref: '#/components/schemas/Activity'
+          - type: 'null'
+        depth:
+          type: integer
+          format: int32
+        forecast:
+          oneOf:
+          - $ref: '#/components/schemas/Forecast'
+          - type: 'null'
+        ordinal:
+          type: integer
+          format: int32
+          description: The rank within the report, which is the order it is displayed in.
+        package_name:
+          type: string
+          example: serde
+        package_version:
+          type: string
+          example: 1.0.228
+        relation:
+          type: string
+          description: |-
+            Whether the submitting project depends on this package itself or
+            inherits it through another.
+          example: direct
+        resolved:
+          type: boolean
+          description: |-
+            True only when a score stands behind the entry. A package resolved to a
+            repository but not yet scored is reported as unresolved, with its own
+            reason.
+        risk:
+          oneOf:
+          - $ref: '#/components/schemas/Risk'
+          - type: 'null'
+        unresolved:
+          oneOf:
+          - $ref: '#/components/schemas/Unresolved'
+          - type: 'null'
+    ReportMethod:
+      type: object
+      required:
+      - abandonment_window_days
+      - risk_model
+      - forecast_model
+      properties:
+        abandonment_window_days:
+          type: integer
+          format: int32
+        forecast_model:
+          $ref: '#/components/schemas/ModelRef'
+        risk_model:
+          $ref: '#/components/schemas/ModelRef'
+    Resolution:
+      type: object
+      required:
+      - is_resolved
+      - label
+      - remedy
+      properties:
+        is_resolved:
+          type: boolean
+        label:
+          type: string
+        remedy:
+          type: string
+    Risk:
+      type: object
+      required:
+      - probability
+      - horizon_days
+      properties:
+        horizon_days:
+          type: integer
+          format: int32
+          example: 365
+        probability:
+          type: number
+          format: double
+          example: 0.031
+          maximum: 1
+          minimum: 0
+    SourceAge:
+      type: object
+      required:
+      - source
+      properties:
+        age_days:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        data_as_of:
+          type:
+          - string
+          - 'null'
+          format: date
+        last_attempt_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        last_attempt_status:
+          type:
+          - string
+          - 'null'
+          example: succeeded
+        last_success_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        source:
+          type: string
+          example: crates_io_dump
+    Unresolved:
+      type: object
+      required:
+      - reason
+      - label
+      - remedy
+      properties:
+        label:
+          type: string
+        reason:
+          type: string
+          example: no_url_declared
+        remedy:
+          type: string
+          description: What the submitter can do about it.
+    Withdrawal:
+      type: object
+      required:
+      - at
+      - reason
+      properties:
+        at:
+          type: string
+          format: date-time
+        reason:
+          type: string
+    WithdrawalRequest:
+      type: object
+      required:
+      - reason
+      properties:
+        reason:
+          type: string
+          description: Kept with the report and shown to whoever opens the link.
+          example: Superseded by a later assessment of the same manifest
+          minLength: 1
+  securitySchemes:
+    adminToken:
+      type: http
+      scheme: bearer
+      description: A bearer token held by the operator and configured as API_ADMIN_TOKEN. It authorises withdrawal and nothing else.
+security:
+- {}
+tags:
+- name: Assessments
+  description: Submitting a manifest and reading the report it produces.
+- name: Packages
+  description: The current assessment of a single package.
+- name: Service
+  description: The method, the age of the data, and liveness.

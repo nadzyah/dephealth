@@ -1,0 +1,22 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT dephealth.previous_report_of(dephealth.report_token_digest($1))",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "previous_report_of",
+        "type_info": "Bytea"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "777c4d562eeed4159a95df7e73396f9d9f6a245a45ac19488c6d4554be9793bd"
+}

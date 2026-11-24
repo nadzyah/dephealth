@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "CALL dephealth.withdraw_report(dephealth.report_token_digest($1), $2)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "ce97b0c8a1ed9221aa79e127c134526f7320c297443d2071f31765e8a564b0e7"
+}

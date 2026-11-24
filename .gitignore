@@ -1,8 +1,10 @@
 # Secrets
 .env
 
-# Rust
+# Rust. api/.sqlx is committed, since it is what lets the crate build without a
+# database
 /target/
+/api/target/
 
 # Analytical tier: raw downloads and the local DuckDB file are data, not source
 /analytics/data/

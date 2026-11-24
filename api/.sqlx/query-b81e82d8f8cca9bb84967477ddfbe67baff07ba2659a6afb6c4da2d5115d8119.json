@@ -1,0 +1,118 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        SELECT a.package_name                    AS \"package_name!\",\n               a.latest_version,\n               a.repository_url,\n               a.is_resolved                     AS \"is_resolved!\",\n               a.resolution_label                AS \"resolution_label!\",\n               a.resolution_remedy               AS \"resolution_remedy!\",\n               a.risk_probability::float8        AS risk_probability,\n               a.risk_horizon_days,\n               a.forecast_point_downloads::float8 AS forecast_point_downloads,\n               a.forecast_horizon_months,\n               a.insufficient_history,\n               a.distinct_contributors,\n               a.contributor_count_withheld      AS \"contributor_count_withheld!\",\n               a.days_since_last_event,\n               a.is_abandoned,\n               a.registry_data_as_of,\n               a.events_data_as_of\n          FROM dephealth.v_package_assessment a\n         WHERE lower(a.package_name) = lower($1)\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "package_name!",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 1,
+        "name": "latest_version",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "repository_url",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "is_resolved!",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 4,
+        "name": "resolution_label!",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 5,
+        "name": "resolution_remedy!",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 6,
+        "name": "risk_probability",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 7,
+        "name": "risk_horizon_days",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 8,
+        "name": "forecast_point_downloads",
+        "type_info": "Float8"
+      },
+      {
+        "ordinal": 9,
+        "name": "forecast_horizon_months",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 10,
+        "name": "insufficient_history",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 11,
+        "name": "distinct_contributors",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 12,
+        "name": "contributor_count_withheld!",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 13,
+        "name": "days_since_last_event",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 14,
+        "name": "is_abandoned",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 15,
+        "name": "registry_data_as_of",
+        "type_info": "Date"
+      },
+      {
+        "ordinal": 16,
+        "name": "events_data_as_of",
+        "type_info": "Date"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      null,
+      true,
+      null,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "b81e82d8f8cca9bb84967477ddfbe67baff07ba2659a6afb6c4da2d5115d8119"
+}

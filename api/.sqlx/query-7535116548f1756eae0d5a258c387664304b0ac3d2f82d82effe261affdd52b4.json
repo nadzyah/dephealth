@@ -1,0 +1,26 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        SELECT dephealth.abandonment_window_days() AS \"window!\",\n               dephealth.k_anonymity_threshold()   AS \"threshold!\"\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "window!",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "threshold!",
+        "type_info": "Int4"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      null,
+      null
+    ]
+  },
+  "hash": "7535116548f1756eae0d5a258c387664304b0ac3d2f82d82effe261affdd52b4"
+}

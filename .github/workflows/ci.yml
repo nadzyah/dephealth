@@ -76,3 +76,73 @@ jobs:
         run: |
           make ddl dictionary
           git diff --exit-code -- db/ddl/schema.sql docs/data-dictionary.md
+
+  api:
+    name: API tier
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: api
+
+      # The committed query data is what lets the crate build without a
+      # database, so it is checked before one is started
+      - name: Build without a database
+        run: cargo build --locked
+        working-directory: api
+        env:
+          SQLX_OFFLINE: true
+
+      - name: Check the formatting
+        run: cargo fmt --check
+        working-directory: api
+
+      - name: Lint
+        run: cargo clippy --all-targets --locked -- -D warnings
+        working-directory: api
+        env:
+          SQLX_OFFLINE: true
+
+      - name: Write the environment file
+        run: .github/write-env.sh
+
+      - name: Cache sqlx-cli
+        id: sqlx-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/bin/sqlx
+          key: sqlx-cli-${{ env.SQLX_VERSION }}-${{ runner.os }}
+
+      - name: Install sqlx-cli
+        if: steps.sqlx-cache.outputs.cache-hit != 'true'
+        run: |
+          cargo install sqlx-cli \
+            --version "$SQLX_VERSION" \
+            --no-default-features --features rustls,postgres \
+            --locked
+
+      - name: Start the database and load the fixture
+        run: make db-up migrate roles seed
+
+      # Includes the test that fails when docs/api/openapi.yaml is stale
+      - name: Run the tests
+        run: make api-test
+
+  openapi:
+    name: API specification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Validate the specification
+        run: make openapi-lint
