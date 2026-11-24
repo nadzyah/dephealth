@@ -16,8 +16,8 @@ forecast and an explanation for each library.
 Diploma project at European Humanities University, 2026/27.
 
 PostgreSQL 17 serves requests, DuckDB derives the features from the raw
-sources, an HTTP service in Rust exposes them, and a React client presents
-them.
+sources, an HTTP service in Rust exposes them, and a
+[React](https://www.npmjs.com/package/react) client presents them.
 
 ## Scope
 

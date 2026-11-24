@@ -5,7 +5,8 @@ constraints, indexes and grants is in [data-dictionary.md](data-dictionary.md),
 generated from the live schema. The analytical tier is in
 [analytics.md](analytics.md).
 
-Diagrams (Mermaid sources in `docs/diagrams`):
+Diagrams ([Mermaid](https://www.npmjs.com/package/mermaid) sources in
+`docs/diagrams`):
 
 - `er.mmd` entity relationship diagram with keys
 - `schema-blocks.mmd` logical schema, five colour coded blocks
@@ -173,7 +174,8 @@ comparison come from the same metric table.
 ## Schema Versioning
 
 The reversible migrations in `db/migrations`, plain SQL, applied with
-`sqlx migrate run` and undone with `sqlx migrate revert`. sqlx stores the
+`sqlx migrate run` and undone with `sqlx migrate revert`.
+[sqlx](https://crates.io/crates/sqlx) stores the
 applied version and a checksum per file, so editing an applied migration is
 refused. `make migrate-info` shows the state of a database.
 

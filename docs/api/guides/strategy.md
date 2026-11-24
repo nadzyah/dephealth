@@ -27,16 +27,16 @@ workflows and the boundaries.
 | ISO 8601 | Every date and instant in a payload |
 | Semantic versioning, Keep a Changelog | The change record |
 | CommonMark | The authored documents |
-| Mermaid | The diagram sources |
+| [Mermaid](https://www.npmjs.com/package/mermaid) | The diagram sources |
 
 ## Tooling
 
 | Tool | Role |
 |---|---|
-| utoipa | Derives the specification from the handlers |
-| Redocly CLI, at a pinned version | Validates the specification, invoked by `make openapi-lint` and by CI |
+| [utoipa](https://crates.io/crates/utoipa) | Derives the specification from the handlers |
+| [Redocly CLI](https://www.npmjs.com/package/@redocly/cli), at a pinned version | Validates the specification, invoked by `make openapi-lint` and by CI |
 | The drift test | Fails when the committed specification is not what the handlers produce |
-| Redoc | Renders the specification, from the repository or served by the service at `/docs/` |
+| [Redoc](https://www.npmjs.com/package/redoc) | Renders the specification, from the repository or served by the service at `/docs/` |
 | The demonstration build of the browser application | Answers from committed response captures, which gives a reader a working client with no service behind it |
 
 ## Structure

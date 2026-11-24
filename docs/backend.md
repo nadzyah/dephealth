@@ -33,18 +33,21 @@ The components and the path a request takes through them are drawn in
 
 ## Framework
 
-axum, on the Tokio runtime. It was chosen for the tower middleware ecosystem,
-which is where the request identifier, the timeout, the tracing span, the
+[axum](https://crates.io/crates/axum), on the
+[Tokio](https://crates.io/crates/tokio) runtime. It was chosen for the
+[tower-http](https://crates.io/crates/tower-http) middleware ecosystem, which
+is where the request identifier, the timeout, the tracing span, the
 cross-origin policy and the panic boundary come from, and for extractors that
 make the shape of a request part of the handler's signature rather than a
-runtime lookup. The specification is derived from those handlers by utoipa, so
-the published contract is a product of the code that serves it.
+runtime lookup. The specification is derived from those handlers by
+[utoipa](https://crates.io/crates/utoipa), so the published contract is a
+product of the code that serves it.
 
 ## Data Access
 
-The requirement for this criterion names an ORM. This service uses `sqlx`,
-which is a compile-checked query layer and not an object mapper, and the
-decision is deliberate.
+The requirement for this criterion names an ORM. This service uses
+[`sqlx`](https://crates.io/crates/sqlx), which is a compile-checked query layer
+and not an object mapper, and the decision is deliberate.
 
 The authority over the data is the schema. Invariants live in constraints, in
 definer-rights functions and in views, because they have to hold for every
@@ -102,11 +105,12 @@ validated, and the database is reached, before the listener is bound.
 
 ## Logging
 
-The service logs through `tracing`. Every request opens a span carrying the
-method, the path and the request identifier, so each line a request produces is
-attributable to it. The identifier is taken from `x-request-id` when the caller
-supplies one and generated otherwise, and it is echoed on the response, which is
-what makes a reported fault locatable without a reproduction.
+The service logs through [`tracing`](https://crates.io/crates/tracing). Every
+request opens a span carrying the method, the path and the request identifier,
+so each line a request produces is attributable to it. The identifier is taken
+from `x-request-id` when the caller supplies one and generated otherwise, and it
+is echoed on the response, which is what makes a reported fault locatable
+without a reproduction.
 
 Events are structured as fields rather than formatted into messages, and the
 output form is selected by `API_LOG_FORMAT`: one JSON object per event where a
@@ -149,7 +153,8 @@ The integration tests drive the router directly rather than a listening socket,
 so they do not depend on a free port, and they read the same environment as the
 service.
 
-`make api-coverage` measures line coverage with `cargo llvm-cov` and fails
+`make api-coverage` measures line coverage with
+[`cargo-llvm-cov`](https://crates.io/crates/cargo-llvm-cov) and fails
 below eighty percent, which is above the minimum this criterion sets. CI runs
 it on every pull request, so a change that drops coverage through the gate fails
 there. The figure it prints covers the whole crate, including the process entry
@@ -158,12 +163,13 @@ points, which no test exercises because they bind a socket.
 ## Dependencies
 
 `make api-audit` checks the dependency graph against the RustSec advisory
-database. Two advisories are recorded as exceptions in `api/.cargo/audit.toml`,
-both for crates that appear in the lockfile as optional database drivers this
-build does not enable, which `cargo tree` confirms are absent from the build
-graph. Each exception states the condition for removing it. One dependency is
-flagged as unmaintained and is reached through the database driver, so replacing
-it is not in this service's hands.
+database with [`cargo-audit`](https://crates.io/crates/cargo-audit). Two
+advisories are recorded as exceptions in `api/.cargo/audit.toml`, both for
+crates that appear in the lockfile as optional database drivers this build does
+not enable, which `cargo tree` confirms are absent from the build graph. Each
+exception states the condition for removing it. One dependency is flagged as
+unmaintained and is reached through the database driver, so replacing it is not
+in this service's hands.
 
 ## Quality Controls
 
