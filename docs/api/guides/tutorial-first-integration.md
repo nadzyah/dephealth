@@ -70,7 +70,8 @@ echo "$LINK" >> assessments.log
 
 The link is a capability. Whoever holds it can read the assessment, which is
 what makes it usable as filed evidence and the reason it does not belong in a
-public build log.
+public build log. [Authentication](authentication.md) states what follows from
+that for storage and revocation.
 
 ## Applying a Threshold
 

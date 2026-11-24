@@ -70,6 +70,7 @@ same targets, so a result obtained locally is the result CI reports.
 - [Entity relationships](docs/diagrams/er.mmd)
 - [Logical schema in blocks](docs/diagrams/schema-blocks.mmd)
 - [Data flow](docs/diagrams/data-flow.mmd)
+- [API request flow](docs/diagrams/api-request-flow.mmd)
 
 ## Documentation
 
@@ -79,6 +80,8 @@ same targets, so a result obtained locally is the result CI reports.
 - [Data dictionary](docs/data-dictionary.md), every table, column, key,
   constraint, index, routine and grant. Generated from the live schema
 - [Analytical tier](docs/analytics.md), the DuckDB pipeline and its layers
+- [Back-end](docs/backend.md), the service architecture, layering, error
+  handling, logging, security and the testing it rests on
 - [API documentation](docs/api/README.md), the generated reference, the guides
   and the runnable examples
 - [Front-end](docs/frontend.md), the client architecture, user flows, state

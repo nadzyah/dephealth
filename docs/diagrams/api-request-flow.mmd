@@ -1,0 +1,54 @@
+%% The two request paths that carry the system: storing an assessment, and
+%% reading the report it produced. Refusals are shown where they arise, since
+%% where a request is refused is what a client has to account for.
+sequenceDiagram
+    autonumber
+    actor C as Client
+    participant M as Middleware
+    participant H as Handler
+    participant P as Lockfile parser
+    participant D as PostgreSQL
+
+    Note over C,D: Submission
+
+    C->>M: POST /api/v1/assessments
+    M->>M: Assign x-request-id, open a span, arm the timeout
+    M->>H: Request, with the body unread
+    H->>H: Read the body up to the configured length
+    alt Longer than the deployment accepts
+        H--)C: 413 manifest-too-large
+    end
+    H->>P: Lockfile text, or an entry list as JSON
+    alt Not parsable
+        P-->>H: Failure, with the line where known
+        H--)C: 422 manifest-unreadable
+    end
+    P-->>H: Entries, depth from a breadth-first walk
+    alt More entries than the deployment accepts
+        H--)C: 413 manifest-too-large
+    end
+    H->>H: Mint 32 random bytes as the report token
+    H->>D: create_report, definer rights, one transaction
+    alt No completed ingestion run, or no current model
+        D-->>H: object_not_in_prerequisite_state
+        H--)C: 503 not-ready
+    end
+    D-->>H: Report stored, manifest fingerprint kept
+    H->>D: Read the report and its ranked entries
+    D-->>H: Header and entries
+    H-->>C: 201, Location, the report and the link, issued once
+
+    Note over C,D: Retrieval
+
+    C->>M: GET /api/v1/reports/{token}
+    M->>H: Request
+    H->>D: Report header, addressed by the digest of the token
+    alt No such row
+        H--)C: 404 report-not-found
+    else Withdrawn
+        H--)C: 410 report-withdrawn, with the reason
+    end
+    D-->>H: Header as stored
+    H->>D: Entries, in their stored rank
+    D-->>H: Entries
+    H-->>C: 200, the report as it stood when generated

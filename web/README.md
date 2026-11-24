@@ -28,7 +28,7 @@ supported viewport.
 
 | Path             | Contents                                                        |
 | ---------------- | --------------------------------------------------------------- |
-| `src/api`        | Request layer, generated types, problem handling, demo fixtures |
+| `src/api`        | Request layer, response types, problem handling, demo fixtures  |
 | `src/pages`      | One component per route, loaded lazily                          |
 | `src/components` | Presentation, grouped by the screen area that owns it           |
 | `src/store`      | Client state, zustand, persisted where it belongs to the viewer |
