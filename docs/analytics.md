@@ -1,6 +1,6 @@
 # Analytical Tier
 
-DuckDB, four layers, one pass per day. It reads the two public sources,
+DuckDB, one pass per day. It reads the two public sources,
 aggregates them to the package, and hands CSV to Postgres. SQL in
 `analytics/sql`, driven by `analytics/run.sh`.
 
@@ -8,7 +8,7 @@ Data flow diagram: `docs/diagrams/data-flow.mmd`.
 
 ## Layer Architecture
 
-| Layer | File | What it does |
+| Layer | File | Transformation |
 |---|---|---|
 | raw | `01_raw.sql` | views over the downloaded files. Nothing is cast or copied, so a defect can be traced back to the file it came from |
 | staging | `02_staging.sql` | typed, deduplicated, filtered. Resolves each package to a repository and records why when it fails. Its two event tables are the only place holding account logins |
@@ -49,7 +49,7 @@ writes the same rows rather than duplicates.
 
 ## Data Quality Controls
 
-`05_quality.sql` defines `main.quality_finding`. Ten checks covering duplicate
+`05_quality.sql` defines `main.quality_finding`. The checks cover duplicate
 package names, two current rows for one package, duplicate download days,
 negative downloads, nulls in key columns, future dated days, contributors
 exceeding events, shares out of range, shares disagreeing with event counts,
@@ -86,7 +86,7 @@ On failure both runs are marked failed and the serving database is untouched.
 `analytics/testdata` holds a small set of source files in the published shape
 of each source, so the pipeline can be run and the result inspected without
 downloading 30 days of event archives. `make analytics-test` copies it into
-place, runs all six layers, loads the result and closes both runs.
+place, runs every stage, loads the result and closes both runs.
 
 It is built to exercise every branch rather than to look realistic. Five
 crates covering all four resolution outcomes, including a repository on GitLab
