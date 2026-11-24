@@ -25,6 +25,8 @@ const ABANDONMENT_DEFINITION: &str = "A package is treated as abandoned at the e
     operation_id = "getMeta",
     responses(
         (status = OK, description = "The method and the state of each source", body = Meta),
+        (status = METHOD_NOT_ALLOWED, description = "The path is served for GET alone",
+         body = crate::dto::Problem, content_type = "application/problem+json"),
         (status = INTERNAL_SERVER_ERROR, description = "The request could not be completed",
          body = crate::dto::Problem, content_type = "application/problem+json")
     )

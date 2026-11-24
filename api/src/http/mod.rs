@@ -18,11 +18,13 @@ use std::sync::Arc;
 use axum::{
     Router,
     extract::DefaultBodyLimit,
-    http::{HeaderValue, Method, StatusCode, header},
+    http::{HeaderValue, Method, Request, StatusCode, header},
+    response::{IntoResponse, Response},
     routing::get,
 };
 use sqlx::PgPool;
 use tower_http::{
+    catch_panic::CatchPanicLayer,
     cors::{AllowOrigin, CorsLayer},
     request_id::{MakeRequestUuid, PropagateRequestIdLayer, SetRequestIdLayer},
     set_header::SetResponseHeaderLayer,
@@ -146,9 +148,43 @@ pub fn router(state: AppState) -> Router {
             config.request_timeout,
         ))
         .layer(PropagateRequestIdLayer::x_request_id())
-        .layer(TraceLayer::new_for_http())
+        .layer(TraceLayer::new_for_http().make_span_with(request_span))
+        // A panic is answered with a problem document like any other internal
+        // failure, rather than closing the connection with nothing in it
+        .layer(CatchPanicLayer::custom(panicked))
         .layer(SetRequestIdLayer::x_request_id(MakeRequestUuid))
         .with_state(state)
+}
+
+/// The span every log line of a request is recorded in. The identifier is in it
+/// because that is what correlates a reported fault with the lines it produced,
+/// and the layer above has already assigned one.
+fn request_span<B>(request: &Request<B>) -> tracing::Span {
+    let request_id = request
+        .headers()
+        .get("x-request-id")
+        .and_then(|value| value.to_str().ok())
+        .unwrap_or_default();
+
+    tracing::info_span!(
+        "request",
+        method = %request.method(),
+        path = %request.uri().path(),
+        request_id = %request_id,
+    )
+}
+
+/// A panic is a fault in this service and never something the client sent, so
+/// the response says only that, and the detail stays in the log.
+fn panicked(error: Box<dyn std::any::Any + Send + 'static>) -> Response {
+    let detail = error
+        .downcast_ref::<&str>()
+        .map(|s| (*s).to_owned())
+        .or_else(|| error.downcast_ref::<String>().cloned())
+        .unwrap_or_else(|| "no description".to_owned());
+
+    tracing::error!(detail = %detail, "a handler panicked");
+    ApiError::Panicked.into_response()
 }
 
 /// The browser application is served from another origin in development and may

@@ -121,6 +121,14 @@ api-test: ## run the API unit and integration tests
 api-check: ## lint and format-check the API
 	cd api && cargo fmt --check && cargo clippy --all-targets -- -D warnings
 
+.PHONY: api-coverage
+api-coverage: ## measure the API test coverage, needs cargo-llvm-cov
+	cd api && cargo llvm-cov --summary-only --fail-under-lines 80
+
+.PHONY: api-audit
+api-audit: ## check the API dependencies against the advisory database, needs cargo-audit
+	cd api && cargo audit
+
 .PHONY: openapi
 openapi: ## regenerate the API specification from the handlers
 	cd api && cargo run --quiet --bin openapi > ../docs/api/openapi.yaml

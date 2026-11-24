@@ -15,7 +15,11 @@ use crate::{
     path = "/health/live",
     tag = "Service",
     operation_id = "getLiveness",
-    responses((status = OK, description = "The process is running", body = Liveness))
+    responses(
+        (status = OK, description = "The process is running", body = Liveness),
+        (status = METHOD_NOT_ALLOWED, description = "The path is served for GET alone",
+         body = crate::dto::Problem, content_type = "application/problem+json")
+    )
 )]
 pub async fn live() -> Json<Liveness> {
     Json(Liveness {
@@ -36,7 +40,9 @@ pub async fn live() -> Json<Liveness> {
     operation_id = "getReadiness",
     responses(
         (status = OK, description = "Ready to serve assessments", body = Readiness),
-        (status = SERVICE_UNAVAILABLE, description = "Not ready", body = Readiness)
+        (status = SERVICE_UNAVAILABLE, description = "Not ready", body = Readiness),
+        (status = METHOD_NOT_ALLOWED, description = "The path is served for GET alone",
+         body = crate::dto::Problem, content_type = "application/problem+json")
     )
 )]
 pub async fn ready(State(state): State<AppState>) -> (StatusCode, Json<Readiness>) {
