@@ -1,6 +1,6 @@
 # Roles and Privileges
 
-The schema defines four group roles, created in
+The group roles are created in
 `db/migrations/0008_roles_and_grants.up.sql`. None of them may log in, and all
 privileges within the schema are held by them.
 
@@ -17,7 +17,8 @@ partition.
 inserts reports, and updates the two withdrawal columns of `report`.
 
 `dephealth_public_read` is used by the public read-only API. It holds `SELECT`
-on five views, no privilege on any base table, and no write privilege anywhere.
+on the public views, no privilege on any base table, and no write privilege
+anywhere.
 
 In the conventional naming, `dephealth_admin` is the administrator and
 `dephealth_public_read` is the read-only application role. The write side is
@@ -25,7 +26,7 @@ split in two rather than held by a single role, because the pipeline and the
 web application write different tables and only one of them has any reason to
 read the contributor counts.
 
-Three login roles correspond to the last three, created by `make roles` from
+A login role corresponds to each of the last three, created by `make roles` from
 `create_login_roles.sql`. A login role holds no privilege of its own, so a
 change of privilege takes the form of a migration rather than an alteration to
 an individual user. Each carries a connection limit, so that one component
