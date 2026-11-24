@@ -4,7 +4,7 @@ import { Empty } from "../components/ui/States";
 
 export default function NotFoundPage() {
     return (
-        <Empty title="No such page">
+        <Empty title="No such page" level={1}>
             <p className="muted">
                 Nothing here answers that address. A report link looks like <code>/r/</code>{" "}
                 followed by its token.

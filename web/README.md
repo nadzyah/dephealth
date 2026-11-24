@@ -4,6 +4,11 @@ The client for the dephealth API. React, TypeScript in strict mode, Vite. It
 submits a dependency manifest, renders the resulting tree ranked by risk, and
 shows the evidence behind each score.
 
+Architecture, user flows and the justification of this stack are in
+[`docs/frontend.md`](../docs/frontend.md). The responsive design, the design
+system and the accessibility verification are in
+[`docs/adaptive-ui.md`](../docs/adaptive-ui.md).
+
 ## Configuration
 
 Copy [`.env.example`](.env.example) to `.env.local`. Vite exposes only

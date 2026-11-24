@@ -76,7 +76,11 @@ export default function ReportPage() {
         const withdrawn = report.problem.isGone;
 
         return (
-            <Failure problem={report.problem} onRetry={withdrawn ? undefined : report.reload}>
+            <Failure
+                problem={report.problem}
+                onRetry={withdrawn ? undefined : report.reload}
+                level={1}
+            >
                 {withdrawn && (
                     <p className="small muted">
                         A withdrawn report keeps its row, so this link is not the same as one that

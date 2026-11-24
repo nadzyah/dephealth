@@ -33,7 +33,7 @@ export default function MethodPage() {
             {meta.status === "loading" && <Skeleton height="10rem" />}
 
             {meta.status === "failed" && meta.problem && (
-                <Failure problem={meta.problem} onRetry={meta.reload} />
+                <Failure problem={meta.problem} onRetry={meta.reload} level={2} />
             )}
 
             {meta.status === "ready" && meta.data && (
