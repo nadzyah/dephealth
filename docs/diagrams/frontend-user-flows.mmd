@@ -1,0 +1,32 @@
+%% How a reader moves through the application, and what each step costs them if
+%% they lose the link.
+flowchart TB
+    START(["Opens the application"]) --> SUBMIT["/<br/>Submit a manifest"]
+
+    SUBMIT -->|"drops or selects Cargo.lock"| CHECK{"Readable<br/>lockfile?"}
+    CHECK -->|"no, checked in the browser"| REFUSE["Refusal names the line<br/>nothing is sent"]
+    REFUSE --> SUBMIT
+    CHECK -->|"yes"| POST["POST /api/v1/assessments"]
+
+    POST -->|"422, 413 or 503"| NOTICE["Notice states the cause<br/>and what to do"]
+    NOTICE --> SUBMIT
+    POST -->|"201"| REPORT["/r/:token<br/>Tree ranked by risk"]
+
+    REPORT --> REMEMBER[/"Link stored in this browser<br/>as a recent report"/]
+
+    REPORT -->|"selects an entry"| PACKAGE["/r/:token/p/:name<br/>Evidence behind one score"]
+    PACKAGE -->|"back"| REPORT
+    REPORT -->|"compare"| CHANGES["/r/:token/changes"]
+    CHANGES -->|"404, first report<br/>for this dependency set"| FIRST["Stated as a first assessment<br/>rather than an error"]
+    REPORT -->|"how is this computed"| METHOD["/method<br/>Definitions and data age"]
+    REPORT -->|"browse the registry"| PACKAGES["/packages<br/>Search, filter, sort"]
+    PACKAGES --> PACKAGE
+
+    RETURN(["Returns later"]) --> OPEN{"Has the link?"}
+    OPEN -->|"from this browser"| SUBMIT
+    OPEN -->|"pasted link"| RESOLVE["/r/:token"]
+    RESOLVE -->|"410, withdrawn"| GONE["Withdrawal and its reason"]
+    RESOLVE -->|"404, never existed"| LOST["Not found<br/>a token cannot be recovered"]
+    RESOLVE -->|"200"| REPORT
+
+    REVIEW(["Reviews the design"]) --> DESIGN["/design-system<br/>Every component in every state"]

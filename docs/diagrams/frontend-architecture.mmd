@@ -1,0 +1,69 @@
+%% Browser application: modules, routes, state and the single path to the API.
+flowchart TB
+    subgraph ENTRY["Entry"]
+        MAIN["main.tsx<br/>BrowserRouter, basename from the build"]
+        APP["App.tsx<br/>routes, shell, error boundary, suspense"]
+        MAIN --> APP
+    end
+
+    subgraph ROUTES["Routes, src/pages"]
+        direction TB
+        SUBMIT["/<br/>SubmitPage, in the first chunk"]
+        REPORT["/r/:token<br/>ReportPage"]
+        CHANGES["/r/:token/changes<br/>ChangesPage"]
+        PACKAGE["/r/:token/p/:name<br/>PackagePage"]
+        PACKAGES["/packages<br/>PackagesPage"]
+        METHOD["/method<br/>MethodPage"]
+        DESIGN["/design-system<br/>DesignSystemPage"]
+        MISSING["*<br/>NotFoundPage"]
+    end
+
+    subgraph COMPONENTS["Presentation, src/components"]
+        direction TB
+        LAYOUT["layout<br/>AppShell, Appearance, Notices"]
+        UI["ui<br/>Button, Card, Badge, States, icons"]
+        REPORTC["report<br/>TreeTable, DataAgeBanner"]
+        CHARTS["charts<br/>FactorBars, DownloadChart"]
+        DROP["FileDrop"]
+    end
+
+    subgraph LOGIC["Logic, src/hooks and src/lib"]
+        direction TB
+        ASYNC["useAsync<br/>one request state machine,<br/>stale responses discarded"]
+        APPEAR["useAppearance<br/>theme and text scale applied to the root"]
+        MANIFEST["lib/manifest<br/>client-side lockfile check"]
+        RISK["lib/risk<br/>ranking and banding"]
+        CONTRAST["lib/contrast<br/>WCAG ratios, asserted in tests"]
+        LOG["lib/logger<br/>one writer, never a token"]
+    end
+
+    subgraph STATE["Global state, src/store"]
+        STORE["useAppStore, zustand<br/>appearance, notices, recent links"]
+        PERSIST["persist<br/>appearance and recent links only"]
+        STORE --- PERSIST
+    end
+
+    subgraph DATA["Request layer, src/api"]
+        CLIENT["client<br/>base address, timeout, headers"]
+        PROBLEM["problem<br/>RFC 9457 as a typed error"]
+        TYPES["types<br/>schemas of the service"]
+        DEMO["demo<br/>committed fixtures"]
+        CLIENT --> PROBLEM
+        CLIENT --> TYPES
+        CLIENT -. "VITE_DEMO=true" .-> DEMO
+    end
+
+    API["dephealth API<br/>see docs/api"]
+
+    APP --> ROUTES
+    ROUTES --> COMPONENTS
+    ROUTES --> ASYNC
+    ASYNC --> CLIENT
+    CLIENT --> API
+    ROUTES --> STORE
+    LAYOUT --> STORE
+    APPEAR --> STORE
+    CLIENT --> LOG
+    DROP --> MANIFEST
+    REPORTC --> RISK
+    CHARTS --> CONTRAST

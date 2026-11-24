@@ -81,6 +81,10 @@ same targets, so a result obtained locally is the result CI reports.
 - [Analytical tier](docs/analytics.md), the DuckDB pipeline and its layers
 - [API documentation](docs/api/README.md), the generated reference, the guides
   and the runnable examples
+- [Front-end](docs/frontend.md), the client architecture, user flows, state
+  management and the technology choices
+- [Adaptive UI](docs/adaptive-ui.md), breakpoints, the design system, the
+  component library and the accessibility verification
 - [Browser application](web/README.md), configuration, commands and layout
 - [Roles](db/roles/README.md), the group roles and which component reads what
 
