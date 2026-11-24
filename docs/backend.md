@@ -190,7 +190,14 @@ certificate store and nothing else. It runs as an unprivileged user and declares
 a liveness check rather than a readiness check, because a container that cannot
 reach the database should not be restarted for it.
 
-No deployment to a publicly reachable environment has been made yet, which the
-Back-end criterion requires. The gap is the environment rather than the
-artefacts: the image builds and runs from the repository as it stands, and the
-configuration it needs is the set of variables in `.env.example`.
+The browser application is published separately, by
+[`pages.yml`](../.github/workflows/pages.yml), which builds it from the
+committed response fixtures and deploys it to GitHub Pages on every push to the
+default branch. That deployment is the client alone and carries no service
+behind it, which the application states on the screen.
+
+The service itself has no publicly reachable deployment yet. The gap is the
+environment rather than the artefacts: the image builds and runs from the
+repository as it stands, it needs only the variables in `.env.example`, and a
+managed PostgreSQL instance with `sslmode=verify-full` is what the certificate
+store in the runtime layer is there for.
