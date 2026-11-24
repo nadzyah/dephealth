@@ -110,7 +110,7 @@ export default function RegistryPackagePage() {
                             <Stat
                                 label="Abandoned by the definition"
                                 value={data.is_abandoned ? "yes" : "no"}
-                                hint={<Link to="/method">Definition</Link>}
+                                hint={<Link to="/method">Learn more</Link>}
                             />
                         )}
                     </StatRow>
@@ -150,7 +150,10 @@ export default function RegistryPackagePage() {
                             }
                             hint={
                                 activity.contributor_count_withheld ? (
-                                    <Link to="/method">Disclosure threshold</Link>
+                                    <>
+                                        Below the disclosure threshold.{" "}
+                                        <Link to="/method">Learn more</Link>
+                                    </>
                                 ) : (
                                     "on the declared repository"
                                 )

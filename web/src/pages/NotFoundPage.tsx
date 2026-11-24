@@ -10,7 +10,7 @@ export default function NotFoundPage() {
                 followed by its token.
             </p>
             <Link to="/" className="button secondary touchable">
-                Go to the home page
+                Go to home page
             </Link>
         </Empty>
     );

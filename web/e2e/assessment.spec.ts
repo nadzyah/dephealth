@@ -91,7 +91,7 @@ test("a link that addresses no report is refused with a reason, not a blank page
 
     // One action. Repeating a request for a link that addresses nothing cannot
     // change the answer, so no retry is offered beside it
-    await expect(page.getByRole("link", { name: /assess a new manifest/i })).toBeVisible();
+    await expect(page.getByRole("link", { name: /go to home page/i })).toBeVisible();
     await expect(page.getByRole("button", { name: /try again/i })).toHaveCount(0);
 });
 

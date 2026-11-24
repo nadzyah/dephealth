@@ -83,7 +83,7 @@ export default function ReportPage() {
             >
                 {!retryable && (
                     <Link to="/" className="button secondary touchable">
-                        Assess a new manifest
+                        Go to home page
                     </Link>
                 )}
             </Failure>
