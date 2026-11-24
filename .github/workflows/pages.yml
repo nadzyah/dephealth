@@ -1,0 +1,75 @@
+# Publishes the browser application to GitHub Pages, built from the committed
+# response fixtures so that it answers without the API or a database behind it.
+# The deployment is therefore the client alone: every figure it shows is a
+# captured response, which the application states on the screen.
+name: Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time, and a run already under way is left to finish
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build the demonstration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install the dependencies
+        run: npm ci
+        working-directory: web
+
+      - uses: actions/configure-pages@v5
+        id: pages
+
+      # The router takes its basename from the build, so the same bundle works
+      # at a domain root and under a repository subpath. A custom domain serves
+      # from the root, where the configured path is empty, and a trailing slash
+      # appended to it blindly would give a base of two
+      - name: Build
+        run: |
+          base="${BASE_PATH%/}/"
+          echo "building for $base"
+          VITE_BASE="$base" npm run build:demo
+        working-directory: web
+        env:
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+
+      # A report is addressed by a deep link, which a static host answers with
+      # its 404 document. Serving the application from there is what makes such
+      # a link work without a server that knows the routes
+      - name: Serve deep links from the application
+        run: cp dist/index.html dist/404.html
+        working-directory: web
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/dist
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
