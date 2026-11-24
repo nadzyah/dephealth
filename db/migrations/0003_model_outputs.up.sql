@@ -107,7 +107,8 @@ CREATE TABLE dephealth.adoption_forecast (
 
     CONSTRAINT forecast_horizon_in_range CHECK (horizon_months BETWEEN 3 AND 12),
 
-    -- the twelve month rule from UC1, derived rather than set by the caller
+    -- derived from the history, not set by the caller: a series shorter than
+    -- twelve months cannot carry a forecast
     CONSTRAINT forecast_history_rule CHECK (
         insufficient_history = (history_days < 365)
     ),

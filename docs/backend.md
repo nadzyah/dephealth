@@ -163,13 +163,10 @@ points, which no test exercises because they bind a socket.
 ## Dependencies
 
 `make api-audit` checks the dependency graph against the RustSec advisory
-database with [`cargo-audit`](https://crates.io/crates/cargo-audit). Two
-advisories are recorded as exceptions in `api/.cargo/audit.toml`, both for
-crates that appear in the lockfile as optional database drivers this build does
-not enable, which `cargo tree` confirms are absent from the build graph. Each
-exception states the condition for removing it. One dependency is flagged as
-unmaintained and is reached through the database driver, so replacing it is not
-in this service's hands.
+database with [`cargo-audit`](https://crates.io/crates/cargo-audit). No
+advisory is suppressed and no exception is configured. One dependency is
+flagged as unmaintained rather than vulnerable, and it is reached through the
+database driver, so replacing it is not in this service's hands.
 
 ## Quality Controls
 

@@ -6,12 +6,24 @@
       {
         "ordinal": 0,
         "name": "day!",
-        "type_info": "Date"
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_download_series",
+            "name": "day"
+          }
+        }
       },
       {
         "ordinal": 1,
         "name": "downloads!",
-        "type_info": "Int8"
+        "type_info": "Int8",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_download_series",
+            "name": "downloads"
+          }
+        }
       }
     ],
     "parameters": {

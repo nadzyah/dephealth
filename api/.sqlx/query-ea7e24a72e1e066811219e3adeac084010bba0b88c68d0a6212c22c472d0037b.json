@@ -6,27 +6,47 @@
       {
         "ordinal": 0,
         "name": "code!",
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "dephealth.report_entry_factor",
+            "name": "factor"
+          }
+        }
       },
       {
         "ordinal": 1,
         "name": "label!",
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "dephealth.risk_factor_catalogue",
+            "name": "label"
+          }
+        }
       },
       {
         "ordinal": 2,
         "name": "description!",
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "dephealth.risk_factor_catalogue",
+            "name": "description"
+          }
+        }
       },
       {
         "ordinal": 3,
         "name": "observed_value!",
-        "type_info": "Float8"
+        "type_info": "Float8",
+        "origin": "Expression"
       },
       {
         "ordinal": 4,
         "name": "contribution!",
-        "type_info": "Float8"
+        "type_info": "Float8",
+        "origin": "Expression"
       }
     ],
     "parameters": {

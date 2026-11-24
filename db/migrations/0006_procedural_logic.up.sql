@@ -198,8 +198,9 @@ BEGIN
 
     IF in_status = 'succeeded' THEN
         BEGIN
-            -- a failed refresh leaves stale data served, which NFR3 allows.
-            -- Losing the run record would not
+            -- a failed refresh leaves the previous figures served, which is
+            -- acceptable because every response states their date. Losing the
+            -- run record would not be
             REFRESH MATERIALIZED VIEW CONCURRENTLY dephealth.mv_package_current_assessment;
         EXCEPTION WHEN OTHERS THEN
             RAISE WARNING 'run % recorded, serving view not refreshed: %',

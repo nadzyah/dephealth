@@ -6,22 +6,41 @@
       {
         "ordinal": 0,
         "name": "package_name!",
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_package_assessment",
+            "name": "package_name"
+          }
+        }
       },
       {
         "ordinal": 1,
         "name": "latest_version",
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_package_assessment",
+            "name": "latest_version"
+          }
+        }
       },
       {
         "ordinal": 2,
         "name": "risk_probability",
-        "type_info": "Float8"
+        "type_info": "Float8",
+        "origin": "Expression"
       },
       {
         "ordinal": 3,
         "name": "is_resolved!",
-        "type_info": "Bool"
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_package_assessment",
+            "name": "is_resolved"
+          }
+        }
       }
     ],
     "parameters": {

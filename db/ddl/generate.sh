@@ -14,12 +14,20 @@ out=db/ddl/schema.sql
 server_major=$(psql "$DATABASE_URL" -At \
     -c "SELECT current_setting('server_version_num')::int / 10000")
 
-pgdump=${PGDUMP:-pg_dump}
+pgdump=(${PGDUMP:-pg_dump})
 if [[ -z ${PGDUMP:-} && -x /usr/lib/postgresql/$server_major/bin/pg_dump ]]; then
-    pgdump=/usr/lib/postgresql/$server_major/bin/pg_dump
+    pgdump=(/usr/lib/postgresql/$server_major/bin/pg_dump)
 fi
 
-client_major=$("$pgdump" --version | sed -E 's/.* ([0-9]+)(\.[0-9]+)?.*/\1/')
+client_major=$("${pgdump[@]}" --version | sed -E 's/.* ([0-9]+)(\.[0-9]+)?.*/\1/')
+
+# No client of the server's major installed. The image the server itself runs
+# from carries one, so take it from there rather than requiring the tools to be
+# installed on every machine that regenerates this file
+if ((client_major < server_major)) && [[ -z ${PGDUMP:-} ]] && command -v docker > /dev/null; then
+    pgdump=(docker run --rm --network host -i "postgres:$server_major-alpine" pg_dump)
+    client_major=$("${pgdump[@]}" --version | sed -E 's/.* ([0-9]+)(\.[0-9]+)?.*/\1/')
+fi
 
 if ((client_major < server_major)); then
     echo "$0: pg_dump $client_major cannot dump a server of $server_major" >&2
@@ -47,7 +55,7 @@ HDR
     # dump that smuggles meta-commands, which a generated file reviewed in this
     # repository does not need. Each directive is followed by a blank line, and
     # both go, so the result matches what an earlier client writes.
-    "$pgdump" "$DATABASE_URL" \
+    "${pgdump[@]}" "$DATABASE_URL" \
         --schema-only \
         --schema=dephealth \
         --no-owner \

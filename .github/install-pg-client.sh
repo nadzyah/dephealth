@@ -7,7 +7,7 @@
 # path instead, which is what this script provides.
 set -euo pipefail
 
-major=17
+major=19
 binary=/usr/lib/postgresql/$major/bin/pg_dump
 
 if [[ -x $binary ]]; then
