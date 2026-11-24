@@ -12,6 +12,16 @@
 *.duckdb.wal
 *.parquet
 
+# Browser application. node_modules and the build output are derived, and
+# .env.local holds whatever the developer pointed the application at
+/web/node_modules/
+/web/dist/
+/web/coverage/
+/web/playwright-report/
+/web/test-results/
+/web/.env.local
+/web/.env
+
 # Editors and tooling
 *.swp
 .DS_Store

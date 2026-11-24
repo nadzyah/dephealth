@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+
+        <!--
+          interactive-widget=resizes-content asks the browser to shrink the
+          viewport when the on-screen keyboard opens, rather than panning over
+          it, which is what stops a fixed bar sitting on top of a focused field.
+        -->
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, interactive-widget=resizes-content"
+        />
+
+        <meta
+            name="description"
+            content="Adoption forecasts and maintenance risk for the dependencies of a Cargo project."
+        />
+
+        <!-- Both themes exist, so the browser paints the right one before the
+             stylesheet arrives and the first frame does not flash white -->
+        <meta name="color-scheme" content="light dark" />
+
+        <link rel="icon" href="data:," />
+
+        <title>dephealth</title>
+    </head>
+    <body>
+        <div id="root"></div>
+        <script type="module" src="/src/main.tsx"></script>
+    </body>
+</html>

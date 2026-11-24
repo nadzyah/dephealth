@@ -1,0 +1,41 @@
+.badge {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    padding: 0.125rem var(--space-2);
+    border: 1px solid currentColor;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    white-space: nowrap;
+}
+
+.badge.neutral {
+    color: var(--color-text-muted);
+}
+
+.badge.accent {
+    color: var(--color-accent);
+}
+
+/* The text carries the ratio against the surface, which the contrast test
+   holds to 4.5:1. The tint behind it is only 10 per cent, so it does not */
+.badge.high {
+    color: var(--color-risk-high);
+    background: color-mix(in oklab, var(--color-risk-high) 10%, var(--color-surface));
+}
+
+.badge.medium {
+    color: var(--color-risk-medium);
+    background: color-mix(in oklab, var(--color-risk-medium) 10%, var(--color-surface));
+}
+
+.badge.low {
+    color: var(--color-risk-low);
+    background: color-mix(in oklab, var(--color-risk-low) 10%, var(--color-surface));
+}
+
+.badge-band {
+    font-weight: var(--weight-normal);
+    opacity: 0.85;
+}

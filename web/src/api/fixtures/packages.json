@@ -1,0 +1,60 @@
+{
+  "items": [
+    {
+      "package_name": "failure",
+      "latest_version": "0.1.8",
+      "risk_probability": 0.971,
+      "is_resolved": true
+    },
+    {
+      "package_name": "solo-crate",
+      "latest_version": "1.1.0",
+      "risk_probability": 0.683,
+      "is_resolved": true
+    },
+    {
+      "package_name": "tiny-config",
+      "latest_version": "0.3.1",
+      "risk_probability": 0.412,
+      "is_resolved": true
+    },
+    {
+      "package_name": "clap",
+      "latest_version": "4.5.49",
+      "risk_probability": 0.094,
+      "is_resolved": true
+    },
+    {
+      "package_name": "serde",
+      "latest_version": "1.0.228",
+      "risk_probability": 0.031,
+      "is_resolved": true
+    },
+    {
+      "package_name": "tokio",
+      "latest_version": "1.48.0",
+      "risk_probability": 0.022,
+      "is_resolved": true
+    },
+    {
+      "package_name": "gitlab-crate",
+      "latest_version": "2.4.1",
+      "risk_probability": null,
+      "is_resolved": false
+    },
+    {
+      "package_name": "urlless-crate",
+      "latest_version": "0.2.0",
+      "risk_probability": null,
+      "is_resolved": false
+    },
+    {
+      "package_name": "vanished-crate",
+      "latest_version": "0.9.3",
+      "risk_probability": null,
+      "is_resolved": false
+    }
+  ],
+  "limit": 50,
+  "offset": 0
+}

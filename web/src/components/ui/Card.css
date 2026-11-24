@@ -1,0 +1,64 @@
+.card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.card-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-4) 0;
+}
+
+.card-title {
+    margin: 0;
+    font-size: var(--text-lg);
+}
+
+.card-body {
+    padding: var(--space-4);
+}
+
+.card-body > :last-child {
+    margin-bottom: 0;
+}
+
+.card-foot {
+    padding: var(--space-3) var(--space-4);
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface-raised);
+    font-size: var(--text-sm);
+}
+
+/* Figures. One column on a phone, as many as fit above that, so the row never
+   squeezes a number onto two lines */
+.stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(10rem, 100%), 1fr));
+    gap: var(--space-4);
+    margin: 0;
+}
+
+.stat dt {
+    margin-bottom: var(--space-1);
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+}
+
+.stat dd {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.stat-value {
+    font-size: var(--text-xl);
+    font-weight: var(--weight-medium);
+    line-height: var(--leading-tight);
+}

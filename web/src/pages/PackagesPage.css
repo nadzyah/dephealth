@@ -1,0 +1,32 @@
+.packages-search {
+    max-width: 24rem;
+}
+
+.packages {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.packages li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.packages li:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.package-name {
+    flex: 1 1 12rem;
+    font-weight: var(--weight-medium);
+    overflow-wrap: anywhere;
+}
