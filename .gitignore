@@ -15,6 +15,7 @@
 # Browser application. node_modules and the build output are derived, and
 # .env.local holds whatever the developer pointed the application at
 /web/node_modules/
+/web/.vite/
 /web/dist/
 /web/coverage/
 /web/playwright-report/

@@ -1,0 +1,18 @@
+# The build context is the repository root, so everything that is not needed to
+# compile the service or to build the browser application stays out of it.
+
+.git
+.github
+.env
+
+api/target
+web/node_modules
+web/dist
+web/coverage
+web/playwright-report
+web/test-results
+
+analytics/data
+docs/screenshots
+thesis
+requirements

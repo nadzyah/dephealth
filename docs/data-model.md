@@ -85,7 +85,7 @@ the report tables so nothing removes a filed record by cascade, `SET NULL` from
 
 **Triggers** for rules that span rows.
 
-| Trigger | What it enforces |
+| Trigger | Invariant |
 |---|---|
 | `report_entry_is_append_only` | no update or delete on a report line |
 | `report_entry_factor_is_append_only` | the same for the stored factors |

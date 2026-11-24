@@ -34,5 +34,115 @@ services:
       timeout: 3s
       retries: 30
 
+  # The schema. One shot, and idempotent: sqlx records what it has applied, so
+  # this is a no-op on every start after the first. It runs the migrations as
+  # the owner, which is why it has DATABASE_URL and the service below does not
+  migrate:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    command: ["/usr/local/bin/dephealth-migrate"]
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?sslmode=disable
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+
+  # The three login roles, which carry passwords and so are not part of a
+  # migration. Idempotent, and it uses the database image because that is what
+  # has psql in it
+  roles:
+    image: postgres:17-alpine
+    entrypoint: ["psql"]
+    command:
+      - "-v"
+      - "ON_ERROR_STOP=1"
+      - "-q"
+      - "-v"
+      - "ingest_password=${INGEST_PASSWORD}"
+      - "-v"
+      - "app_password=${APP_PASSWORD}"
+      - "-v"
+      - "public_read_password=${PUBLIC_READ_PASSWORD}"
+      - "-f"
+      - "/roles/create_login_roles.sql"
+    environment:
+      PGHOST: db
+      PGUSER: ${POSTGRES_USER}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      PGDATABASE: ${POSTGRES_DB}
+    volumes:
+      - ./db/roles:/roles:ro
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    restart: "no"
+
+  # The fixture. Behind a profile, because the test data is not idempotent and
+  # a second load is refused by the schema rather than merged:
+  #
+  #   docker compose --profile fixture run --rm seed
+  seed:
+    image: postgres:17-alpine
+    profiles: ["fixture"]
+    entrypoint: ["psql"]
+    command:
+      - "-v"
+      - "ON_ERROR_STOP=1"
+      - "-q"
+      - "-f"
+      - "/seed/reference.sql"
+      - "-f"
+      - "/seed/test_data.sql"
+    environment:
+      PGHOST: db
+      PGUSER: ${POSTGRES_USER}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      PGDATABASE: ${POSTGRES_DB}
+    volumes:
+      - ./db/seed:/seed:ro
+    depends_on:
+      roles:
+        condition: service_completed_successfully
+    restart: "no"
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    environment:
+      # The application role, not the owner. Inside the network the database is
+      # a service name, and TLS is off because the hop never leaves the host
+      API_DATABASE_URL: postgres://dephealth_app_login:${APP_PASSWORD}@db:5432/${POSTGRES_DB}?sslmode=disable
+      MANIFEST_SALT: ${MANIFEST_SALT}
+      API_ADMIN_TOKEN: ${API_ADMIN_TOKEN:-}
+      API_CORS_ORIGINS: http://localhost:5173,http://localhost:8081
+      API_PUBLIC_BASE_URL: http://localhost:5173
+      API_LOG: ${API_LOG:-info}
+    ports:
+      - "${API_PORT:-8080}:8080"
+    depends_on:
+      roles:
+        condition: service_completed_successfully
+
+  # The development server, so the source is edited on the host and the browser
+  # reloads. node_modules stays in the container, where it was installed for
+  # this platform
+  web:
+    build:
+      context: ./web
+      target: dev
+    environment:
+      VITE_API_BASE_URL: http://localhost:${API_PORT:-8080}
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./web:/app
+      - web_modules:/app/node_modules
+    depends_on:
+      - api
+
 volumes:
   pgdata:
+  web_modules:
