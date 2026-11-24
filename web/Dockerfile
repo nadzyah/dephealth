@@ -7,7 +7,7 @@
 # bundle, so a production image is built for one API address. Nothing secret
 # belongs in them: everything a browser receives is public.
 
-FROM node:22-alpine AS deps
+FROM node:26-alpine AS deps
 
 WORKDIR /app
 COPY package.json package-lock.json ./
@@ -33,7 +33,7 @@ ENV VITE_BASE=$VITE_BASE
 COPY . .
 RUN npm run build
 
-FROM nginx:1.27-alpine AS production
+FROM nginx:1.31-alpine AS production
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /usr/share/nginx/html
