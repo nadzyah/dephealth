@@ -16,7 +16,10 @@ design system is reachable in the running application at `/design-system`.
 
 Screenshots of every screen at each of these viewports are in
 [`screenshots`](screenshots), captured from the running application rather than
-drawn.
+drawn. [The interface design document](mockups/index.html) collects them with
+the token sheet, the component library and the annotations, and
+`make mockups` renders it to
+[PDF](mockups/dephealth-interface-design.pdf).
 
 ## Breakpoints
 

@@ -28,7 +28,7 @@ const screens = [
     { name: "04-changes", path: "/r/demo/changes" },
     { name: "05-packages", path: "/packages" },
     { name: "06-method", path: "/method" },
-    { name: "07-design-system", path: "/design-system" },
+    { name: "07-design-system", path: "/design-system", full: true },
 ];
 
 async function capture(browser, target, theme) {

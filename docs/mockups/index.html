@@ -1,0 +1,1646 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>dephealth interface design</title>
+
+    <!--
+            The application's own stylesheets. Every component on these pages is
+            rendered by the rules that render it in the running client, so this
+            document cannot describe an interface that does not exist.
+        -->
+    <link rel="stylesheet" href="../../web/src/styles/global.css" />
+    <link rel="stylesheet" href="../../web/src/components/ui/Button.css" />
+    <link rel="stylesheet" href="../../web/src/components/ui/Badge.css" />
+    <link rel="stylesheet" href="../../web/src/components/ui/Card.css" />
+    <link rel="stylesheet" href="../../web/src/components/ui/States.css" />
+    <link rel="stylesheet" href="mockups.css" />
+  </head>
+  <body>
+    <section class="cover">
+      <h1>dephealth</h1>
+      <p class="subject">
+        Interface design: pages, components, states and device variants
+      </p>
+
+      <p class="lede">
+        The subject is a browser client that accepts a dependency manifest and
+        presents the dependency tree ranked by the risk that maintenance ceases.
+        The pages that follow document the design of that client: the token
+        foundations, the library of reusable components, the appearance of every
+        interactive element in each state it can occupy, and each screen at five
+        device sizes.
+      </p>
+
+      <p class="lede">
+        The specimens are rendered by the stylesheets of the application itself
+        rather than drawn, and the screen plates are captures of the running
+        client. A change to a design token therefore reaches this document,
+        which is what keeps a design document and an implementation from
+        diverging. Three appearances are the exception and are noted where they
+        appear: hover, press and keyboard focus cannot be held open in a printed
+        page, so they are reproduced from the rules that produce them.
+      </p>
+
+      <ol class="contents">
+        <li>Foundations: colour <span>1</span></li>
+        <li>Foundations: type, spacing and target size <span>2</span></li>
+        <li>Components: actions <span>3</span></li>
+        <li>Components: risk, badges and figures <span>4</span></li>
+        <li>Components: containers <span>5</span></li>
+        <li>Components: asynchronous states <span>6</span></li>
+        <li>Component library, as rendered in the client <span>7</span></li>
+        <li>Screen: submission <span>8</span></li>
+        <li>Screen: report <span>9</span></li>
+        <li>Screen: entry evidence <span>10</span></li>
+        <li>Screen: comparison <span>11</span></li>
+        <li>Screen: registry <span>12</span></li>
+        <li>Screen: method <span>13</span></li>
+        <li>The dark theme <span>14</span></li>
+        <li>Breakpoints and device queries <span>15</span></li>
+        <li>Device patterns <span>16</span></li>
+        <li>Accessibility annotations <span>17</span></li>
+      </ol>
+    </section>
+
+    <section class="sheet">
+      <header>
+        <h2>Foundations: colour</h2>
+        <p class="sheet-number">1</p>
+      </header>
+
+      <p class="lede">
+        One palette, defined once as custom properties and referenced by every
+        component. Each text colour is checked against the surfaces it appears
+        on by a test that fails below the ratio its requirement sets, so the
+        figures below are measurements rather than intentions.
+      </p>
+
+      <figure class="specimen">
+        <figcaption>
+          Light theme
+          <span
+            >Ratios against the base surface. Text is held to 4.5:1 and a
+            control edge to 3:1</span
+          >
+        </figcaption>
+        <table class="tokens">
+          <thead>
+            <tr>
+              <th>Token</th>
+              <th>Sample</th>
+              <th>Value</th>
+              <th>Role</th>
+              <th class="ratio">Ratio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>--color-surface</code></td>
+              <td><span class="swatch" style="background: #ffffff"></span></td>
+              <td><code>#ffffff</code></td>
+              <td>The page</td>
+              <td class="ratio">base</td>
+            </tr>
+            <tr>
+              <td><code>--color-surface-raised</code></td>
+              <td><span class="swatch" style="background: #f4f6f8"></span></td>
+              <td><code>#f4f6f8</code></td>
+              <td>Card feet, hovered rows, skeletons</td>
+              <td class="ratio">base</td>
+            </tr>
+            <tr>
+              <td><code>--color-text</code></td>
+              <td><span class="swatch" style="background: #14181f"></span></td>
+              <td><code>#14181f</code></td>
+              <td>Body and headings</td>
+              <td class="ratio">17.79</td>
+            </tr>
+            <tr>
+              <td><code>--color-text-muted</code></td>
+              <td><span class="swatch" style="background: #555f6e"></span></td>
+              <td><code>#555f6e</code></td>
+              <td>Secondary text, hints, labels</td>
+              <td class="ratio">6.46</td>
+            </tr>
+            <tr>
+              <td><code>--color-accent</code></td>
+              <td><span class="swatch" style="background: #1a5490"></span></td>
+              <td><code>#1a5490</code></td>
+              <td>Links, primary action, focus ring</td>
+              <td class="ratio">7.74</td>
+            </tr>
+            <tr>
+              <td><code>--color-risk-high</code></td>
+              <td><span class="swatch" style="background: #a02b1c"></span></td>
+              <td><code>#a02b1c</code></td>
+              <td>High band, failure, danger action</td>
+              <td class="ratio">7.35</td>
+            </tr>
+            <tr>
+              <td><code>--color-risk-medium</code></td>
+              <td><span class="swatch" style="background: #7a5200"></span></td>
+              <td><code>#7a5200</code></td>
+              <td>Medium band</td>
+              <td class="ratio">6.92</td>
+            </tr>
+            <tr>
+              <td><code>--color-risk-low</code></td>
+              <td><span class="swatch" style="background: #1a6236"></span></td>
+              <td><code>#1a6236</code></td>
+              <td>Low band</td>
+              <td class="ratio">7.38</td>
+            </tr>
+            <tr>
+              <td><code>--color-border-strong</code></td>
+              <td><span class="swatch" style="background: #555f6e"></span></td>
+              <td><code>#555f6e</code></td>
+              <td>The edge of a control</td>
+              <td class="ratio">6.46</td>
+            </tr>
+            <tr>
+              <td><code>--color-border</code></td>
+              <td><span class="swatch" style="background: #d4dae1"></span></td>
+              <td><code>#d4dae1</code></td>
+              <td>Separates blocks, carries no meaning</td>
+              <td class="ratio">1.41</td>
+            </tr>
+          </tbody>
+        </table>
+      </figure>
+
+      <figure class="specimen">
+        <figcaption>
+          Dark theme
+          <span
+            >Selected by the system preference or by the reader, and checked by
+            the same test</span
+          >
+        </figcaption>
+        <table class="tokens">
+          <thead>
+            <tr>
+              <th>Token</th>
+              <th>Sample</th>
+              <th>Value</th>
+              <th>Role</th>
+              <th class="ratio">Ratio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>--color-surface</code></td>
+              <td><span class="swatch" style="background: #12161c"></span></td>
+              <td><code>#12161c</code></td>
+              <td>The page</td>
+              <td class="ratio">base</td>
+            </tr>
+            <tr>
+              <td><code>--color-surface-raised</code></td>
+              <td><span class="swatch" style="background: #1b212a"></span></td>
+              <td><code>#1b212a</code></td>
+              <td>Card feet, hovered rows, skeletons</td>
+              <td class="ratio">base</td>
+            </tr>
+            <tr>
+              <td><code>--color-text</code></td>
+              <td><span class="swatch" style="background: #e8ecf2"></span></td>
+              <td><code>#e8ecf2</code></td>
+              <td>Body and headings</td>
+              <td class="ratio">15.30</td>
+            </tr>
+            <tr>
+              <td><code>--color-text-muted</code></td>
+              <td><span class="swatch" style="background: #a8b2c0"></span></td>
+              <td><code>#a8b2c0</code></td>
+              <td>Secondary text, hints, labels</td>
+              <td class="ratio">8.46</td>
+            </tr>
+            <tr>
+              <td><code>--color-accent</code></td>
+              <td><span class="swatch" style="background: #7db3e8"></span></td>
+              <td><code>#7db3e8</code></td>
+              <td>Links, primary action, focus ring</td>
+              <td class="ratio">8.20</td>
+            </tr>
+            <tr>
+              <td><code>--color-risk-high</code></td>
+              <td><span class="swatch" style="background: #f08a7a"></span></td>
+              <td><code>#f08a7a</code></td>
+              <td>High band, failure, danger action</td>
+              <td class="ratio">7.45</td>
+            </tr>
+            <tr>
+              <td><code>--color-risk-medium</code></td>
+              <td><span class="swatch" style="background: #e0a93c"></span></td>
+              <td><code>#e0a93c</code></td>
+              <td>Medium band</td>
+              <td class="ratio">8.56</td>
+            </tr>
+            <tr>
+              <td><code>--color-risk-low</code></td>
+              <td><span class="swatch" style="background: #64c98c"></span></td>
+              <td><code>#64c98c</code></td>
+              <td>Low band</td>
+              <td class="ratio">8.88</td>
+            </tr>
+            <tr>
+              <td><code>--color-border-strong</code></td>
+              <td><span class="swatch" style="background: #a8b2c0"></span></td>
+              <td><code>#a8b2c0</code></td>
+              <td>The edge of a control</td>
+              <td class="ratio">8.46</td>
+            </tr>
+            <tr>
+              <td><code>--color-border</code></td>
+              <td><span class="swatch" style="background: #2c3540"></span></td>
+              <td><code>#2c3540</code></td>
+              <td>Separates blocks, carries no meaning</td>
+              <td class="ratio">1.46</td>
+            </tr>
+          </tbody>
+        </table>
+      </figure>
+    </section>
+
+    <section class="sheet">
+      <header>
+        <h2>Foundations: type, spacing and target size</h2>
+        <p class="sheet-number">2</p>
+      </header>
+
+      <p class="lede">
+        Every length is relative. A length in pixels would ignore the reader's
+        own font size, and the text scale control in the application would then
+        move the text without moving the space around it.
+      </p>
+
+      <figure class="specimen">
+        <figcaption>
+          Type scale
+          <span>Seven steps, two line heights, three weights</span>
+        </figcaption>
+        <div class="frame stack tight">
+          <p style="font-size: var(--text-3xl); margin: 0">Display, 2.25rem</p>
+          <p style="font-size: var(--text-2xl); margin: 0">
+            Page title, 1.75rem
+          </p>
+          <p style="font-size: var(--text-xl); margin: 0">Section, 1.375rem</p>
+          <p style="font-size: var(--text-lg); margin: 0">
+            Card title, 1.125rem
+          </p>
+          <p style="font-size: var(--text-base); margin: 0">Body, 1rem</p>
+          <p style="font-size: var(--text-sm); margin: 0">
+            Secondary, 0.875rem
+          </p>
+          <p style="font-size: var(--text-xs); margin: 0">
+            Annotation, 0.75rem
+          </p>
+        </div>
+      </figure>
+
+      <figure class="specimen">
+        <figcaption>
+          Spacing scale
+          <span
+            >One scale, used for both layout gaps and component padding</span
+          >
+        </figcaption>
+        <div class="frame stack tight">
+          <div class="row" style="gap: var(--space-2)">
+            <span
+              class="swatch"
+              style="width: var(--space-1); background: var(--color-accent)"
+            ></span>
+            <code>--space-1</code><span class="muted small">0.25rem</span>
+          </div>
+          <div class="row" style="gap: var(--space-2)">
+            <span
+              class="swatch"
+              style="width: var(--space-2); background: var(--color-accent)"
+            ></span>
+            <code>--space-2</code><span class="muted small">0.5rem</span>
+          </div>
+          <div class="row" style="gap: var(--space-2)">
+            <span
+              class="swatch"
+              style="width: var(--space-4); background: var(--color-accent)"
+            ></span>
+            <code>--space-4</code
+            ><span class="muted small">1rem, the default gap</span>
+          </div>
+          <div class="row" style="gap: var(--space-2)">
+            <span
+              class="swatch"
+              style="width: var(--space-6); background: var(--color-accent)"
+            ></span>
+            <code>--space-6</code
+            ><span class="muted small">2rem, between sections</span>
+          </div>
+          <div class="row" style="gap: var(--space-2)">
+            <span
+              class="swatch"
+              style="width: var(--space-8); background: var(--color-accent)"
+            ></span>
+            <code>--space-8</code
+            ><span class="muted small">4rem, clears the bottom bar</span>
+          </div>
+        </div>
+      </figure>
+
+      <figure class="specimen">
+        <figcaption>
+          Target size and radius
+          <span
+            >The square is the minimum a touch target may occupy, which the end
+            to end suite measures on a phone viewport</span
+          >
+        </figcaption>
+        <div class="frame row" style="gap: var(--space-5)">
+          <div
+            style="
+              width: var(--touch-target);
+              height: var(--touch-target);
+              border: 1px solid var(--color-border-strong);
+              border-radius: var(--radius-sm);
+              background: var(--color-surface-raised);
+            "
+          ></div>
+          <p class="small muted" style="margin: 0; max-width: 34ch">
+            <code>--touch-target</code> is 2.75rem, the 44 pixel minimum of WCAG
+            2.5.5 at the default font size, and it grows with the reader's own
+            setting rather than staying fixed.
+          </p>
+          <div class="row" style="gap: var(--space-3)">
+            <span
+              class="swatch"
+              style="
+                width: 3rem;
+                height: 2rem;
+                border-radius: var(--radius-sm);
+                background: var(--color-surface-raised);
+              "
+            ></span>
+            <span
+              class="swatch"
+              style="
+                width: 3rem;
+                height: 2rem;
+                border-radius: var(--radius-md);
+                background: var(--color-surface-raised);
+              "
+            ></span>
+            <span
+              class="swatch"
+              style="
+                width: 3rem;
+                height: 2rem;
+                border-radius: var(--radius-lg);
+                background: var(--color-surface-raised);
+              "
+            ></span>
+          </div>
+        </div>
+      </figure>
+    </section>
+
+    <section class="sheet">
+      <header>
+        <h2>Components: actions</h2>
+        <p class="sheet-number">3</p>
+      </header>
+
+      <p class="lede">
+        Four button variants, each shown at rest, hovered, pressed, focused by
+        keyboard and disabled. Hover, press and focus are reproduced from the
+        rules that produce them, since a printed page cannot hold a pseudo-class
+        open; rest and disabled are the components themselves.
+      </p>
+
+      <figure class="specimen">
+        <figcaption>
+          Primary
+          <span
+            >One per screen, for the action the screen exists to perform</span
+          >
+        </figcaption>
+        <div class="frame matrix">
+          <div>
+            <button class="button primary">Assess</button><small>rest</small>
+          </div>
+          <div>
+            <button class="button primary mk-hover">Assess</button>
+            <small>hover</small>
+          </div>
+          <div>
+            <button class="button primary mk-hover mk-active">Assess</button>
+            <small>pressed</small>
+          </div>
+          <div>
+            <button class="button primary mk-focus">Assess</button>
+            <small>focus</small>
+          </div>
+          <div>
+            <button class="button primary" disabled>Assess</button>
+            <small>disabled</small>
+          </div>
+        </div>
+      </figure>
+
+      <figure class="specimen">
+        <figcaption>
+          Secondary
+          <span
+            >The alternative to the primary action, and the retry on a
+            failure</span
+          >
+        </figcaption>
+        <div class="frame matrix">
+          <div>
+            <button class="button secondary">Try again</button
+            ><small>rest</small>
+          </div>
+          <div>
+            <button class="button secondary mk-hover">Try again</button>
+            <small>hover</small>
+          </div>
+          <div>
+            <button class="button secondary mk-hover mk-active">
+              Try again
+            </button>
+            <small>pressed</small>
+          </div>
+          <div>
+            <button class="button secondary mk-focus">Try again</button>
+            <small>focus</small>
+          </div>
+          <div>
+            <button class="button secondary" disabled>Try again</button>
+            <small>disabled</small>
+          </div>
+        </div>
+      </figure>
+
+      <figure class="specimen">
+        <figcaption>
+          Ghost and danger
+          <span
+            >Ghost for navigation inside a card. Danger for withdrawal, which
+            cannot be undone</span
+          >
+        </figcaption>
+        <div class="frame matrix">
+          <div>
+            <button class="button ghost">Evidence</button><small>rest</small>
+          </div>
+          <div>
+            <button class="button ghost mk-hover">Evidence</button>
+            <small>hover</small>
+          </div>
+          <div>
+            <button class="button ghost mk-focus">Evidence</button>
+            <small>focus</small>
+          </div>
+          <div>
+            <button class="button danger">Withdraw</button><small>rest</small>
+          </div>
+          <div>
+            <button class="button danger" disabled>Withdraw</button>
+            <small>disabled</small>
+          </div>
+        </div>
+      </figure>
+
+      <figure class="specimen">
+        <figcaption>
+          Size and busy state
+          <span
+            >The small size is for a control inside a dense row. The spinner
+            replaces the label's leading edge while a request is in flight, and
+            the button is disabled for its duration</span
+          >
+        </figcaption>
+        <div class="frame row still" style="gap: var(--space-4)">
+          <button class="button primary small">Filter</button>
+          <button class="button secondary small">Clear</button>
+          <button class="button primary" disabled>
+            <span class="button-spinner" aria-hidden="true"></span> Assessing
+          </button>
+        </div>
+      </figure>
+    </section>
+
+    <section class="sheet">
+      <header>
+        <h2>Components: risk, badges and figures</h2>
+        <p class="sheet-number">4</p>
+      </header>
+
+      <figure class="specimen">
+        <figcaption>
+          Risk badge
+          <span
+            >The figure, the band and the horizon. Assistive technology receives
+            one sentence instead of the three parts</span
+          >
+        </figcaption>
+        <div class="frame row" style="gap: var(--space-4)">
+          <span class="badge high"
+            ><span class="numeric">97%</span
+            ><span class="badge-band">high</span></span
+          >
+          <span class="badge medium"
+            ><span class="numeric">41%</span
+            ><span class="badge-band">medium</span></span
+          >
+          <span class="badge low"
+            ><span class="numeric">3%</span
+            ><span class="badge-band">low</span></span
+          >
+          <span class="badge neutral">not scored</span>
+        </div>
+      </figure>
+
+      <figure class="specimen">
+        <figcaption>
+          Badge tones
+          <span
+            >Neutral for a fact, accent for a relation to the submitted
+            project</span
+          >
+        </figcaption>
+        <div class="frame row" style="gap: var(--space-4)">
+          <span class="badge accent">direct</span>
+          <span class="badge neutral">indirect</span>
+          <span class="badge neutral">withheld</span>
+          <span class="badge neutral">withdrawn</span>
+        </div>
+      </figure>
+
+      <figure class="specimen">
+        <figcaption>
+          Figures
+          <span
+            >One column on a phone and as many as fit above that, so a number is
+            never broken across two lines</span
+          >
+        </figcaption>
+        <div class="frame">
+          <dl class="stat-row">
+            <div class="stat">
+              <dt>Entries</dt>
+              <dd>
+                <span class="stat-value numeric">39</span>
+                <span class="stat-hint muted small">in the manifest</span>
+              </dd>
+            </div>
+            <div class="stat">
+              <dt>Scored</dt>
+              <dd>
+                <span class="stat-value numeric">4</span>
+                <span class="stat-hint muted small"
+                  >matched to a repository</span
+                >
+              </dd>
+            </div>
+            <div class="stat">
+              <dt>Unscored</dt>
+              <dd>
+                <span class="stat-value numeric">35</span>
+                <span class="stat-hint muted small"
+                  >reason given per entry</span
+                >
+              </dd>
+            </div>
+            <div class="stat">
+              <dt>Data as of</dt>
+              <dd>
+                <span class="stat-value numeric">2026-11-21</span>
+                <span class="stat-hint muted small">registry and events</span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </figure>
+
+      <figure class="specimen">
+        <figcaption>
+          Factor bar
+          <span
+            >The decomposition behind one score. The baseline is zero, a bar to
+            the right raised the risk and a bar to the left lowered it</span
+          >
+        </figcaption>
+        <div class="frame stack tight">
+          <div class="factor">
+            <div class="factor-head row between">
+              <span class="factor-label">Days since the last event</span>
+              <span class="factor-observed muted small numeric">1920</span>
+            </div>
+            <div
+              class="factor-track"
+              style="
+                position: relative;
+                height: 0.75rem;
+                background: var(--color-surface-raised);
+                border-radius: var(--radius-sm);
+              "
+            >
+              <span
+                class="factor-baseline"
+                style="
+                  position: absolute;
+                  left: 50%;
+                  top: 0;
+                  bottom: 0;
+                  width: 1px;
+                  background: var(--color-border-strong);
+                "
+              ></span>
+              <span
+                style="
+                  position: absolute;
+                  left: 50%;
+                  top: 0;
+                  bottom: 0;
+                  width: 34%;
+                  background: var(--chart-positive);
+                  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+                "
+              ></span>
+            </div>
+          </div>
+          <div class="factor">
+            <div class="factor-head row between">
+              <span class="factor-label">Distinct contributors</span>
+              <span class="factor-observed muted small numeric">11</span>
+            </div>
+            <div
+              class="factor-track"
+              style="
+                position: relative;
+                height: 0.75rem;
+                background: var(--color-surface-raised);
+                border-radius: var(--radius-sm);
+              "
+            >
+              <span
+                class="factor-baseline"
+                style="
+                  position: absolute;
+                  left: 50%;
+                  top: 0;
+                  bottom: 0;
+                  width: 1px;
+                  background: var(--color-border-strong);
+                "
+              ></span>
+              <span
+                style="
+                  position: absolute;
+                  right: 50%;
+                  top: 0;
+                  bottom: 0;
+                  width: 18%;
+                  background: var(--chart-negative);
+                  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+                "
+              ></span>
+            </div>
+          </div>
+          <p class="factor-foot small muted" style="margin: 0">
+            Ordered by the magnitude of the contribution, so the first bar is
+            the reason for the score.
+          </p>
+        </div>
+      </figure>
+    </section>
+
+    <section class="sheet">
+      <header>
+        <h2>Components: containers</h2>
+        <p class="sheet-number">5</p>
+      </header>
+
+      <figure class="specimen">
+        <figcaption>
+          Card
+          <span
+            >The container for every block of content. The head carries the
+            heading, the foot carries provenance</span
+          >
+        </figcaption>
+        <section class="card">
+          <header class="card-head">
+            <h2 class="card-title">tiny-config 0.3.1</h2>
+            <span class="badge medium"
+              ><span class="numeric">41%</span
+              ><span class="badge-band">medium</span></span
+            >
+          </header>
+          <div class="card-body">
+            <p style="margin: 0">
+              An indirect dependency, two levels below the submitted project,
+              matched to a repository with activity in the last month.
+            </p>
+          </div>
+          <footer class="card-foot muted">
+            Registry data as of 2026-11-21. Events as of 2026-11-21.
+          </footer>
+        </section>
+      </figure>
+    </section>
+
+    <section class="sheet">
+      <header>
+        <h2>Components: asynchronous states</h2>
+        <p class="sheet-number">6</p>
+      </header>
+
+      <p class="lede">
+        Four states cover every request the client makes. Each occupies the
+        place the content will occupy, so nothing moves when the content
+        arrives. A state that is the whole screen carries the first heading of
+        that screen rather than a lower one.
+      </p>
+
+      <figure class="specimen">
+        <figcaption>
+          Loading, and the skeleton of a table
+          <span
+            >Announced politely, so a screen reader hears that something is
+            coming rather than silence. Shown here mid-animation</span
+          >
+        </figcaption>
+        <div class="frame still" style="display: grid; gap: var(--space-4)">
+          <div class="state" role="status">
+            <span class="state-spinner" aria-hidden="true"></span>
+            <p class="muted">Assessing the manifest</p>
+          </div>
+          <div class="skeleton-table">
+            <div class="skeleton-row">
+              <span class="skeleton" style="width: 40%; height: 1rem"></span>
+              <span class="skeleton" style="width: 18%; height: 1rem"></span>
+              <span class="skeleton" style="width: 22%; height: 1rem"></span>
+            </div>
+            <div class="skeleton-row">
+              <span class="skeleton" style="width: 40%; height: 1rem"></span>
+              <span class="skeleton" style="width: 18%; height: 1rem"></span>
+              <span class="skeleton" style="width: 22%; height: 1rem"></span>
+            </div>
+          </div>
+        </div>
+      </figure>
+
+      <figure class="specimen">
+        <figcaption>
+          Empty, and failure
+          <span
+            >A failure states what happened, what it means, the one action
+            available, and the problem identifier the API reference
+            indexes</span
+          >
+        </figcaption>
+        <div class="frame" style="display: grid; gap: var(--space-5)">
+          <div class="state">
+            <h3>Nothing matches</h3>
+            <p class="muted">
+              No entry in this report matches that filter. Clearing it brings
+              the tree back.
+            </p>
+          </div>
+          <div class="state failure" role="alert">
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path d="M12 3 1.8 21h20.4L12 3Z" />
+              <path d="M12 9v5" />
+              <circle cx="12" cy="17.5" r="0.9" fill="currentColor" />
+            </svg>
+            <h3>No such report</h3>
+            <p>
+              The link has never addressed a report on this deployment. A token
+              cannot be recovered once it is lost.
+            </p>
+            <div class="row">
+              <button class="button secondary">Try again</button>
+              <code class="small muted">report-not-found</code>
+            </div>
+          </div>
+        </div>
+      </figure>
+    </section>
+
+    <section class="sheet">
+      <header>
+        <h2>Component library, as rendered in the client</h2>
+        <p class="sheet-number">7</p>
+      </header>
+
+      <p class="lede">
+        The application serves the library itself, at
+        <code>/design-system</code>, where every reusable component appears in
+        every state it can occupy. The plate below is that page captured whole,
+        which makes the library a running artefact rather than a description of
+        one: a component that changes is wrong here on the next capture.
+      </p>
+
+      <figure class="device desktop" style="width: 100%">
+        <figcaption>
+          <code>/design-system</code>, desktop at 1440 by 900
+          <span
+            >Colour with its measured ratios, the type and spacing scales,
+            buttons in every state, risk bands, badges, figures, the four
+            asynchronous states, the charts, and the breakpoints</span
+          >
+        </figcaption>
+        <img
+          src="../screenshots/desktop/07-design-system-full.png"
+          alt="The design system page, showing every component in every state"
+          style="width: 100%; height: auto; object-fit: contain"
+        />
+      </figure>
+
+      <p class="lede">
+        Groups, and the area that owns each: <code>ui</code> holds the button,
+        card, badge, states and icons; <code>layout</code> holds the shell, the
+        appearance control and the notices; <code>report</code> holds the tree
+        table and the data age banner; <code>charts</code> holds the factor bars
+        and the download series; and the file drop is the one input the client
+        has.
+      </p>
+    </section>
+
+    <section class="sheet">
+      <header>
+        <h2>Screen: submission</h2>
+        <p class="sheet-number">8</p>
+      </header>
+
+      <p class="lede">
+        The entry point. A lockfile is chosen or dropped, and the client refuses
+        what it can refuse locally before a request is made.
+      </p>
+
+      <div class="screen">
+        <div>
+          <figure class="device desktop">
+            <figcaption>
+              Desktop, 1440 by 900
+              <span>Content bounded by a maximum width and centred</span>
+            </figcaption>
+            <img
+              src="../screenshots/desktop/01-submit.png"
+              alt="Submission on a desktop"
+            />
+          </figure>
+          <ol class="notes">
+            <li>
+              Skip link, first in the tab order and visible only when focused.
+            </li>
+            <li>
+              Brand and primary navigation. Above 48rem it is inline here; below
+              it the bar at the foot carries the same destinations.
+            </li>
+            <li>
+              The file drop, operable by click, by keyboard and by drag. The
+              accepted name is stated rather than implied.
+            </li>
+            <li>
+              A local refusal: a file that is not a lockfile is reported here
+              without a request, since the client can tell.
+            </li>
+            <li>
+              The primary action, disabled until a file is chosen and busy for
+              the duration of the request.
+            </li>
+            <li>
+              What the service does with the manifest, stated before it is sent
+              rather than in a policy elsewhere.
+            </li>
+          </ol>
+        </div>
+        <div>
+          <figure class="device phone">
+            <figcaption>
+              Phone, 390 by 844
+              <span>One column, navigation at the bottom</span>
+            </figcaption>
+            <img
+              src="../screenshots/phone/01-submit.png"
+              alt="Submission on a phone"
+            />
+          </figure>
+          <figure class="device tablet">
+            <figcaption>
+              Tablet, 820 by 1180
+              <span>Navigation moves into the header</span>
+            </figcaption>
+            <img
+              src="../screenshots/tablet/01-submit.png"
+              alt="Submission on a tablet"
+            />
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="sheet">
+      <header>
+        <h2>Screen: report</h2>
+        <p class="sheet-number">9</p>
+      </header>
+
+      <p class="lede">
+        The screen the project exists for: the dependency tree ranked by risk,
+        with the age of the data it rests on and a filter over the entries. It
+        is also the screen whose structure changes most between widths, since a
+        table cannot be narrowed indefinitely.
+      </p>
+
+      <div class="screen">
+        <div>
+          <figure class="device desktop">
+            <figcaption>
+              Desktop, 1440 by 900
+              <span
+                >The full table, with the figures in a tabular numeric
+                column</span
+              >
+            </figcaption>
+            <img
+              src="../screenshots/desktop/02-report.png"
+              alt="A report on a desktop"
+            />
+          </figure>
+          <ol class="notes">
+            <li>
+              The permanent link, which is the only copy of the token that is
+              issued.
+            </li>
+            <li>
+              The age of each source, so a score is read against the data behind
+              it.
+            </li>
+            <li>
+              Counts: entries submitted, scored, and left unscored with a
+              reason.
+            </li>
+            <li>
+              The filter, which narrows the tree and has a state of its own when
+              nothing matches.
+            </li>
+            <li>
+              The ranked tree. The rank is stored with the report, so it is
+              identical on every later read.
+            </li>
+            <li>
+              The risk badge, carrying the figure, the word and the horizon
+              together.
+            </li>
+          </ol>
+        </div>
+        <div>
+          <figure class="device phone">
+            <figcaption>
+              Phone, 390 by 844
+              <span
+                >Each row becomes a card, every cell preceded by its own
+                label</span
+              >
+            </figcaption>
+            <img
+              src="../screenshots/phone/02-report.png"
+              alt="A report on a phone"
+            />
+          </figure>
+          <figure class="device tablet">
+            <figcaption>
+              Tablet, 820 by 1180
+              <span>Above 48rem the cards become a table again</span>
+            </figcaption>
+            <img
+              src="../screenshots/tablet/02-report.png"
+              alt="A report on a tablet"
+            />
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="sheet">
+      <header>
+        <h2>Screen: entry evidence</h2>
+        <p class="sheet-number">10</p>
+      </header>
+
+      <p class="lede">
+        One entry of a report, with the factors that moved its score, the
+        observed download series and the current assessment of the same package.
+        Above 64rem the evidence sits beside the entry it explains rather than
+        beneath it.
+      </p>
+
+      <div class="screen">
+        <div>
+          <figure class="device desktop">
+            <figcaption>
+              Desktop, 1440 by 900
+              <span
+                >The factor decomposition beside the series it is drawn
+                from</span
+              >
+            </figcaption>
+            <img
+              src="../screenshots/desktop/03-package.png"
+              alt="Entry evidence on a desktop"
+            />
+          </figure>
+          <ol class="notes">
+            <li>
+              The entry, its version, and its relation to the submitted project.
+            </li>
+            <li>
+              The factors, ordered by the magnitude of their contribution, so
+              the first is the reason.
+            </li>
+            <li>
+              The observed download series, which a package has even when its
+              history is too short for a forecast.
+            </li>
+            <li>
+              A contributor count below the disclosure threshold is withheld
+              rather than rounded, and the screen says which happened.
+            </li>
+            <li>
+              The current assessment of the same package, which may differ from
+              the stored one and is labelled as current.
+            </li>
+          </ol>
+        </div>
+        <div>
+          <figure class="device phone">
+            <figcaption>
+              Phone, 390 by 844
+              <span>Evidence below the entry, in one column</span>
+            </figcaption>
+            <img
+              src="../screenshots/phone/03-package.png"
+              alt="Entry evidence on a phone"
+            />
+          </figure>
+          <figure class="device tablet">
+            <figcaption>
+              Tablet, 820 by 1180
+              <span>Two columns where the content pairs</span>
+            </figcaption>
+            <img
+              src="../screenshots/tablet/03-package.png"
+              alt="Entry evidence on a tablet"
+            />
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="sheet">
+      <header>
+        <h2>Screen: comparison</h2>
+        <p class="sheet-number">11</p>
+      </header>
+
+      <p class="lede">
+        What has changed since the previous assessment of the same manifest,
+        matched on a fingerprint rather than on a stored copy of the file. The
+        first assessment of a manifest has nothing to compare, which is a state
+        of this screen rather than an error.
+      </p>
+
+      <div class="screen">
+        <div>
+          <figure class="device desktop">
+            <figcaption>
+              Desktop, 1440 by 900
+              <span
+                >Both assessment dates stated, since the interval is what the
+                change is relative to</span
+              >
+            </figcaption>
+            <img
+              src="../screenshots/desktop/04-changes.png"
+              alt="Comparison on a desktop"
+            />
+          </figure>
+          <ol class="notes">
+            <li>The two dates being compared.</li>
+            <li>Entries that appeared, with their first score.</li>
+            <li>
+              Entries whose score moved, with the direction stated in words.
+            </li>
+            <li>Entries that are no longer in the manifest.</li>
+          </ol>
+        </div>
+        <div>
+          <figure class="device phone">
+            <figcaption>
+              Phone, 390 by 844
+              <span>Changes as labelled cards</span>
+            </figcaption>
+            <img
+              src="../screenshots/phone/04-changes.png"
+              alt="Comparison on a phone"
+            />
+          </figure>
+          <figure class="device tablet">
+            <figcaption>
+              Tablet, 820 by 1180
+              <span>Direction of change in its own column</span>
+            </figcaption>
+            <img
+              src="../screenshots/tablet/04-changes.png"
+              alt="Comparison on a tablet"
+            />
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="sheet">
+      <header>
+        <h2>Screen: registry</h2>
+        <p class="sheet-number">12</p>
+      </header>
+
+      <p class="lede">
+        The list of assessed packages, ranked by risk, for a reader who arrives
+        without a report. Searching matches anywhere in a name and without
+        regard to case.
+      </p>
+
+      <div class="screen">
+        <div>
+          <figure class="device desktop">
+            <figcaption>
+              Desktop, 1440 by 900
+              <span>The listing as a table, ranked</span>
+            </figcaption>
+            <img
+              src="../screenshots/desktop/05-packages.png"
+              alt="The registry on a desktop"
+            />
+          </figure>
+          <ol class="notes">
+            <li>Search, matching anywhere in a name without regard to case.</li>
+            <li>
+              Ranked by descending risk, so the first page is the one worth
+              reading.
+            </li>
+            <li>
+              An unresolved package is listed with the reason it carries no
+              score rather than omitted.
+            </li>
+            <li>
+              Paging by limit and offset, both repeated in the response, so a
+              page is interpretable on its own.
+            </li>
+          </ol>
+        </div>
+        <div>
+          <figure class="device phone">
+            <figcaption>
+              Phone, 390 by 844
+              <span>Results as cards</span>
+            </figcaption>
+            <img
+              src="../screenshots/phone/05-packages.png"
+              alt="The registry on a phone"
+            />
+          </figure>
+          <figure class="device tablet">
+            <figcaption>
+              Tablet, 820 by 1180
+              <span>The same list as a table</span>
+            </figcaption>
+            <img
+              src="../screenshots/tablet/05-packages.png"
+              alt="The registry on a tablet"
+            />
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="sheet">
+      <header>
+        <h2>Screen: method</h2>
+        <p class="sheet-number">13</p>
+      </header>
+
+      <p class="lede">
+        The definition every score rests on, served by the API from the database
+        that holds those scores, so the page cannot disagree with them.
+      </p>
+
+      <div class="screen">
+        <div>
+          <figure class="device desktop">
+            <figcaption>
+              Desktop, 1440 by 900
+              <span
+                >The definition, with the two consequences that bear on how a
+                score should be read</span
+              >
+            </figcaption>
+            <img
+              src="../screenshots/desktop/06-method.png"
+              alt="The method on a desktop"
+            />
+          </figure>
+          <ol class="notes">
+            <li>
+              The abandonment definition, in the words the service publishes.
+            </li>
+            <li>
+              The observation window, and the note that a package still active
+              at its end is right censored rather than called healthy.
+            </li>
+            <li>
+              The disclosure threshold, below which a contributor count is
+              withheld rather than rounded.
+            </li>
+            <li>
+              The age of each source, which is what a score should be read
+              against.
+            </li>
+          </ol>
+        </div>
+        <div>
+          <figure class="device phone">
+            <figcaption>
+              Phone, 390 by 844
+              <span>One column, the definition first</span>
+            </figcaption>
+            <img
+              src="../screenshots/phone/06-method.png"
+              alt="The method on a phone"
+            />
+          </figure>
+          <figure class="device tablet">
+            <figcaption>
+              Tablet, 820 by 1180
+              <span>Two columns where the content pairs</span>
+            </figcaption>
+            <img
+              src="../screenshots/tablet/06-method.png"
+              alt="The method on a tablet"
+            />
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="sheet">
+      <header>
+        <h2>The dark theme</h2>
+        <p class="sheet-number">14</p>
+      </header>
+
+      <p class="lede">
+        The theme follows the system preference until the reader chooses
+        otherwise, and the choice persists. It is a second palette rather than
+        an inversion: every pair in it is measured against the same thresholds,
+        which is why the muted text and the risk colours are not the light
+        values lightened.
+      </p>
+
+      <div class="devices tight">
+        <figure class="device phone">
+          <figcaption>
+            Submission
+            <span>Phone, 390 by 844</span>
+          </figcaption>
+          <img
+            src="../screenshots/phone/01-submit-dark.png"
+            alt="Submission on a phone in the dark theme"
+          />
+        </figure>
+        <figure class="device phone">
+          <figcaption>
+            Report
+            <span>Rows reflowed into cards</span>
+          </figcaption>
+          <img
+            src="../screenshots/phone/02-report-dark.png"
+            alt="A report on a phone in the dark theme"
+          />
+        </figure>
+        <figure class="device phone">
+          <figcaption>
+            Entry evidence
+            <span>Chart marks held to 3:1 in both themes</span>
+          </figcaption>
+          <img
+            src="../screenshots/phone/03-package-dark.png"
+            alt="Entry evidence on a phone in the dark theme"
+          />
+        </figure>
+        <figure class="device phone">
+          <figcaption>
+            Comparison
+            <span>Direction carried by a word as well as a colour</span>
+          </figcaption>
+          <img
+            src="../screenshots/phone/04-changes-dark.png"
+            alt="A comparison on a phone in the dark theme"
+          />
+        </figure>
+      </div>
+
+      <figure class="device desktop" style="margin-top: var(--space-4)">
+        <figcaption>
+          Report, desktop at 1440 by 900
+          <span>The same table, the same ranking, a second palette</span>
+        </figcaption>
+        <img
+          src="../screenshots/desktop/02-report-dark.png"
+          alt="A report on a desktop in the dark theme"
+        />
+      </figure>
+    </section>
+
+    <section class="sheet">
+      <header>
+        <h2>Breakpoints and device queries</h2>
+        <p class="sheet-number">15</p>
+      </header>
+
+      <figure class="specimen">
+        <figcaption>
+          Breakpoints
+          <span
+            >Three widths in <code>rem</code>, so they respond to the reader's
+            font size rather than to a pixel count</span
+          >
+        </figcaption>
+        <table class="tokens">
+          <thead>
+            <tr>
+              <th>Width</th>
+              <th>At the default font size</th>
+              <th>Change</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>30rem</code></td>
+              <td>480px</td>
+              <td>
+                The appearance panel spans the width rather than hanging from
+                the right edge, where it would be cut off
+              </td>
+            </tr>
+            <tr>
+              <td><code>48rem</code></td>
+              <td>768px</td>
+              <td>
+                The principal change: cards become tables, navigation moves from
+                the bottom bar into the header, multi-column layouts begin
+              </td>
+            </tr>
+            <tr>
+              <td><code>64rem</code></td>
+              <td>1024px</td>
+              <td>Evidence appears beside the entry it explains</td>
+            </tr>
+          </tbody>
+        </table>
+      </figure>
+
+      <figure class="specimen">
+        <figcaption>
+          Queries that adapt to the device rather than to its width
+          <span>Detected, never inferred from a user agent string</span>
+        </figcaption>
+        <table class="tokens">
+          <thead>
+            <tr>
+              <th>Query</th>
+              <th>Effect</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>pointer: coarse</code></td>
+              <td>
+                Every interactive element is raised to the touch minimum, so a
+                touch device gets larger controls whatever its width
+              </td>
+            </tr>
+            <tr>
+              <td><code>orientation: landscape</code></td>
+              <td>
+                Vertical spacing is compressed on a short viewport, where height
+                is the scarce dimension
+              </td>
+            </tr>
+            <tr>
+              <td><code>prefers-color-scheme</code></td>
+              <td>Selects the initial theme</td>
+            </tr>
+            <tr>
+              <td><code>prefers-reduced-motion</code></td>
+              <td>
+                Removes transitions and animation for a reader who has asked
+                their system for that
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </figure>
+    </section>
+
+    <section class="sheet">
+      <header>
+        <h2>Device patterns</h2>
+        <p class="sheet-number">16</p>
+      </header>
+
+      <figure class="specimen">
+        <figcaption>
+          Phone in landscape
+          <span
+            >The case height-based layouts tend to fail. The navigation stays
+            reachable and nothing overflows sideways</span
+          >
+        </figcaption>
+        <div class="devices">
+          <figure class="device landscape">
+            <figcaption>
+              844 by 390
+              <span>Submission</span>
+            </figcaption>
+            <img
+              src="../screenshots/phone-landscape/01-submit.png"
+              alt="Submission on a phone in landscape"
+            />
+          </figure>
+          <figure class="device landscape">
+            <figcaption>
+              844 by 390
+              <span>Report</span>
+            </figcaption>
+            <img
+              src="../screenshots/phone-landscape/02-report.png"
+              alt="A report on a phone in landscape"
+            />
+          </figure>
+        </div>
+      </figure>
+
+      <p class="lede">
+        <strong>One-handed use and platform patterns.</strong> Below 48rem the
+        primary destinations sit in a bar fixed to the foot of the viewport,
+        which is the pattern of Android's bottom navigation and the iOS tab bar
+        and the part of a phone screen a thumb reaches. Exactly one navigation
+        is present at a time, so a reader never meets two. The bar respects
+        <code>env(safe-area-inset-bottom)</code>, so it clears a home indicator,
+        and the main content reserves space for it rather than ending
+        underneath.
+      </p>
+
+      <p class="lede">
+        <strong>The on-screen keyboard.</strong> The client has two inputs, the
+        file chooser and the filter field. Both sit in normal document flow
+        rather than pinned to the viewport, so a keyboard opening scrolls them
+        into view instead of covering them, and the layout is sized in
+        <code>dvh</code> rather than <code>vh</code> so that the visible height
+        is the one used. No element is fixed to the bottom except the navigation
+        bar, which a keyboard may cover while it is open, when the field being
+        typed into is the thing that matters.
+      </p>
+
+      <p class="lede">
+        <strong>Reader controls.</strong> Theme and text scale are the reader's
+        to set, in the appearance control in the header, and both persist.
+        Because every dimension is relative, enlarging the text enlarges
+        spacing, controls and touch targets with it. The end to end suite
+        asserts that doubling the root font size, which is how a browser applies
+        zoom, leaves the phone layout without horizontal overflow.
+      </p>
+    </section>
+
+    <section class="sheet">
+      <header>
+        <h2>Accessibility annotations</h2>
+        <p class="sheet-number">17</p>
+      </header>
+
+      <p class="lede">
+        Level AA of WCAG 2.1 is the target. Three of its requirements are
+        checked by tests rather than reviewed, which is why the figures on the
+        colour sheet are measurements.
+      </p>
+
+      <table class="tokens">
+        <thead>
+          <tr>
+            <th>Requirement</th>
+            <th>How it is met</th>
+            <th>How it is checked</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1.4.3 Contrast, minimum</td>
+            <td>Every text colour against every surface it appears on</td>
+            <td>A unit test over the token file, in both themes, at 4.5:1</td>
+          </tr>
+          <tr>
+            <td>1.4.11 Non-text contrast</td>
+            <td>Control edges and chart marks</td>
+            <td>The same suite, at 3:1</td>
+          </tr>
+          <tr>
+            <td>2.5.5 Target size</td>
+            <td>
+              <code>--touch-target</code> on every control under a coarse
+              pointer
+            </td>
+            <td>Measured in the browser on a phone viewport</td>
+          </tr>
+          <tr>
+            <td>1.3.1 Info and relationships</td>
+            <td>
+              The table reflow keeps explicit ARIA roles, since changing
+              <code>display</code> strips a table's implicit semantics
+            </td>
+            <td>Reviewed, and the roles are asserted in component tests</td>
+          </tr>
+          <tr>
+            <td>2.4.6 Headings and labels</td>
+            <td>
+              Headings descend without skipping, and a state occupying the whole
+              screen carries that screen's first heading
+            </td>
+            <td>A component test asserts the heading level</td>
+          </tr>
+          <tr>
+            <td>2.1.1 Keyboard</td>
+            <td>
+              Every control reachable and operable, with a skip link first in
+              the order
+            </td>
+            <td>Exercised in the end to end suite</td>
+          </tr>
+          <tr>
+            <td>2.4.7 Focus visible</td>
+            <td>
+              <code>:focus-visible</code>, so a keyboard reader sees a ring and
+              a pointer user does not
+            </td>
+            <td>Shown on sheet 3, rule mirrored</td>
+          </tr>
+          <tr>
+            <td>1.4.1 Use of colour</td>
+            <td>
+              Each risk band carries a numeral and a word, and the chart palette
+              was validated against simulated deuteranopia
+            </td>
+            <td>Reviewed against the simulation</td>
+          </tr>
+          <tr>
+            <td>4.1.3 Status messages</td>
+            <td>
+              Loading states are announced politely and failures assertively
+            </td>
+            <td>A component test asserts the live region</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="lede">
+        Colour is never the sole carrier of meaning. Each risk band is
+        accompanied by a numeral and a word everywhere it appears, so the band
+        survives being read by someone who cannot distinguish the three, and the
+        chart palette separates its two series by hue against blue rather than
+        red against green, a pair that fails simulated deuteranopia.
+      </p>
+
+      <p class="lede">
+        Two device classes are deliberately out of scope. A foldable is handled
+        as the two widths it presents, since the viewport segment queries are
+        not yet broadly supported, and a smartwatch is not addressed at all: the
+        narrowest layout assumes a readable table of dependency names, which
+        does not fit a display of that size. Both would need a different
+        information design rather than another breakpoint.
+      </p>
+    </section>
+  </body>
+</html>
