@@ -63,6 +63,12 @@ pub enum ApiError {
 
     #[error(transparent)]
     Database(#[from] sqlx::Error),
+
+    /// A fault in this service with no further description. Indistinguishable
+    /// from a database failure to the client, deliberately, since neither is
+    /// something the request can be corrected for.
+    #[error("a handler panicked")]
+    Panicked,
 }
 
 impl ApiError {
@@ -86,7 +92,7 @@ impl ApiError {
             Self::Unauthorised => StatusCode::UNAUTHORIZED,
             Self::WithdrawalNotConfigured => StatusCode::NOT_IMPLEMENTED,
             Self::NotReady { .. } => StatusCode::SERVICE_UNAVAILABLE,
-            Self::Database(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            Self::Database(_) | Self::Panicked => StatusCode::INTERNAL_SERVER_ERROR,
         }
     }
 
@@ -109,7 +115,7 @@ impl ApiError {
             Self::Unauthorised => "unauthorised",
             Self::WithdrawalNotConfigured => "withdrawal-not-configured",
             Self::NotReady { .. } => "not-ready",
-            Self::Database(_) => "internal-error",
+            Self::Database(_) | Self::Panicked => "internal-error",
         }
     }
 
@@ -132,7 +138,7 @@ impl ApiError {
             Self::Unauthorised => "Authentication required",
             Self::WithdrawalNotConfigured => "Withdrawal is not enabled",
             Self::NotReady { .. } => "The service is not ready",
-            Self::Database(_) => "Internal error",
+            Self::Database(_) | Self::Panicked => "Internal error",
         }
     }
 
@@ -222,7 +228,7 @@ impl ApiError {
             Self::UnsupportedMediaType { received } => {
                 format!("The request carries {received}.")
             }
-            Self::Database(_) => "The request could not be completed.".into(),
+            Self::Database(_) | Self::Panicked => "The request could not be completed.".into(),
         }
     }
 }

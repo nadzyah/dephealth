@@ -429,6 +429,7 @@ async fn an_unusable_query_parameter_is_refused() {
     for uri in [
         "/api/v1/packages?limit=0",
         "/api/v1/packages?limit=9999",
+        "/api/v1/packages?offset=-1",
         "/api/v1/packages/serde/downloads?from=2026-12-01&to=2026-01-01",
     ] {
         let (status, body, _) = send(&app, get(uri)).await;
@@ -448,6 +449,120 @@ async fn an_unknown_package_and_an_unknown_endpoint_both_answer_as_problems() {
     let (status, body, _) = send(&app, get("/api/v1/nope")).await;
     assert_eq!(status, StatusCode::NOT_FOUND);
     assert_eq!(body["type"], "/problems/no-such-endpoint");
+}
+
+#[tokio::test]
+async fn readiness_reports_the_database_and_every_source() {
+    let app = service().await;
+    let (status, body, _) = send(&app, get("/health/ready")).await;
+
+    assert_eq!(status, StatusCode::OK, "{body}");
+    assert_eq!(body["status"], "ready");
+    assert_eq!(body["database"], "reachable");
+    assert!(
+        body["sources_never_ingested"]
+            .as_array()
+            .expect("the list of sources never ingested")
+            .is_empty(),
+        "a seeded database has ingested every source: {body}"
+    );
+
+    for source in body["sources"].as_array().expect("the sources") {
+        assert!(
+            source["data_as_of"].is_string(),
+            "a source with no date makes the service unready: {source}"
+        );
+    }
+}
+
+#[tokio::test]
+async fn the_listing_is_ranked_and_pages_without_losing_its_place() {
+    let app = service().await;
+
+    let (status, first, _) = send(&app, get("/api/v1/packages?limit=2")).await;
+    assert_eq!(status, StatusCode::OK, "{first}");
+    assert_eq!(first["limit"], 2);
+    assert_eq!(first["offset"], 0);
+
+    let items = first["items"].as_array().expect("a page of packages");
+    assert_eq!(items.len(), 2);
+
+    let risk = |item: &Value| item["risk_probability"].as_f64().expect("a probability");
+    assert!(
+        risk(&items[0]) >= risk(&items[1]),
+        "the listing is ranked by descending risk: {first}"
+    );
+
+    // The second page has to begin where the first ended, which is the property
+    // an offset walk depends on within one ingestion run
+    let (_, second, _) = send(&app, get("/api/v1/packages?limit=2&offset=1")).await;
+    assert_eq!(
+        second["items"][0]["package_name"], items[1]["package_name"],
+        "{second}"
+    );
+}
+
+#[tokio::test]
+async fn a_name_is_matched_without_regard_to_case() {
+    let app = service().await;
+    let (status, body, _) = send(&app, get("/api/v1/packages?q=SERDE")).await;
+
+    assert_eq!(status, StatusCode::OK, "{body}");
+    let names: Vec<&str> = body["items"]
+        .as_array()
+        .expect("the matches")
+        .iter()
+        .map(|item| item["package_name"].as_str().expect("a name"))
+        .collect();
+    assert!(names.contains(&"serde"), "{names:?}");
+}
+
+#[tokio::test]
+async fn a_download_series_is_bounded_by_the_requested_range() {
+    let app = service().await;
+
+    let (status, body, _) = send(
+        &app,
+        get("/api/v1/packages/serde/downloads?from=2026-01-01&to=2026-01-31"),
+    )
+    .await;
+    assert_eq!(status, StatusCode::OK, "{body}");
+
+    let days: Vec<&str> = body
+        .as_array()
+        .expect("a series")
+        .iter()
+        .map(|point| point["day"].as_str().expect("a day"))
+        .collect();
+
+    assert!(!days.is_empty(), "the fixture covers that month");
+    assert!(
+        days.windows(2).all(|pair| pair[0] < pair[1]),
+        "the series is ascending: {days:?}"
+    );
+    assert!(
+        days.iter()
+            .all(|day| *day >= "2026-01-01" && *day <= "2026-01-31"),
+        "every point lies inside the requested range: {days:?}"
+    );
+
+    let (status, body, _) = send(&app, get("/api/v1/packages/left-pad/downloads")).await;
+    assert_eq!(status, StatusCode::NOT_FOUND);
+    assert_eq!(body["type"], "/problems/package-not-found");
+}
+
+#[tokio::test]
+async fn a_method_the_endpoint_does_not_serve_is_refused_as_a_problem() {
+    let app = service().await;
+    let request = Request::builder()
+        .method("DELETE")
+        .uri("/api/v1/packages")
+        .body(Body::empty())
+        .expect("a request");
+
+    let (status, body, _) = send(&app, request).await;
+    assert_eq!(status, StatusCode::METHOD_NOT_ALLOWED, "{body}");
+    assert_eq!(body["type"], "/problems/method-not-allowed");
 }
 
 #[tokio::test]

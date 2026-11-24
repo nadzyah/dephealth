@@ -1,0 +1,17 @@
+# Advisories for crates that appear in Cargo.lock but not in the build graph.
+# The lockfile records the optional drivers of sqlx, and this crate enables only
+# the PostgreSQL one, so neither flagged crate is compiled. Verified with
+# `cargo tree -i libsqlite3-sys` and `cargo tree -i rsa`, both of which report
+# that nothing depends on them.
+#
+# Each entry states what would have to change for it to be removed.
+
+[advisories]
+ignore = [
+    # libsqlite3-sys, reachable only through the sqlx sqlite driver.
+    # Remove when sqlx stops recording unselected drivers in the lockfile.
+    "RUSTSEC-2026-0459",
+    # rsa, reachable only through the sqlx mysql driver, which uses it for
+    # authentication. Same condition as above.
+    "RUSTSEC-2023-0071",
+]

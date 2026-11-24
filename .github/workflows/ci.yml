@@ -15,6 +15,8 @@ concurrency:
 
 env:
   SQLX_VERSION: 0.8.6
+  LLVM_COV_VERSION: 0.9.2
+  AUDIT_VERSION: 0.22.2
 
 jobs:
   database:
@@ -85,7 +87,7 @@ jobs:
 
       - uses: dtolnay/rust-toolchain@stable
         with:
-          components: rustfmt, clippy
+          components: rustfmt, clippy, llvm-tools-preview
 
       - uses: Swatinem/rust-cache@v2
         with:
@@ -134,6 +136,31 @@ jobs:
       - name: Run the tests
         run: make api-test
 
+      - name: Cache the coverage and audit tools
+        id: tool-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/cargo-llvm-cov
+            ~/.cargo/bin/cargo-audit
+          key: api-tools-${{ env.LLVM_COV_VERSION }}-${{ env.AUDIT_VERSION }}-${{ runner.os }}
+
+      - name: Install the coverage and audit tools
+        if: steps.tool-cache.outputs.cache-hit != 'true'
+        run: |
+          cargo install cargo-llvm-cov --version "$LLVM_COV_VERSION" --locked
+          cargo install cargo-audit --version "$AUDIT_VERSION" --locked
+
+      # The threshold is the quality gate, so a change that drops coverage below
+      # it fails here rather than being noticed later
+      - name: Measure the test coverage
+        run: make api-coverage
+
+      # The exceptions in api/.cargo/audit.toml state why each is not in the
+      # build graph
+      - name: Audit the dependencies
+        run: make api-audit
+
   openapi:
     name: API specification
     runs-on: ubuntu-latest
@@ -146,3 +173,44 @@ jobs:
 
       - name: Validate the specification
         run: make openapi-lint
+
+  web:
+    name: Browser application
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install the dependencies
+        run: npm ci
+        working-directory: web
+
+      - name: Lint, format and type-check
+        run: make web-check
+
+      - name: Run the unit tests
+        run: make web-test
+
+      # Both projects in the Playwright configuration are Chromium, the phone
+      # one through device emulation, so no other browser is downloaded
+      - name: Install the browser
+        run: npx playwright install --with-deps chromium
+        working-directory: web
+
+      # The demo build answers from the committed fixtures, so these need
+      # neither the API nor a database
+      - name: Run the end to end tests
+        run: make web-e2e
+
+      - name: Keep the report of a failed run
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: web/playwright-report
+          retention-days: 7

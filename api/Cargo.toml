@@ -17,7 +17,7 @@ sqlx = { version = "0.8", default-features = false, features = ["runtime-tokio",
 thiserror = "2.0.21"
 tokio = { version = "1.54.1", features = ["rt-multi-thread", "macros", "signal", "net"] }
 toml = "1.2.2"
-tower-http = { version = "0.7.1", features = ["trace", "cors", "limit", "timeout", "request-id", "set-header"] }
+tower-http = { version = "0.7.1", features = ["trace", "cors", "limit", "timeout", "request-id", "set-header", "catch-panic"] }
 tracing = "0.1.44"
 tracing-subscriber = { version = "0.3.23", features = ["env-filter", "json"] }
 utoipa = { version = "6.0.0", features = ["axum_extras", "chrono", "yaml"] }

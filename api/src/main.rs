@@ -14,11 +14,20 @@ async fn main() -> ExitCode {
 }
 
 async fn run() -> Result<(), Box<dyn std::error::Error>> {
-    fmt()
-        .with_env_filter(
-            EnvFilter::try_from_env("API_LOG").unwrap_or_else(|_| EnvFilter::new("info")),
-        )
-        .init();
+    let filter = EnvFilter::try_from_env("API_LOG").unwrap_or_else(|_| EnvFilter::new("info"));
+
+    // One line of JSON per event where a collector reads the output, and the
+    // human form in a terminal. The fields are the same either way, since they
+    // are attached to the event and not formatted into its message
+    if std::env::var("API_LOG_FORMAT").as_deref() == Ok("json") {
+        fmt()
+            .json()
+            .flatten_event(true)
+            .with_env_filter(filter)
+            .init();
+    } else {
+        fmt().with_env_filter(filter).init();
+    }
 
     let config = Config::from_env()?;
     let pool = db::connect(&config).await?;

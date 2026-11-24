@@ -120,6 +120,7 @@ services:
       API_CORS_ORIGINS: http://localhost:5173,http://localhost:8081
       API_PUBLIC_BASE_URL: http://localhost:5173
       API_LOG: ${API_LOG:-info}
+      API_LOG_FORMAT: ${API_LOG_FORMAT:-json}
     ports:
       - "${API_PORT:-8080}:8080"
     depends_on:

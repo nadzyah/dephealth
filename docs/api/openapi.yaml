@@ -114,6 +114,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Meta'
+        '405':
+          description: The path is served for GET alone
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
         '500':
           description: The request could not be completed
           content:
@@ -462,6 +468,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Liveness'
+        '405':
+          description: The path is served for GET alone
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
   /health/ready:
     get:
       tags:
@@ -480,6 +492,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Readiness'
+        '405':
+          description: The path is served for GET alone
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
         '503':
           description: Not ready
           content:
