@@ -8,8 +8,21 @@ function channel(value: number): number {
     return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
 }
 
+/**
+ * The channels of a hex colour, in any of the forms a stylesheet holds it. A
+ * build minifies #ffffff to #fff, so a reader of the computed value cannot
+ * assume six digits. An alpha is dropped rather than composited, since these
+ * colours are opaque.
+ */
+function channels(hex: string): [number, number, number] {
+    const digits = hex.trim().replace(/^#/, "");
+    const full = digits.length <= 4 ? [...digits].map((digit) => digit + digit).join("") : digits;
+    const [r, g, b] = [0, 2, 4].map((i) => parseInt(full.slice(i, i + 2), 16));
+    return [r, g, b];
+}
+
 export function luminance(hex: string): number {
-    const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+    const [r, g, b] = channels(hex);
     return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
 }
 
