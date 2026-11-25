@@ -484,6 +484,7 @@ One line of a stored report, holding the figures as they stood when it was gener
 | `insufficient_history` | boolean | no | `false` |  |
 | `distinct_contributors` | integer | yes |  |  |
 | `days_since_last_event` | integer | yes |  |  |
+| `contributor_count_withheld` | boolean | no | `false` | The package had a contributor count and it fell below the disclosure threshold, so the report carries the fact rather than the number. |
 
 **Keys and constraints**
 

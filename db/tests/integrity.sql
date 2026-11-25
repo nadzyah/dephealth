@@ -333,4 +333,43 @@ BEGIN
 END;
 $$;
 
+-- 17. A report says that a contributor count was withheld rather than leaving
+--     the reader to read a withheld count as none at all. serde is below the
+--     threshold, so its count is absent from the report and the fact is not.
+BEGIN;
+
+SELECT dephealth.create_report(
+    'integrity0000000000000000000000000000000000000000000000000017',
+    'integrity-test-salt',
+    '[{"name":"serde","version":"1.0.228","depth":0}]'::jsonb
+) AS created \gset
+
+DO $$
+DECLARE
+    entry record;
+BEGIN
+    SELECT e.distinct_contributors, e.contributor_count_withheld
+      INTO entry
+      FROM dephealth.v_report_entry e
+      JOIN dephealth.v_report r ON r.id = e.report_id
+     WHERE r.token_digest = dephealth.report_token_digest(
+               'integrity0000000000000000000000000000000000000000000000000017')
+       AND e.package_name = 'serde';
+
+    IF entry.distinct_contributors IS NOT NULL THEN
+        RAISE EXCEPTION 'a contributor count below the threshold reached a report'
+            USING ERRCODE = 'assert_failure';
+    END IF;
+
+    IF NOT entry.contributor_count_withheld THEN
+        RAISE EXCEPTION 'a withheld count is indistinguishable from none'
+            USING ERRCODE = 'assert_failure';
+    END IF;
+
+    RAISE NOTICE 'pass: a report states that a contributor count was withheld';
+END;
+$$;
+
+ROLLBACK;
+
 \echo 'all integrity tests passed'

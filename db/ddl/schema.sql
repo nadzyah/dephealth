@@ -283,6 +283,14 @@ BEGIN
                CASE WHEN m.resolved
                     THEN dephealth.disclosed_contributors(m.distinct_contributors)
                END              AS distinct_contributors,
+               -- The count stays out of the report when it falls below the
+               -- threshold. This records that there was one, which is a
+               -- different statement from a package having no contributors
+               CASE WHEN m.resolved
+                    THEN dephealth.disclosed_contributors(m.distinct_contributors) IS NULL
+                         AND m.distinct_contributors IS NOT NULL
+                    ELSE false
+               END              AS contributor_count_withheld,
                CASE WHEN m.resolved THEN m.days_since_last_event END
                                 AS days_since_last_event
           FROM matched m
@@ -303,14 +311,14 @@ BEGIN
          package_id, resolved, unresolved_reason,
          risk_probability, risk_horizon_days,
          forecast_point_downloads, forecast_horizon_months, insufficient_history,
-         distinct_contributors, days_since_last_event)
+         distinct_contributors, contributor_count_withheld, days_since_last_event)
     SELECT stored.id, l.ordinal, l.package_name, l.package_version, l.depth,
            l.is_direct, l.package_id, l.resolved,
            l.unresolved_reason::dephealth.resolution_status,
            l.risk_probability, l.risk_horizon_days,
            l.forecast_point_downloads, l.forecast_horizon_months,
            l.insufficient_history, l.distinct_contributors,
-           l.days_since_last_event
+           l.contributor_count_withheld, l.days_since_last_event
       FROM line l CROSS JOIN stored;
 
     SELECT id INTO new_id
@@ -1432,6 +1440,7 @@ CREATE TABLE dephealth.report_entry (
     insufficient_history boolean DEFAULT false NOT NULL,
     distinct_contributors integer,
     days_since_last_event integer,
+    contributor_count_withheld boolean DEFAULT false NOT NULL,
     CONSTRAINT report_entry_days_since_last_event_check CHECK ((days_since_last_event >= 0)),
     CONSTRAINT report_entry_depth_check CHECK ((depth >= 0)),
     CONSTRAINT report_entry_direct_matches_depth CHECK ((is_direct = (depth = 0))),
@@ -1453,6 +1462,13 @@ CREATE TABLE dephealth.report_entry (
 --
 
 COMMENT ON TABLE dephealth.report_entry IS 'One line of a stored report, holding the figures as they stood when it was generated. Append only, so a report filed as evidence does not change when the next run overwrites the live scores.';
+
+
+--
+-- Name: COLUMN report_entry.contributor_count_withheld; Type: COMMENT; Schema: dephealth; Owner: -
+--
+
+COMMENT ON COLUMN dephealth.report_entry.contributor_count_withheld IS 'The package had a contributor count and it fell below the disclosure threshold, so the report carries the fact rather than the number.';
 
 
 --
@@ -1874,7 +1890,7 @@ CREATE VIEW dephealth.v_report_entry AS
     dephealth.disclosed_contributors(e.distinct_contributors) AS distinct_contributors,
     e.days_since_last_event,
     e.unresolved_reason,
-    ((dephealth.disclosed_contributors(e.distinct_contributors) IS NULL) AND (e.distinct_contributors IS NOT NULL)) AS contributor_count_withheld
+    (e.contributor_count_withheld OR ((dephealth.disclosed_contributors(e.distinct_contributors) IS NULL) AND (e.distinct_contributors IS NOT NULL))) AS contributor_count_withheld
    FROM (dephealth.report_entry e
      LEFT JOIN dephealth.resolution_outcome o ON ((o.status = e.unresolved_reason)));
 
