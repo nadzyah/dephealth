@@ -57,6 +57,27 @@ export function validateFile(file: File): FileRejection | undefined {
 }
 
 /**
+ * The project a lockfile belongs to, when the file says. A package with no
+ * `source` is resolved locally rather than from a registry, which is the
+ * submitting project or a member of its workspace. Cargo lists packages
+ * alphabetically, so a workspace of several is named by its first member.
+ *
+ * This is the one thing read from the file in the browser, and it is read for
+ * a label rather than for the assessment. Whether the contents are a lockfile
+ * remains the service's judgement.
+ */
+export function projectName(lockfile: string): string | undefined {
+    for (const block of lockfile.split(/^\[\[package\]\]/m).slice(1)) {
+        const body = block.split(/^\[/m)[0];
+        if (/^\s*source\s*=/m.test(body)) continue;
+
+        const name = /^\s*name\s*=\s*"([^"]+)"/m.exec(body);
+        if (name) return name[1];
+    }
+    return undefined;
+}
+
+/**
  * The token out of a permanent link, accepting either the whole link or the
  * token on its own. Anything else is refused rather than sent, since a request
  * for it could only come back as a 404.

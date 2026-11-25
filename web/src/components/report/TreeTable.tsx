@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import type { ReportEntry } from "../../api/types";
 import { RiskBadge } from "../ui/Badge";
 import { SearchField } from "../ui/SearchField";
+import { SortAscendingIcon, SortDescendingIcon } from "../ui/icons";
 
 import "./TreeTable.css";
 
@@ -154,13 +155,24 @@ export function TreeTable({ entries, token }: TreeTableProps) {
                                         onClick={() => toggle(column.key)}
                                     >
                                         {column.label}
-                                        <span aria-hidden="true" className="tree-sort-mark">
-                                            {sort === column.key ? (ascending ? "▲" : "▼") : ""}
-                                        </span>
+                                        {sort === column.key &&
+                                            (ascending ? (
+                                                <SortAscendingIcon
+                                                    size="0.9em"
+                                                    className="tree-sort-mark"
+                                                />
+                                            ) : (
+                                                <SortDescendingIcon
+                                                    size="0.9em"
+                                                    className="tree-sort-mark"
+                                                />
+                                            ))}
                                     </button>
                                 </th>
                             ))}
-                            <th scope="col" role="columnheader">
+                            {/* No sort button, so the padding the others get from
+                                theirs has to come from the cell */}
+                            <th scope="col" role="columnheader" className="tree-head-plain">
                                 Reason
                             </th>
                         </tr>

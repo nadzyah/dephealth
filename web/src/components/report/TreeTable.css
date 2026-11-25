@@ -81,6 +81,12 @@
     white-space: nowrap;
 }
 
+/* A header whose label is not a button carries the padding itself, so every
+   column heading lines up with the cells beneath it */
+.tree-table thead th.tree-head-plain {
+    padding: var(--space-2) var(--space-3);
+}
+
 .tree-sort {
     display: inline-flex;
     align-items: center;
@@ -102,10 +108,14 @@
 }
 
 .tree-sort-mark {
-    font-size: 0.7em;
+    flex: none;
 }
 
-.numeric-column {
+/* Qualified by the element, because `.tree-table td` above is a class and an
+   element together and would otherwise keep every figure on the left while the
+   heading above it sat on the right */
+.tree-table th.numeric-column,
+.tree-table td.numeric-column {
     text-align: right;
 }
 

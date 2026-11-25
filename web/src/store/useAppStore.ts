@@ -33,6 +33,8 @@ export interface RecentReport {
     token: string;
     assessedOn: string;
     entries: number;
+    /** The submitting project, when the lockfile named one. */
+    project?: string;
 }
 
 interface AppState {

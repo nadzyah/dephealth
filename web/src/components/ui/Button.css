@@ -56,15 +56,6 @@
     background: var(--color-surface-raised);
 }
 
-.button.ghost {
-    background: transparent;
-    color: var(--color-accent);
-}
-
-.button.ghost:hover:not(:disabled) {
-    background: var(--color-surface-raised);
-}
-
 .button.danger {
     background: var(--color-surface);
     border-color: var(--color-risk-high);

@@ -4,15 +4,17 @@
  */
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { DEMO, api } from "../api/client";
 import { useSubmit } from "../hooks/useAsync";
-import { tokenFromLink } from "../lib/manifest";
+import { projectName, tokenFromLink } from "../lib/manifest";
 import { useAppStore, selectRecent } from "../store/useAppStore";
 import { FileDrop } from "../components/FileDrop";
 import { Card } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
+
+import "./SubmitPage.css";
 
 export default function SubmitPage() {
     const navigate = useNavigate();
@@ -35,6 +37,7 @@ export default function SubmitPage() {
             token,
             assessedOn: report.assessed_on,
             entries: report.counts.entries,
+            project: projectName(text),
         });
 
         notify({
@@ -132,16 +135,15 @@ export default function SubmitPage() {
                             Nothing yet. Reports you open appear here, and stay in this browser.
                         </p>
                     ) : (
-                        <ul className="stack tight" style={{ listStyle: "none", padding: 0 }}>
+                        <ul className="recent">
                             {recent.map((report) => (
                                 <li key={report.token}>
-                                    <Button
-                                        variant="ghost"
-                                        size="small"
-                                        onClick={() => navigate(`/r/${report.token}`)}
-                                    >
-                                        {`${report.assessedOn}, ${report.entries} entries`}
-                                    </Button>
+                                    <Link to={`/r/${report.token}`} className="touchable">
+                                        {report.project ?? "Lockfile"}
+                                    </Link>{" "}
+                                    <span className="muted small">
+                                        {report.assessedOn}, {report.entries} entries
+                                    </span>
                                 </li>
                             ))}
                         </ul>

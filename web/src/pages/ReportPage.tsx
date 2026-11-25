@@ -51,7 +51,6 @@ function CopyLink({ token }: { token: string }) {
     return (
         <Button
             variant="secondary"
-            size="small"
             onClick={() => void copy()}
             iconBefore={copied ? <CheckIcon size="1em" /> : <CopyIcon size="1em" />}
         >
@@ -103,7 +102,10 @@ export default function ReportPage() {
                 </p>
                 <div className="row">
                     <CopyLink token={token} />
-                    <Link to={`/r/${token}/changes`} className="button ghost touchable">
+                    {/* The same shape as the button beside it: both are actions on
+                        this report, and one of them looking like prose made the pair
+                        read as a control and a sentence */}
+                    <Link to={`/r/${token}/changes`} className="button secondary touchable">
                         Compare with the previous assessment
                     </Link>
                 </div>
@@ -154,7 +156,7 @@ export default function ReportPage() {
                     />
                 </StatRow>
                 <p className="small muted" style={{ marginTop: "var(--space-4)" }}>
-                    <Link to="/method">What these mean</Link>
+                    <Link to="/method">Learn more</Link>
                 </p>
             </Card>
         </div>

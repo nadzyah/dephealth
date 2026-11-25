@@ -123,6 +123,12 @@ textarea {
        would otherwise win and leave a control under the minimum on exactly the
        devices that need it. A class beats an element selector, and a media
        query adds no specificity of its own */
+    /* A link only takes a height once it is no longer inline */
+    a.touchable {
+        display: inline-flex;
+        align-items: center;
+    }
+
     .button,
     .button.small,
     .appearance > summary,
