@@ -5960,7 +5960,7 @@
             "activity": {
                 "distinct_contributors": null,
                 "days_since_last_event": 0,
-                "contributor_count_withheld": false
+                "contributor_count_withheld": true
             }
         },
         "factors": [
@@ -6545,7 +6545,7 @@
             "activity": {
                 "distinct_contributors": null,
                 "days_since_last_event": 0,
-                "contributor_count_withheld": false
+                "contributor_count_withheld": true
             }
         },
         "factors": [
@@ -7266,7 +7266,7 @@
             "activity": {
                 "distinct_contributors": null,
                 "days_since_last_event": 9,
-                "contributor_count_withheld": false
+                "contributor_count_withheld": true
             }
         },
         "factors": [
@@ -7987,7 +7987,7 @@
             "activity": {
                 "distinct_contributors": null,
                 "days_since_last_event": 8,
-                "contributor_count_withheld": false
+                "contributor_count_withheld": true
             }
         },
         "factors": [
@@ -8708,7 +8708,7 @@
             "activity": {
                 "distinct_contributors": null,
                 "days_since_last_event": 70,
-                "contributor_count_withheld": false
+                "contributor_count_withheld": true
             }
         },
         "factors": [
@@ -9429,7 +9429,7 @@
             "activity": {
                 "distinct_contributors": null,
                 "days_since_last_event": 8,
-                "contributor_count_withheld": false
+                "contributor_count_withheld": true
             }
         },
         "factors": [
@@ -10150,7 +10150,7 @@
             "activity": {
                 "distinct_contributors": null,
                 "days_since_last_event": 26,
-                "contributor_count_withheld": false
+                "contributor_count_withheld": true
             }
         },
         "factors": [
@@ -10871,7 +10871,7 @@
             "activity": {
                 "distinct_contributors": null,
                 "days_since_last_event": 1,
-                "contributor_count_withheld": false
+                "contributor_count_withheld": true
             }
         },
         "factors": [
@@ -11592,7 +11592,7 @@
             "activity": {
                 "distinct_contributors": null,
                 "days_since_last_event": 1,
-                "contributor_count_withheld": false
+                "contributor_count_withheld": true
             }
         },
         "factors": [
@@ -11937,7 +11937,7 @@
             "activity": {
                 "distinct_contributors": null,
                 "days_since_last_event": 1,
-                "contributor_count_withheld": false
+                "contributor_count_withheld": true
             }
         },
         "factors": [
@@ -12658,7 +12658,7 @@
             "activity": {
                 "distinct_contributors": null,
                 "days_since_last_event": 2,
-                "contributor_count_withheld": false
+                "contributor_count_withheld": true
             }
         },
         "factors": [
