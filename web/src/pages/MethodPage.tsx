@@ -4,6 +4,7 @@
  */
 
 import { api } from "../api/client";
+import { SectionNav } from "../components/layout/SectionNav";
 import { useAsync } from "../hooks/useAsync";
 import { Card, Stat, StatRow } from "../components/ui/Card";
 import { Failure, Skeleton } from "../components/ui/States";
@@ -30,6 +31,8 @@ export default function MethodPage() {
                     of the data behind it.
                 </p>
             </section>
+
+            <SectionNav />
 
             {meta.status === "loading" && <Skeleton height="10rem" />}
 

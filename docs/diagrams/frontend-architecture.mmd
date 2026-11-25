@@ -13,6 +13,8 @@ flowchart TB
         CHANGES["/r/:token/changes<br/>ChangesPage"]
         PACKAGE["/r/:token/p/:name<br/>PackagePage"]
         PACKAGES["/packages<br/>PackagesPage"]
+        REGISTRY["/p/:name<br/>RegistryPackagePage"]
+        ABOUT["/about<br/>AboutPage"]
         METHOD["/method<br/>MethodPage"]
         DESIGN["/design-system<br/>DesignSystemPage"]
         MISSING["*<br/>NotFoundPage"]
@@ -20,7 +22,7 @@ flowchart TB
 
     subgraph COMPONENTS["Presentation, src/components"]
         direction TB
-        LAYOUT["layout<br/>AppShell, Appearance, Notices"]
+        LAYOUT["layout<br/>AppShell, NavMenu, SectionNav,<br/>Appearance, Notices"]
         UI["ui<br/>Button, Card, Badge, States, icons"]
         REPORTC["report<br/>TreeTable, DataAgeBanner"]
         CHARTS["charts<br/>FactorBars, DownloadChart"]

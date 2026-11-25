@@ -37,6 +37,12 @@ test("a submitted manifest becomes a ranked tree with evidence behind each entry
     await expect(page).toHaveURL(/\/r\/demo$/);
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Dependencies");
 
+    // The lockfile names the project it belongs to, so the list of reports this
+    // browser has opened is titled by it rather than by a date alone
+    await page.goto("/");
+    await expect(page.getByRole("link", { name: /my-service/ })).toBeVisible();
+    await page.goBack();
+
     // The age of both sources travels with the figures
     await expect(page.getByText("Source Data")).toBeVisible();
     await expect(page.getByText("Repository events")).toBeVisible();
@@ -101,7 +107,11 @@ test("a package in the list opens its current assessment", async ({ page }) => {
     // The list is the only route to a package that is not in a report, so a row
     // that does not address one is a dead end
     const first = page.locator("ul.packages a").first();
-    const name = (await first.innerText()).split(" ")[0];
+
+    // From the address rather than the text, which is the package name as it
+    // was submitted and may carry characters the address escapes
+    const href = (await first.getAttribute("href")) ?? "";
+    const name = decodeURIComponent(href.split("/p/")[1] ?? "");
     await first.click();
 
     await expect(page).toHaveURL(new RegExp(`/p/${name}$`));
@@ -110,4 +120,30 @@ test("a package in the list opens its current assessment", async ({ page }) => {
 
     // The screen states which figures these are, since a report holds different ones
     await expect(page.getByText("The figures on this screen are the current ones")).toBeVisible();
+});
+
+test("the pages describing the project are reached through the About menu", async ({ page }) => {
+    await page.goto("/");
+
+    // The header carries the menu from tablet width up and the bar at the foot
+    // of a phone carries the same one below it, so exactly one is on the screen
+    const menu = page.locator("details.nav-menu").filter({ visible: true });
+    await expect(menu).toHaveCount(1);
+
+    await menu.getByText("About").click();
+    await menu.getByRole("link", { name: "Method" }).click();
+
+    await expect(page).toHaveURL(/\/method$/);
+
+    // A details element stays open by itself, which would leave the menu
+    // hanging over the page the reader has just opened
+    await expect(menu.getByRole("link", { name: "Method" })).toBeHidden();
+
+    // Method is also reached from a report, so its siblings are on the page
+    // itself rather than only in the menu
+    const section = page.getByRole("navigation", { name: "About" });
+    await section.getByRole("link", { name: "Design System" }).click();
+
+    await expect(page).toHaveURL(/\/design-system$/);
+    await expect(page.getByRole("heading", { level: 1, name: "Design System" })).toBeVisible();
 });

@@ -1,0 +1,76 @@
+.nav-menu {
+    position: relative;
+}
+
+.nav-menu > summary {
+    gap: var(--space-1);
+    cursor: pointer;
+    list-style: none;
+}
+
+.nav-menu > summary::-webkit-details-marker {
+    display: none;
+}
+
+.nav-menu-mark {
+    flex: none;
+    transition: transform 120ms ease;
+}
+
+.nav-menu[open] .nav-menu-mark {
+    transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nav-menu-mark {
+        transition: none;
+    }
+}
+
+.nav-menu-panel {
+    position: absolute;
+    z-index: 15;
+    display: flex;
+    flex-direction: column;
+    min-width: 11rem;
+    padding: var(--space-1);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.nav-menu-header .nav-menu-panel {
+    left: 0;
+    top: calc(100% + var(--space-2));
+}
+
+/* The bar sits at the foot of the window, so its panel opens upwards and hangs
+   from the right edge of the item, where there is room for it on a phone */
+.nav-menu-bar .nav-menu-panel {
+    right: var(--space-2);
+    bottom: calc(100% + var(--space-1));
+}
+
+.nav-menu-item {
+    display: flex;
+    align-items: center;
+    min-height: var(--touch-target);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.nav-menu-item:hover {
+    background: var(--color-surface-raised);
+    color: var(--color-text);
+}
+
+.nav-menu-item.active {
+    background: var(--color-surface-raised);
+    color: var(--color-text);
+}

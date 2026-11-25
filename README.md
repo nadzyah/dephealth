@@ -13,7 +13,7 @@ series.
 You upload a dependency file and get the dependency tree ranked by risk, with a
 forecast and an explanation for each library.
 
-Diploma project at European Humanities University, 2026/27.
+Diploma project, 2026/27.
 
 PostgreSQL 19 serves requests, DuckDB derives the features from the raw
 sources, an HTTP service in Rust exposes them, and a

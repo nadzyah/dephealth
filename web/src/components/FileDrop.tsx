@@ -92,12 +92,7 @@ export function FileDrop({ onFile, busy = false, error }: FileDropProps) {
                 />
 
                 <div className="row">
-                    <Button
-                        variant="primary"
-                        busy={busy}
-                        onClick={() => input.current?.click()}
-                        iconBefore={<UploadIcon size="1em" />}
-                    >
+                    <Button variant="primary" busy={busy} onClick={() => input.current?.click()}>
                         {busy ? "Assessing" : "Choose a file"}
                     </Button>
                     {accepted && !message && (

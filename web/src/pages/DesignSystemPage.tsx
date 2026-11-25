@@ -11,6 +11,7 @@
 import { useEffect, useState } from "react";
 
 import { contrastRatio, tokenValue } from "../lib/contrast";
+import { SectionNav } from "../components/layout/SectionNav";
 import type { Factor } from "../api/types";
 import { DownloadChart } from "../components/charts/DownloadChart";
 import { FactorBars } from "../components/charts/FactorBars";
@@ -32,7 +33,7 @@ const textTokens = [
     "--color-risk-low",
 ];
 
-const markTokens = ["--chart-series", "--chart-positive", "--chart-negative"];
+const markTokens = ["--chart-series", "--chart-raised", "--chart-lowered"];
 
 const typeScale = [
     ["--text-3xl", "Display"],
@@ -131,6 +132,8 @@ export default function DesignSystemPage() {
                 </p>
             </section>
 
+            <SectionNav />
+
             <Card title="Colour">
                 <h3>Text Contrast</h3>
                 <p className="muted small">
@@ -158,9 +161,11 @@ export default function DesignSystemPage() {
                 <h3>Non-Text Contrast</h3>
                 <p className="muted small">
                     Control edges and chart marks are held to the 3:1 of WCAG 1.4.11 rather than to
-                    the ratio required of text. The diverging pair is a separate question again: red
-                    against green fails for a reader with deuteranopia, so it is red against blue,
-                    which the palette validator puts at delta E 18 rather than 6.6.
+                    the ratio required of text. The three marks also have to be told apart from one
+                    another, since a download series and the two directions of a factor bar can
+                    share a screen. Red against green is lost to deuteranopia, so a factor bar is
+                    red against purple, and no two marks come closer than delta E 15.6 under a
+                    colour vision simulation, where the floor is 8.
                 </p>
                 <ul className="swatches">
                     {markRows.map((row) => (
@@ -217,7 +222,7 @@ export default function DesignSystemPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {(["primary", "secondary", "ghost", "danger"] as const).map((variant) => (
+                        {(["primary", "secondary", "danger"] as const).map((variant) => (
                             <tr key={variant}>
                                 <td data-label="Variant">
                                     <code className="small">{variant}</code>

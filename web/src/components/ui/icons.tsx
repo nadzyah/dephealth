@@ -60,15 +60,6 @@ export const BookIcon = (props: IconProps) => (
     </Svg>
 );
 
-export const PaletteIcon = (props: IconProps) => (
-    <Svg {...props}>
-        <circle cx="12" cy="12" r="9" />
-        <circle cx="9" cy="9.5" r="1.2" fill="currentColor" stroke="none" />
-        <circle cx="15" cy="9.5" r="1.2" fill="currentColor" stroke="none" />
-        <circle cx="12" cy="15" r="1.2" fill="currentColor" stroke="none" />
-    </Svg>
-);
-
 export const SettingsIcon = (props: IconProps) => (
     <Svg {...props}>
         <circle cx="12" cy="12" r="3" />
@@ -105,6 +96,26 @@ export const CloseIcon = (props: IconProps) => (
 export const ChevronRightIcon = (props: IconProps) => (
     <Svg {...props}>
         <path d="m9 5 7 7-7 7" />
+    </Svg>
+);
+
+export const ChevronDownIcon = (props: IconProps) => (
+    <Svg {...props}>
+        <path d="m5 9 7 7 7-7" />
+    </Svg>
+);
+
+/** The direction a column is sorted in. Decorative: the header carries
+ *  aria-sort, which is what a screen reader announces. */
+export const SortAscendingIcon = (props: IconProps) => (
+    <Svg {...props}>
+        <path d="m7 14 5-5 5 5" />
+    </Svg>
+);
+
+export const SortDescendingIcon = (props: IconProps) => (
+    <Svg {...props}>
+        <path d="m7 10 5 5 5-5" />
     </Svg>
 );
 
