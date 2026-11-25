@@ -90,9 +90,14 @@ jobs:
         with:
           components: rustfmt, clippy, llvm-tools-preview
 
+      # Binaries are left out of this cache. It also restores ~/.cargo/bin, and
+      # a tool it brings back is not the version the steps below pin, so the
+      # install refuses to overwrite it. The per-tool caches keyed by version
+      # own that directory instead
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: api
+          cache-bin: false
 
       # The committed query data is what lets the crate build without a
       # database, so it is checked before one is started
