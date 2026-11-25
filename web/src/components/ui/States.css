@@ -16,6 +16,19 @@
     max-width: 44ch;
 }
 
+/* The heading above the text carries its own leading, which reads as space,
+   while a button's border starts where its box does. An equal gap therefore
+   looks unequal, so the action takes the larger one. The second selector is the
+   state that holds a single button rather than a row of them */
+.state-actions,
+.state > .button {
+    margin-top: var(--space-2);
+}
+
+.state-actions:empty {
+    display: none;
+}
+
 .state.failure {
     color: var(--color-text);
 }

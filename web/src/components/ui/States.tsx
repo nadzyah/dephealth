@@ -103,7 +103,7 @@ export function Failure({ problem, onRetry, level = 3, children }: FailureProps)
             <WarningIcon size="1.75em" />
             <StateHeading level={level}>{problem.title}</StateHeading>
             <p>{problem.detail}</p>
-            <div className="row">
+            <div className="row state-actions">
                 {onRetry && (
                     <Button variant="secondary" onClick={onRetry}>
                         Try again
