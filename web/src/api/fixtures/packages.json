@@ -1,60 +1,258 @@
 {
-  "items": [
-    {
-      "package_name": "failure",
-      "latest_version": "0.1.8",
-      "risk_probability": 0.971,
-      "is_resolved": true
-    },
-    {
-      "package_name": "solo-crate",
-      "latest_version": "1.1.0",
-      "risk_probability": 0.683,
-      "is_resolved": true
-    },
-    {
-      "package_name": "tiny-config",
-      "latest_version": "0.3.1",
-      "risk_probability": 0.412,
-      "is_resolved": true
-    },
-    {
-      "package_name": "clap",
-      "latest_version": "4.5.49",
-      "risk_probability": 0.094,
-      "is_resolved": true
-    },
-    {
-      "package_name": "serde",
-      "latest_version": "1.0.228",
-      "risk_probability": 0.031,
-      "is_resolved": true
-    },
-    {
-      "package_name": "tokio",
-      "latest_version": "1.48.0",
-      "risk_probability": 0.022,
-      "is_resolved": true
-    },
-    {
-      "package_name": "gitlab-crate",
-      "latest_version": "2.4.1",
-      "risk_probability": null,
-      "is_resolved": false
-    },
-    {
-      "package_name": "urlless-crate",
-      "latest_version": "0.2.0",
-      "risk_probability": null,
-      "is_resolved": false
-    },
-    {
-      "package_name": "vanished-crate",
-      "latest_version": "0.9.3",
-      "risk_probability": null,
-      "is_resolved": false
-    }
-  ],
-  "limit": 50,
-  "offset": 0
+    "items": [
+        {
+            "package_name": "failure",
+            "latest_version": "0.1.8",
+            "risk_probability": 0.9089,
+            "is_resolved": true
+        },
+        {
+            "package_name": "failure_derive",
+            "latest_version": "0.1.8",
+            "risk_probability": 0.9089,
+            "is_resolved": true
+        },
+        {
+            "package_name": "adler2",
+            "latest_version": "2.0.1",
+            "risk_probability": 0.8873,
+            "is_resolved": true
+        },
+        {
+            "package_name": "unicode-xid",
+            "latest_version": "0.2.6",
+            "risk_probability": 0.8431,
+            "is_resolved": true
+        },
+        {
+            "package_name": "strsim",
+            "latest_version": "0.11.1",
+            "risk_probability": 0.7886,
+            "is_resolved": true
+        },
+        {
+            "package_name": "is_terminal_polyfill",
+            "latest_version": "1.48.2",
+            "risk_probability": 0.7763,
+            "is_resolved": true
+        },
+        {
+            "package_name": "once_cell_polyfill",
+            "latest_version": "1.56.1",
+            "risk_probability": 0.7763,
+            "is_resolved": true
+        },
+        {
+            "package_name": "solo-crate",
+            "latest_version": "1.1.0",
+            "risk_probability": 0.683,
+            "is_resolved": true
+        },
+        {
+            "package_name": "synstructure",
+            "latest_version": "0.14.0",
+            "risk_probability": 0.4889,
+            "is_resolved": true
+        },
+        {
+            "package_name": "tiny-config",
+            "latest_version": "0.3.1",
+            "risk_probability": 0.412,
+            "is_resolved": true
+        },
+        {
+            "package_name": "memchr",
+            "latest_version": "2.8.3",
+            "risk_probability": 0.371,
+            "is_resolved": true
+        },
+        {
+            "package_name": "windows-link",
+            "latest_version": "0.100.0",
+            "risk_probability": 0.1585,
+            "is_resolved": true
+        },
+        {
+            "package_name": "windows-sys",
+            "latest_version": "0.61.2",
+            "risk_probability": 0.1585,
+            "is_resolved": true
+        },
+        {
+            "package_name": "proc-macro2",
+            "latest_version": "1.0.107",
+            "risk_probability": 0.1445,
+            "is_resolved": true
+        },
+        {
+            "package_name": "addr2line",
+            "latest_version": "0.27.1",
+            "risk_probability": 0.1429,
+            "is_resolved": true
+        },
+        {
+            "package_name": "cfg-if",
+            "latest_version": "1.0.5",
+            "risk_probability": 0.1222,
+            "is_resolved": true
+        },
+        {
+            "package_name": "utf8parse",
+            "latest_version": "0.2.2",
+            "risk_probability": 0.1204,
+            "is_resolved": true
+        },
+        {
+            "package_name": "unicode-ident",
+            "latest_version": "1.0.27",
+            "risk_probability": 0.1185,
+            "is_resolved": true
+        },
+        {
+            "package_name": "serde",
+            "latest_version": "1.0.228",
+            "risk_probability": 0.101,
+            "is_resolved": true
+        },
+        {
+            "package_name": "serde_core",
+            "latest_version": "1.0.229",
+            "risk_probability": 0.101,
+            "is_resolved": true
+        },
+        {
+            "package_name": "serde_derive",
+            "latest_version": "1.0.229",
+            "risk_probability": 0.101,
+            "is_resolved": true
+        },
+        {
+            "package_name": "quote",
+            "latest_version": "1.0.47",
+            "risk_probability": 0.0953,
+            "is_resolved": true
+        },
+        {
+            "package_name": "object",
+            "latest_version": "0.41.0",
+            "risk_probability": 0.0884,
+            "is_resolved": true
+        },
+        {
+            "package_name": "anstyle-parse",
+            "latest_version": "1.0.0",
+            "risk_probability": 0.0829,
+            "is_resolved": true
+        },
+        {
+            "package_name": "syn",
+            "latest_version": "3.0.10",
+            "risk_probability": 0.082,
+            "is_resolved": true
+        },
+        {
+            "package_name": "anstream",
+            "latest_version": "1.0.0",
+            "risk_probability": 0.0779,
+            "is_resolved": true
+        },
+        {
+            "package_name": "clap",
+            "latest_version": "4.5.49",
+            "risk_probability": 0.0768,
+            "is_resolved": true
+        },
+        {
+            "package_name": "clap_builder",
+            "latest_version": "4.6.10",
+            "risk_probability": 0.0768,
+            "is_resolved": true
+        },
+        {
+            "package_name": "anstyle-query",
+            "latest_version": "1.1.5",
+            "risk_probability": 0.0763,
+            "is_resolved": true
+        },
+        {
+            "package_name": "anstyle-wincon",
+            "latest_version": "3.0.11",
+            "risk_probability": 0.0763,
+            "is_resolved": true
+        },
+        {
+            "package_name": "clap_lex",
+            "latest_version": "1.1.2",
+            "risk_probability": 0.0733,
+            "is_resolved": true
+        },
+        {
+            "package_name": "miniz_oxide",
+            "latest_version": "0.9.1",
+            "risk_probability": 0.0722,
+            "is_resolved": true
+        },
+        {
+            "package_name": "anstyle",
+            "latest_version": "1.0.14",
+            "risk_probability": 0.0717,
+            "is_resolved": true
+        },
+        {
+            "package_name": "colorchoice",
+            "latest_version": "1.0.5",
+            "risk_probability": 0.0717,
+            "is_resolved": true
+        },
+        {
+            "package_name": "rustc-demangle",
+            "latest_version": "0.1.28",
+            "risk_probability": 0.0684,
+            "is_resolved": true
+        },
+        {
+            "package_name": "gimli",
+            "latest_version": "0.34.0",
+            "risk_probability": 0.0671,
+            "is_resolved": true
+        },
+        {
+            "package_name": "tokio",
+            "latest_version": "1.48.0",
+            "risk_probability": 0.052,
+            "is_resolved": true
+        },
+        {
+            "package_name": "backtrace",
+            "latest_version": "0.3.77",
+            "risk_probability": 0.0472,
+            "is_resolved": true
+        },
+        {
+            "package_name": "libc",
+            "latest_version": "0.2.191",
+            "risk_probability": 0.0383,
+            "is_resolved": true
+        },
+        {
+            "package_name": "gitlab-crate",
+            "latest_version": "2.4.1",
+            "risk_probability": null,
+            "is_resolved": false
+        },
+        {
+            "package_name": "urlless-crate",
+            "latest_version": "0.2.0",
+            "risk_probability": null,
+            "is_resolved": false
+        },
+        {
+            "package_name": "vanished-crate",
+            "latest_version": "0.9.3",
+            "risk_probability": null,
+            "is_resolved": false
+        }
+    ],
+    "limit": 200,
+    "offset": 0
 }

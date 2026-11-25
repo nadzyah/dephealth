@@ -1,570 +1,867 @@
 {
-  "assessed_on": "2026-11-23",
-  "created_at": "2026-11-23T21:19:23.034096Z",
-  "data_as_of": {
-    "registry": "2026-11-22",
-    "events": "2026-11-22"
-  },
-  "method": {
-    "abandonment_window_days": 180,
-    "risk_model": {
-      "name": "cox_proportional_hazards",
-      "version": "1"
+    "assessed_on": "2026-11-25",
+    "created_at": "2026-11-25T12:19:48.335718Z",
+    "data_as_of": {
+        "registry": "2026-11-24",
+        "events": "2026-11-24"
     },
-    "forecast_model": {
-      "name": "theta",
-      "version": "1"
-    }
-  },
-  "counts": {
-    "entries": 39,
-    "resolved": 4,
-    "unresolved": 35
-  },
-  "entries": [
-    {
-      "ordinal": 1,
-      "package_name": "failure",
-      "package_version": "0.1.8",
-      "depth": 0,
-      "relation": "direct",
-      "resolved": true,
-      "risk": {
-        "probability": 0.971,
-        "horizon_days": 365
-      },
-      "forecast": {
-        "point_downloads": 31400.0,
-        "horizon_months": 12,
-        "insufficient_history": false
-      },
-      "activity": {
-        "distinct_contributors": 0,
-        "days_since_last_event": 1920,
-        "contributor_count_withheld": false
-      }
+    "method": {
+        "abandonment_window_days": 180,
+        "risk_model": {
+            "name": "cox_proportional_hazards",
+            "version": "1"
+        },
+        "forecast_model": {
+            "name": "theta",
+            "version": "1"
+        }
     },
-    {
-      "ordinal": 2,
-      "package_name": "clap",
-      "package_version": "4.5.49",
-      "depth": 0,
-      "relation": "direct",
-      "resolved": true,
-      "risk": {
-        "probability": 0.094,
-        "horizon_days": 365
-      },
-      "forecast": {
-        "point_downloads": 527000.0,
-        "horizon_months": 12,
-        "insufficient_history": false
-      },
-      "activity": {
-        "distinct_contributors": 18,
-        "days_since_last_event": 5,
-        "contributor_count_withheld": false
-      }
+    "counts": {
+        "entries": 39,
+        "resolved": 37,
+        "unresolved": 2
     },
-    {
-      "ordinal": 3,
-      "package_name": "serde",
-      "package_version": "1.0.228",
-      "depth": 0,
-      "relation": "direct",
-      "resolved": true,
-      "risk": {
-        "probability": 0.031,
-        "horizon_days": 365
-      },
-      "forecast": {
-        "point_downloads": 1294000.0,
-        "horizon_months": 12,
-        "insufficient_history": false
-      },
-      "activity": {
-        "distinct_contributors": 42,
-        "days_since_last_event": 2,
-        "contributor_count_withheld": false
-      }
-    },
-    {
-      "ordinal": 4,
-      "package_name": "tokio",
-      "package_version": "1.48.0",
-      "depth": 0,
-      "relation": "direct",
-      "resolved": true,
-      "risk": {
-        "probability": 0.022,
-        "horizon_days": 365
-      },
-      "forecast": {
-        "point_downloads": 1086000.0,
-        "horizon_months": 12,
-        "insufficient_history": false
-      },
-      "activity": {
-        "distinct_contributors": 65,
-        "days_since_last_event": 1,
-        "contributor_count_withheld": false
-      }
-    },
-    {
-      "ordinal": 5,
-      "package_name": "addr2line",
-      "package_version": "0.27.1",
-      "depth": 2,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 6,
-      "package_name": "adler2",
-      "package_version": "2.0.1",
-      "depth": 3,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 7,
-      "package_name": "anstream",
-      "package_version": "0.6.21",
-      "depth": 2,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 8,
-      "package_name": "anstyle",
-      "package_version": "1.0.14",
-      "depth": 2,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 9,
-      "package_name": "anstyle-parse",
-      "package_version": "0.2.7",
-      "depth": 3,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 10,
-      "package_name": "anstyle-query",
-      "package_version": "1.1.5",
-      "depth": 3,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 11,
-      "package_name": "anstyle-wincon",
-      "package_version": "3.0.11",
-      "depth": 3,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 12,
-      "package_name": "backtrace",
-      "package_version": "0.3.77",
-      "depth": 1,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 13,
-      "package_name": "cfg-if",
-      "package_version": "1.0.5",
-      "depth": 2,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 14,
-      "package_name": "clap_builder",
-      "package_version": "4.5.49",
-      "depth": 1,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 15,
-      "package_name": "clap_lex",
-      "package_version": "0.7.7",
-      "depth": 2,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 16,
-      "package_name": "colorchoice",
-      "package_version": "1.0.5",
-      "depth": 3,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 17,
-      "package_name": "failure_derive",
-      "package_version": "0.1.8",
-      "depth": 1,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 18,
-      "package_name": "gimli",
-      "package_version": "0.34.0",
-      "depth": 3,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 19,
-      "package_name": "is_terminal_polyfill",
-      "package_version": "1.70.2",
-      "depth": 3,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 20,
-      "package_name": "libc",
-      "package_version": "0.2.191",
-      "depth": 2,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 21,
-      "package_name": "local-helper",
-      "package_version": "0.1.0",
-      "depth": 0,
-      "relation": "direct",
-      "resolved": false,
-      "unresolved": {
-        "reason": "not_a_registry_package",
-        "label": "Not published on the registry",
-        "remedy": "The entry is a path or git dependency, which carries no registry history, so no adoption forecast or maintenance score can be derived for it"
-      }
-    },
-    {
-      "ordinal": 22,
-      "package_name": "memchr",
-      "package_version": "2.8.3",
-      "depth": 3,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 23,
-      "package_name": "miniz_oxide",
-      "package_version": "0.9.1",
-      "depth": 2,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 24,
-      "package_name": "object",
-      "package_version": "0.40.0",
-      "depth": 2,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 25,
-      "package_name": "once_cell_polyfill",
-      "package_version": "1.70.2",
-      "depth": 4,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 26,
-      "package_name": "pin-project-lite",
-      "package_version": "0.2.18",
-      "depth": 1,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 27,
-      "package_name": "proc-macro2",
-      "package_version": "1.0.107",
-      "depth": 2,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 28,
-      "package_name": "quote",
-      "package_version": "1.0.47",
-      "depth": 2,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 29,
-      "package_name": "rustc-demangle",
-      "package_version": "0.1.28",
-      "depth": 2,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 30,
-      "package_name": "serde_core",
-      "package_version": "1.0.228",
-      "depth": 1,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 31,
-      "package_name": "serde_derive",
-      "package_version": "1.0.228",
-      "depth": 2,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 32,
-      "package_name": "strsim",
-      "package_version": "0.11.1",
-      "depth": 2,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 33,
-      "package_name": "syn",
-      "package_version": "1.0.109",
-      "depth": 2,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 34,
-      "package_name": "synstructure",
-      "package_version": "0.12.6",
-      "depth": 2,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 35,
-      "package_name": "unicode-ident",
-      "package_version": "1.0.27",
-      "depth": 3,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 36,
-      "package_name": "unicode-xid",
-      "package_version": "0.2.6",
-      "depth": 3,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 37,
-      "package_name": "utf8parse",
-      "package_version": "0.2.2",
-      "depth": 3,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 38,
-      "package_name": "windows-link",
-      "package_version": "0.2.1",
-      "depth": 2,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    },
-    {
-      "ordinal": 39,
-      "package_name": "windows-sys",
-      "package_version": "0.61.2",
-      "depth": 4,
-      "relation": "indirect",
-      "resolved": false,
-      "unresolved": {
-        "reason": "absent_from_snapshot",
-        "label": "Not present in the registry snapshot",
-        "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
-      }
-    }
-  ],
-  "link": "/r/demo"
+    "entries": [
+        {
+            "ordinal": 1,
+            "package_name": "failure",
+            "package_version": "0.1.8",
+            "depth": 0,
+            "relation": "direct",
+            "resolved": true,
+            "risk": {
+                "probability": 0.9089,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 81647.41,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 0,
+                "days_since_last_event": 2398,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 2,
+            "package_name": "failure_derive",
+            "package_version": "0.1.8",
+            "depth": 1,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.9089,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 76618.64,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 0,
+                "days_since_last_event": 2398,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 3,
+            "package_name": "adler2",
+            "package_version": "2.0.1",
+            "depth": 3,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.8873,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 4701697.66,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 0,
+                "days_since_last_event": 534,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 4,
+            "package_name": "unicode-xid",
+            "package_version": "0.2.6",
+            "depth": 3,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.8431,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 2438079.42,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 0,
+                "days_since_last_event": 439,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 5,
+            "package_name": "strsim",
+            "package_version": "0.11.1",
+            "depth": 2,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.7886,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 4838257.2,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 0,
+                "days_since_last_event": 363,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 6,
+            "package_name": "is_terminal_polyfill",
+            "package_version": "1.70.2",
+            "depth": 3,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.7763,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 3427593.95,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 0,
+                "days_since_last_event": 400,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 7,
+            "package_name": "once_cell_polyfill",
+            "package_version": "1.70.2",
+            "depth": 4,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.7763,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 1462328.23,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 0,
+                "days_since_last_event": 400,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 8,
+            "package_name": "synstructure",
+            "package_version": "0.12.6",
+            "depth": 2,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.4889,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 6989333.35,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 0,
+                "days_since_last_event": 118,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 9,
+            "package_name": "memchr",
+            "package_version": "2.8.3",
+            "depth": 3,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.371,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 8227634.53,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 0,
+                "days_since_last_event": 107,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 10,
+            "package_name": "windows-link",
+            "package_version": "0.2.1",
+            "depth": 2,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.1585,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 3552309.95,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": null,
+                "days_since_last_event": 0,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 11,
+            "package_name": "windows-sys",
+            "package_version": "0.61.2",
+            "depth": 4,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.1585,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 8325000.4,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": null,
+                "days_since_last_event": 0,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 12,
+            "package_name": "proc-macro2",
+            "package_version": "1.0.107",
+            "depth": 2,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.1445,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 8791535.27,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": null,
+                "days_since_last_event": 9,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 13,
+            "package_name": "addr2line",
+            "package_version": "0.27.1",
+            "depth": 2,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.1429,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 1599144.38,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": null,
+                "days_since_last_event": 8,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 14,
+            "package_name": "cfg-if",
+            "package_version": "1.0.5",
+            "depth": 2,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.1222,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 8909579.25,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": null,
+                "days_since_last_event": 70,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 15,
+            "package_name": "utf8parse",
+            "package_version": "0.2.2",
+            "depth": 3,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.1204,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 3418417.2,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": null,
+                "days_since_last_event": 8,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 16,
+            "package_name": "unicode-ident",
+            "package_version": "1.0.27",
+            "depth": 3,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.1185,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 9136860.53,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": null,
+                "days_since_last_event": 26,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 17,
+            "package_name": "serde",
+            "package_version": "1.0.228",
+            "depth": 0,
+            "relation": "direct",
+            "resolved": true,
+            "risk": {
+                "probability": 0.101,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 8027977.65,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": null,
+                "days_since_last_event": 1,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 18,
+            "package_name": "serde_core",
+            "package_version": "1.0.228",
+            "depth": 1,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.101,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 7795946.88,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": null,
+                "days_since_last_event": 1,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 19,
+            "package_name": "serde_derive",
+            "package_version": "1.0.228",
+            "depth": 2,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.101,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 7961586.17,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": null,
+                "days_since_last_event": 1,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 20,
+            "package_name": "quote",
+            "package_version": "1.0.47",
+            "depth": 2,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.0953,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 8831139.83,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": null,
+                "days_since_last_event": 2,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 21,
+            "package_name": "object",
+            "package_version": "0.40.0",
+            "depth": 2,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.0884,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 2821332.43,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 6,
+                "days_since_last_event": 12,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 22,
+            "package_name": "anstyle-parse",
+            "package_version": "0.2.7",
+            "depth": 3,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.0829,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 3569255.13,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 5,
+                "days_since_last_event": 2,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 23,
+            "package_name": "syn",
+            "package_version": "1.0.109",
+            "depth": 2,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.082,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 18028126.79,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 5,
+                "days_since_last_event": 2,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 24,
+            "package_name": "anstream",
+            "package_version": "0.6.21",
+            "depth": 2,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.0779,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 3590419.2,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 5,
+                "days_since_last_event": 2,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 25,
+            "package_name": "clap",
+            "package_version": "4.5.49",
+            "depth": 0,
+            "relation": "direct",
+            "resolved": true,
+            "risk": {
+                "probability": 0.0768,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 4605468.09,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 7,
+                "days_since_last_event": 1,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 26,
+            "package_name": "clap_builder",
+            "package_version": "4.5.49",
+            "depth": 1,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.0768,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 4126153.02,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 7,
+                "days_since_last_event": 1,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 27,
+            "package_name": "anstyle-query",
+            "package_version": "1.1.5",
+            "depth": 3,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.0763,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 3493154.82,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 5,
+                "days_since_last_event": 2,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 28,
+            "package_name": "anstyle-wincon",
+            "package_version": "3.0.11",
+            "depth": 3,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.0763,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 1609059.07,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 5,
+                "days_since_last_event": 2,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 29,
+            "package_name": "clap_lex",
+            "package_version": "0.7.7",
+            "depth": 2,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.0733,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 4268708.61,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 7,
+                "days_since_last_event": 1,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 30,
+            "package_name": "miniz_oxide",
+            "package_version": "0.9.1",
+            "depth": 2,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.0722,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 6789666.1,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 5,
+                "days_since_last_event": 23,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 31,
+            "package_name": "anstyle",
+            "package_version": "1.0.14",
+            "depth": 2,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.0717,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 4101431.32,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 5,
+                "days_since_last_event": 2,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 32,
+            "package_name": "colorchoice",
+            "package_version": "1.0.5",
+            "depth": 3,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.0717,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 3511378.93,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 5,
+                "days_since_last_event": 2,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 33,
+            "package_name": "rustc-demangle",
+            "package_version": "0.1.28",
+            "depth": 2,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.0684,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 1867395.65,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 5,
+                "days_since_last_event": 2,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 34,
+            "package_name": "gimli",
+            "package_version": "0.34.0",
+            "depth": 3,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.0671,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 1936935.63,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 5,
+                "days_since_last_event": 1,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 35,
+            "package_name": "tokio",
+            "package_version": "1.48.0",
+            "depth": 0,
+            "relation": "direct",
+            "resolved": true,
+            "risk": {
+                "probability": 0.052,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 5774913.09,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 40,
+                "days_since_last_event": 1,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 36,
+            "package_name": "backtrace",
+            "package_version": "0.3.77",
+            "depth": 1,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.0472,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 1287108.29,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 10,
+                "days_since_last_event": 8,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 37,
+            "package_name": "libc",
+            "package_version": "0.2.191",
+            "depth": 2,
+            "relation": "indirect",
+            "resolved": true,
+            "risk": {
+                "probability": 0.0383,
+                "horizon_days": 365
+            },
+            "forecast": {
+                "point_downloads": 9010540.02,
+                "horizon_months": 12,
+                "insufficient_history": false
+            },
+            "activity": {
+                "distinct_contributors": 42,
+                "days_since_last_event": 2,
+                "contributor_count_withheld": false
+            }
+        },
+        {
+            "ordinal": 38,
+            "package_name": "local-helper",
+            "package_version": "0.1.0",
+            "depth": 0,
+            "relation": "direct",
+            "resolved": false,
+            "unresolved": {
+                "reason": "not_a_registry_package",
+                "label": "Not published on the registry",
+                "remedy": "The entry is a path or git dependency, which carries no registry history, so no adoption forecast or maintenance score can be derived for it"
+            }
+        },
+        {
+            "ordinal": 39,
+            "package_name": "pin-project-lite",
+            "package_version": "0.2.18",
+            "depth": 1,
+            "relation": "indirect",
+            "resolved": false,
+            "unresolved": {
+                "reason": "absent_from_snapshot",
+                "label": "Not present in the registry snapshot",
+                "remedy": "The package was published after the last ingestion run, or it has been removed from the registry. A later run will include it"
+            }
+        }
+    ],
+    "link": "/r/demo"
 }

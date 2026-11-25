@@ -1,279 +1,279 @@
 {
-  "assessed_on": "2026-11-23",
-  "previous_assessed_on": "2026-11-23",
-  "packages": [
-    {
-      "package_name": "clap",
-      "risk_then": 0.094,
-      "risk_now": 0.094,
-      "change": 0.0,
-      "verdict": "unchanged"
-    },
-    {
-      "package_name": "failure",
-      "risk_then": 0.971,
-      "risk_now": 0.971,
-      "change": 0.0,
-      "verdict": "unchanged"
-    },
-    {
-      "package_name": "serde",
-      "risk_then": 0.031,
-      "risk_now": 0.031,
-      "change": 0.0,
-      "verdict": "unchanged"
-    },
-    {
-      "package_name": "tokio",
-      "risk_then": 0.022,
-      "risk_now": 0.022,
-      "change": 0.0,
-      "verdict": "unchanged"
-    },
-    {
-      "package_name": "addr2line",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "adler2",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "anstream",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "anstyle",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "anstyle-parse",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "anstyle-query",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "anstyle-wincon",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "backtrace",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "cfg-if",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "clap_builder",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "clap_lex",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "colorchoice",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "failure_derive",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "gimli",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "is_terminal_polyfill",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "libc",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "local-helper",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "memchr",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "miniz_oxide",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "object",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "once_cell_polyfill",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "pin-project-lite",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "proc-macro2",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "quote",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "rustc-demangle",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "serde_core",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "serde_derive",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "strsim",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "syn",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "synstructure",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "unicode-ident",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "unicode-xid",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "utf8parse",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "windows-link",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    },
-    {
-      "package_name": "windows-sys",
-      "risk_then": null,
-      "risk_now": null,
-      "change": null,
-      "verdict": "still unresolved"
-    }
-  ]
+    "assessed_on": "2026-11-25",
+    "previous_assessed_on": "2026-11-25",
+    "packages": [
+        {
+            "package_name": "addr2line",
+            "risk_then": 0.1429,
+            "risk_now": 0.1429,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "adler2",
+            "risk_then": 0.8873,
+            "risk_now": 0.8873,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "anstream",
+            "risk_then": 0.0779,
+            "risk_now": 0.0779,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "anstyle",
+            "risk_then": 0.0717,
+            "risk_now": 0.0717,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "anstyle-parse",
+            "risk_then": 0.0829,
+            "risk_now": 0.0829,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "anstyle-query",
+            "risk_then": 0.0763,
+            "risk_now": 0.0763,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "anstyle-wincon",
+            "risk_then": 0.0763,
+            "risk_now": 0.0763,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "backtrace",
+            "risk_then": 0.0472,
+            "risk_now": 0.0472,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "cfg-if",
+            "risk_then": 0.1222,
+            "risk_now": 0.1222,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "clap",
+            "risk_then": 0.0768,
+            "risk_now": 0.0768,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "clap_builder",
+            "risk_then": 0.0768,
+            "risk_now": 0.0768,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "clap_lex",
+            "risk_then": 0.0733,
+            "risk_now": 0.0733,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "colorchoice",
+            "risk_then": 0.0717,
+            "risk_now": 0.0717,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "failure",
+            "risk_then": 0.9089,
+            "risk_now": 0.9089,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "failure_derive",
+            "risk_then": 0.9089,
+            "risk_now": 0.9089,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "gimli",
+            "risk_then": 0.0671,
+            "risk_now": 0.0671,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "is_terminal_polyfill",
+            "risk_then": 0.7763,
+            "risk_now": 0.7763,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "libc",
+            "risk_then": 0.0383,
+            "risk_now": 0.0383,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "memchr",
+            "risk_then": 0.371,
+            "risk_now": 0.371,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "miniz_oxide",
+            "risk_then": 0.0722,
+            "risk_now": 0.0722,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "object",
+            "risk_then": 0.0884,
+            "risk_now": 0.0884,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "once_cell_polyfill",
+            "risk_then": 0.7763,
+            "risk_now": 0.7763,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "proc-macro2",
+            "risk_then": 0.1445,
+            "risk_now": 0.1445,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "quote",
+            "risk_then": 0.0953,
+            "risk_now": 0.0953,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "rustc-demangle",
+            "risk_then": 0.0684,
+            "risk_now": 0.0684,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "serde",
+            "risk_then": 0.101,
+            "risk_now": 0.101,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "serde_core",
+            "risk_then": 0.101,
+            "risk_now": 0.101,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "serde_derive",
+            "risk_then": 0.101,
+            "risk_now": 0.101,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "strsim",
+            "risk_then": 0.7886,
+            "risk_now": 0.7886,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "syn",
+            "risk_then": 0.082,
+            "risk_now": 0.082,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "synstructure",
+            "risk_then": 0.4889,
+            "risk_now": 0.4889,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "tokio",
+            "risk_then": 0.052,
+            "risk_now": 0.052,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "unicode-ident",
+            "risk_then": 0.1185,
+            "risk_now": 0.1185,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "unicode-xid",
+            "risk_then": 0.8431,
+            "risk_now": 0.8431,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "utf8parse",
+            "risk_then": 0.1204,
+            "risk_now": 0.1204,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "windows-link",
+            "risk_then": 0.1585,
+            "risk_now": 0.1585,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "windows-sys",
+            "risk_then": 0.1585,
+            "risk_now": 0.1585,
+            "change": 0,
+            "verdict": "unchanged"
+        },
+        {
+            "package_name": "local-helper",
+            "risk_then": null,
+            "risk_now": null,
+            "change": null,
+            "verdict": "still unresolved"
+        },
+        {
+            "package_name": "pin-project-lite",
+            "risk_then": null,
+            "risk_now": null,
+            "change": null,
+            "verdict": "still unresolved"
+        }
+    ]
 }
