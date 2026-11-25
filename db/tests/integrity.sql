@@ -180,7 +180,7 @@ $$;
 
 -- 11. The disclosure threshold holds on the published view. solo-crate has two
 --     contributors, so neither the count nor the concentration of effort may
---     appear, while serde has forty-two and both appear.
+--     appear, while tokio has forty and both appear.
 DO $$
 DECLARE
     withheld   record;
@@ -199,7 +199,7 @@ BEGIN
 
     SELECT distinct_contributors, top_contributor_share, contributor_count_withheld
       INTO disclosed
-      FROM dephealth.v_package_assessment WHERE package_name = 'serde';
+      FROM dephealth.v_package_assessment WHERE package_name = 'tokio';
 
     IF disclosed.distinct_contributors IS NULL
        OR disclosed.top_contributor_share IS NULL

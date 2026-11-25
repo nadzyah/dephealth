@@ -78,8 +78,9 @@ roles: ## create the three login roles from the passwords in .env
 	  -f db/roles/create_login_roles.sql
 
 .PHONY: seed
-seed: ## load the reference data and the test data
-	@$(PSQL) -q -f db/seed/reference.sql -f db/seed/test_data.sql
+seed: ## load the reference data, the test data and the registry snapshot
+	@$(PSQL) -q -f db/seed/reference.sql -f db/seed/test_data.sql \
+	         -f db/seed/registry_snapshot.sql
 	@echo "loaded"
 
 .PHONY: reference
@@ -172,6 +173,10 @@ web-e2e: ## run the browser application's end to end tests
 .PHONY: web-check
 web-check: ## lint, format and type-check the browser application
 	cd web && npm run lint && npm run format:check && npm run typecheck
+
+.PHONY: fixtures
+fixtures: ## recapture the demonstration fixtures from a running API
+	cd web && npm run fixtures
 
 .PHONY: screenshots
 screenshots: ## capture every screen at every device size

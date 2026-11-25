@@ -207,7 +207,8 @@ async fn a_stored_report_reads_back_with_the_same_figures() {
         .iter()
         .find(|e| e["package_name"] == "failure")
         .expect("the seeded abandoned package");
-    assert_eq!(failure["risk"]["probability"], 0.971);
+    // The figure db/seed/test_data.sql stores for it
+    assert_eq!(failure["risk"]["probability"], 0.9089);
 }
 
 #[tokio::test]

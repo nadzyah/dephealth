@@ -97,6 +97,8 @@ services:
       - "/seed/reference.sql"
       - "-f"
       - "/seed/test_data.sql"
+      - "-f"
+      - "/seed/registry_snapshot.sql"
     environment:
       PGHOST: db
       PGUSER: ${POSTGRES_USER}

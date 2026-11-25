@@ -1,8 +1,11 @@
--- Test data. Synthetic, but shaped like the real thing and chosen so every
--- branch the interface handles is present.
+-- Test data. The four crates that exist carry figures observed from crates.io
+-- and from the GitHub API on 2026-11-25. The rest are invented, each one so
+-- that a branch the interface handles is present. The remainder of the
+-- demonstration manifest is in db/seed/registry_snapshot.sql, which is
+-- generated and loaded after this file.
 --
---   serde, tokio, clap    healthy packages with three years of history
---   failure               a real abandoned crate, silent for years, high risk
+--   serde, tokio, clap    maintained crates, three years of downloads behind them
+--   failure               abandoned, silent since 2020, high risk
 --   tiny-config           younger than twelve months, so no forecast is produced
 --   solo-crate            two contributors, so the count is withheld on display
 --   urlless-crate         no repository declared in the registry
@@ -146,10 +149,10 @@ SELECT p.id,
        (SELECT id FROM dephealth.ingestion_run
          WHERE source = 'crates_io_dump' ORDER BY id LIMIT 1)
   FROM (VALUES
-    ('serde',       1095, 820000, 0.00040),
-    ('tokio',       1095, 610000, 0.00055),
-    ('clap',        1095, 390000, 0.00030),
-    ('failure',     1095,  96000, -0.00072),
+    ('serde',       1095, 2873354, 0.001061),
+    ('tokio',       1095, 1967184, 0.001136),
+    ('clap',        1095, 2268172, 0.000641),
+    ('failure',     1095,   49070, 0.000425),
     ('solo-crate',   800,    140, 0.00050),
     ('tiny-config',  200,    310, 0.00320)
   ) AS profile(name, history_days, base_downloads, daily_drift)
@@ -167,24 +170,25 @@ SELECT p.id, current_date - 1, a.window_days, a.contributors, a.events,
        (SELECT id FROM dephealth.ingestion_run
          WHERE source = 'gh_archive' AND status = 'succeeded' ORDER BY id LIMIT 1)
   FROM (VALUES
+    -- healthy, effort concentrated in a few hands
+    ('serde',        30,   3,    8,    5,    2,    1,    1, 0.600),
+    ('serde',        90,   3,   14,    9,    3,    2,    1, 0.778),
+    ('serde',       180,   4,   22,   14,    5,    3,    1, 0.778),
+    ('serde',       365,   4,   34,   22,    8,    4,    1, 0.778),
     -- healthy, many contributors, effort well spread
-    ('serde',        30,  24,  310,  170,  100,   40,    2, 0.260),
-    ('serde',        90,  42,  980,  520,  300,  150,    2, 0.220),
-    ('serde',       180,  58, 1980, 1050,  620,  300,    2, 0.200),
-    ('serde',       365,  83, 4100, 2150, 1300,  630,    2, 0.170),
-    ('tokio',        30,  38,  480,  230,  160,   90,    1, 0.210),
-    ('tokio',        90,  65, 1500,  700,  500,  290,    1, 0.180),
-    ('tokio',       180,  88, 3050, 1420, 1010,  600,    1, 0.170),
-    ('tokio',       365, 121, 6200, 2900, 2080, 1200,    1, 0.150),
-    ('clap',         30,   9,   70,   35,   24,   11,    5, 0.370),
-    ('clap',         90,  18,  240,  120,   80,   35,    5, 0.310),
-    ('clap',        180,  26,  505,  250,  170,   80,    5, 0.280),
-    ('clap',        365,  37, 1040,  520,  350,  160,    5, 0.250),
+    ('tokio',        30,  31,   88,   57,   20,   11,    1, 0.228),
+    ('tokio',        90,  40,  154,   99,   35,   20,    1, 0.293),
+    ('tokio',       180,  52,  248,  160,   56,   32,    1, 0.290),
+    ('tokio',       365,  52,  372,  240,   84,   48,    1, 0.290),
+    ('clap',         30,   5,   52,   33,   12,    7,    1, 0.667),
+    ('clap',         90,   7,  123,   79,   28,   16,    1, 0.633),
+    ('clap',        180,   9,  195,  126,   44,   25,    1, 0.633),
+    ('clap',        365,   9,  295,  190,   67,   38,    1, 0.633),
     -- abandoned: silent in every window
-    ('failure',      30,   0,    0,    0,    0,    0, 1920, NULL),
-    ('failure',      90,   0,    0,    0,    0,    0, 1920, NULL),
-    ('failure',     180,   0,    0,    0,    0,    0, 1920, NULL),
-    ('failure',     365,   0,    0,    0,    0,    0, 1920, NULL),
+    ('failure',      30,   0,    0,    0,    0,    0, 2398, NULL),
+    ('failure',      90,   0,    0,    0,    0,    0, 2398, NULL),
+    ('failure',     180,   0,    0,    0,    0,    0, 2398, NULL),
+    ('failure',     365,   0,    0,    0,    0,    0, 2398, NULL),
     -- young package, small team, above the disclosure threshold on the longer
     -- windows and below it on the shortest one
     ('tiny-config',  30,   3,   19,   10,    6,    3,   11, 0.520),
@@ -249,11 +253,11 @@ SELECT p.id,
        f.horizon_months, f.point, f.lower, f.upper,
        f.history_days, f.insufficient
   FROM (VALUES
-    ('serde',        3, 1182000.00,  1034000.00, 1330000.00, 1095, false),
-    ('serde',       12, 1294000.00,  1012000.00, 1576000.00, 1095, false),
-    ('tokio',       12, 1086000.00,   843000.00, 1329000.00, 1095, false),
-    ('clap',        12,  527000.00,   428000.00,  626000.00, 1095, false),
-    ('failure',     12,   31400.00,    18900.00,   43900.00, 1095, false),
+    ('serde',        3, 6664068.56,  5797739.65, 7663678.84, 1095, false),
+    ('serde',       12, 8027977.65,  6582941.67, 9713852.96, 1095, false),
+    ('tokio',       12, 5774913.09,  4735428.73, 6987644.84, 1095, false),
+    ('clap',        12, 4605468.09,  3776483.84, 5572616.39, 1095, false),
+    ('failure',     12,   81647.41,    66950.88,   98793.37, 1095, false),
     ('solo-crate',  12,     247.00,      112.00,     382.00,  800, false),
     -- younger than twelve months: the forecast is withheld rather than guessed
     ('tiny-config', 12,       NULL,        NULL,       NULL,  200, true)
@@ -276,12 +280,12 @@ SELECT p.id,
        r.probability,
        dephealth.abandonment_window_days()
   FROM (VALUES
-    ('serde',       0.0310),
-    ('tokio',       0.0220),
-    ('clap',        0.0940),
+    ('serde',       0.1010),
+    ('tokio',       0.0520),
+    ('clap',        0.0768),
     ('tiny-config', 0.4120),
     ('solo-crate',  0.6830),
-    ('failure',     0.9710)
+    ('failure',     0.9089)
   ) AS r(package_name, probability)
   JOIN dephealth.package p ON p.name = r.package_name;
 
@@ -289,10 +293,10 @@ INSERT INTO dephealth.risk_factor
     (maintenance_risk_id, factor, observed_value, contribution)
 SELECT mr.id, f.factor, f.observed_value, f.contribution
   FROM (VALUES
-    ('failure',     'days_since_last_event', 1920.000,  2.410),
-    ('failure',     'contributor_count',        0.000,  1.180),
-    ('failure',     'release_gap',           2480.000,  0.940),
-    ('failure',     'download_trend',          -0.214,  0.360),
+    ('failure',     'days_since_last_event', 2398.000,  2.400),
+    ('failure',     'contributor_count',        0.000,  1.050),
+    ('failure',     'top_contributor_share',     1.000,  0.480),
+    ('failure',     'release_gap',           2398.000,  0.300),
     ('solo-crate',  'top_contributor_share',    0.860,  0.620),
     ('solo-crate',  'contributor_count',        2.000,  0.510),
     ('solo-crate',  'days_since_last_event',   23.000,  0.180),
@@ -301,10 +305,18 @@ SELECT mr.id, f.factor, f.observed_value, f.contribution
     ('tiny-config', 'contributor_count',        6.000, -0.120),
     ('tiny-config', 'top_contributor_share',    0.450,  0.090),
     ('tiny-config', 'commit_share',             0.517, -0.080),
-    ('serde',       'contributor_count',       42.000, -0.910),
-    ('serde',       'days_since_last_event',    2.000, -0.430),
-    ('serde',       'top_contributor_share',    0.220, -0.260),
-    ('serde',       'package_age',           4360.000, -0.190)
+    ('serde',       'days_since_last_event',    1.000, -0.594),
+    ('serde',       'contributor_count',        3.000,  0.000),
+    ('serde',       'top_contributor_share',    0.778,  0.302),
+    ('serde',       'release_gap',            424.000,  0.036),
+    ('tokio',       'days_since_last_event',    1.000, -0.594),
+    ('tokio',       'contributor_count',       40.000, -0.316),
+    ('tokio',       'top_contributor_share',    0.290, -0.088),
+    ('tokio',       'release_gap',            407.000,  0.026),
+    ('clap',        'days_since_last_event',    1.000, -0.594),
+    ('clap',        'contributor_count',        7.000, -0.175),
+    ('clap',        'top_contributor_share',    0.633,  0.186),
+    ('clap',        'release_gap',            408.000,  0.027)
   ) AS f(package_name, factor, observed_value, contribution)
   JOIN dephealth.package p ON p.name = f.package_name
   JOIN dephealth.maintenance_risk mr ON mr.package_id = p.id;
@@ -344,13 +356,13 @@ SELECT (SELECT id FROM dephealth.report ORDER BY id LIMIT 1),
        e.contributors, e.days_since
   FROM (VALUES
     (1, 'failure',       '0.1.8',   0, true,  NULL::dephealth.resolution_status,
-        0.9710, 31400.00,    0, 1920),
+        0.9089,   81647.41,  0, 2398),
     (2, 'solo-crate',    '1.1.0',   0, true,  NULL,
-        0.6830,   247.00,    2,   23),
-    (3, 'clap',          '4.5.49',  0, true,  NULL,
-        0.0940, 527000.00,  18,    5),
-    (4, 'serde',         '1.0.228', 0, true,  NULL,
-        0.0310, 1294000.00, 42,    2),
+        0.6830,     247.00,  2,   23),
+    (3, 'serde',         '1.0.228', 0, true,  NULL,
+        0.1010, 8027977.65,  3,    1),
+    (4, 'clap',          '4.5.49',  0, true,  NULL,
+        0.0768, 4605468.09,  7,    1),
     (5, 'urlless-crate', '0.2.0',   1, false, 'no_url_declared',
         NULL,     NULL,     NULL, NULL)
   ) AS e(ordinal, package_name, package_version, depth, resolved,
@@ -361,11 +373,11 @@ INSERT INTO dephealth.report_entry_factor
     (report_id, ordinal, factor, observed_value, contribution)
 VALUES
     ((SELECT id FROM dephealth.report ORDER BY id LIMIT 1), 1,
-     'days_since_last_event', 1920.000, 2.410),
+     'days_since_last_event', 2398.000, 2.400),
     ((SELECT id FROM dephealth.report ORDER BY id LIMIT 1), 1,
-     'contributor_count', 0.000, 1.180),
+     'contributor_count', 0.000, 1.050),
     ((SELECT id FROM dephealth.report ORDER BY id LIMIT 1), 1,
-     'release_gap', 2480.000, 0.940),
+     'release_gap', 2398.000, 0.300),
     ((SELECT id FROM dephealth.report ORDER BY id LIMIT 1), 2,
      'top_contributor_share', 0.860, 0.620),
     ((SELECT id FROM dephealth.report ORDER BY id LIMIT 1), 2,
@@ -407,11 +419,11 @@ SELECT (SELECT id FROM dephealth.report
        e.contributors, e.days_since
   FROM (VALUES
     (1, 'failure',       '0.1.8',   0, true,  NULL::dephealth.resolution_status,
-        0.9390, 34800.00,    0, 1877),
-    (2, 'clap',          '4.5.48',  0, true,  NULL,
-        0.1020, 511000.00,  16,    9),
-    (3, 'serde',         '1.0.227', 0, true,  NULL,
-        0.0290, 1261000.00, 40,    3),
+        0.8840,   79320.00,  0, 2355),
+    (2, 'serde',         '1.0.227', 0, true,  NULL,
+        0.0930, 7814000.00,  4,    2),
+    (3, 'clap',          '4.5.48',  0, true,  NULL,
+        0.0810, 4480000.00,  8,    3),
     (4, 'urlless-crate', '0.2.0',   1, false, 'no_url_declared',
         NULL,     NULL,     NULL, NULL)
   ) AS e(ordinal, package_name, package_version, depth, resolved,
