@@ -34,9 +34,15 @@ function write(name, value) {
     console.error(`${name}: ${JSON.stringify(value).length} bytes`);
 }
 
-/** The token is replaced by the one the demo uses, so a link in a capture works. */
+/**
+ * The token is replaced by the one the demo uses, so a link in a capture works,
+ * and the address of whatever service was captured is dropped with it. The
+ * demonstration is served from somewhere else entirely.
+ */
 function asDemo(value) {
-    return JSON.parse(JSON.stringify(value).replaceAll(/\/r\/[0-9a-f]{64}/g, "/r/demo"));
+    return JSON.parse(
+        JSON.stringify(value).replaceAll(/(https?:\/\/[^"]*?)?\/r\/[0-9a-f]{64}/g, "/r/demo"),
+    );
 }
 
 const submitted = await fetch(`${API}/api/v1/assessments`, {
