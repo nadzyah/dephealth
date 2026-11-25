@@ -28,11 +28,11 @@ service returns are fixture data rather than model output.
 
 ## Demonstration
 
-The browser application is published to GitHub Pages from the default branch at
-<https://nadzyah.github.io/dephealth/>. It is built from the response fixtures
-committed in `web/src/api/fixtures`, so it can be opened and used with no
-service behind it, and it says so on the screen. The figures it shows are
-captured responses rather than live scores.
+The browser application is published to GitHub Pages from the default branch
+and served at <https://dephealth.nadzeya.me>. It is built from the response
+fixtures committed in `web/src/api/fixtures`, so it can be opened and used
+with no service behind it, and it says so on the screen. The figures it shows
+are captured responses rather than live scores.
 
 ## Requirements
 
