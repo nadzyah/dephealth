@@ -67,15 +67,19 @@ export default function PackagesPage() {
                     <ul className="packages">
                         {page.data.items.map((item) => (
                             <li key={item.package_name}>
-                                <Link
-                                    to={`/p/${encodeURIComponent(item.package_name)}`}
-                                    className="package-name touchable"
-                                >
-                                    {item.package_name}
+                                <span className="package-id">
+                                    <Link
+                                        to={`/p/${encodeURIComponent(item.package_name)}`}
+                                        className="package-name touchable"
+                                    >
+                                        {item.package_name}
+                                    </Link>
                                     {item.latest_version && (
-                                        <span className="muted small"> {item.latest_version}</span>
+                                        <span className="package-version muted small">
+                                            {item.latest_version}
+                                        </span>
                                     )}
-                                </Link>
+                                </span>
                                 <RiskBadge probability={item.risk_probability} />
                                 {!item.is_resolved && (
                                     <span className="muted small">
