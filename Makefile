@@ -178,13 +178,24 @@ web-check: ## lint, format and type-check the browser application
 fixtures: ## recapture the demonstration fixtures from a running API
 	cd web && npm run fixtures
 
+# Both captures drive a browser, and the image carries one, so neither needs
+# the browsers downloaded onto the machine. It runs as the caller, or the files
+# it writes come back owned by root
+PLAYWRIGHT := docker run --rm --network host --user "$$(id -u):$$(id -g)" \
+	-v "$(CURDIR)":/repo -w /repo/web -e HOME=/tmp \
+	mcr.microsoft.com/playwright:v1.65.1-noble
+
 .PHONY: screenshots
 screenshots: ## capture every screen at every device size
-	cd web && npm run screenshots
+	$(PLAYWRIGHT) npm run screenshots
 
 .PHONY: mockups
 mockups: ## render the interface design document to PDF
-	cd web && npm run mockups
+	$(PLAYWRIGHT) node scripts/mockups.mjs
+
+.PHONY: web-e2e-container
+web-e2e-container: ## run the end to end tests with no local browsers
+	$(PLAYWRIGHT) npx playwright test
 
 # Analytical tier
 
