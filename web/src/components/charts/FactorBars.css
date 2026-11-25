@@ -50,21 +50,13 @@
 
 .factor-bar.raised {
     left: 50%;
-    background: var(--chart-positive);
+    background: var(--chart-raised);
 }
 
 .factor-bar.lowered {
     right: 50%;
     border-radius: 4px 0 0 4px;
-    background: var(--chart-negative);
-}
-
-.raised-text {
-    color: var(--color-risk-high);
-}
-
-.lowered-text {
-    color: var(--color-risk-low);
+    background: var(--chart-lowered);
 }
 
 .factor-label {

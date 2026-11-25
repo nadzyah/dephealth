@@ -36,13 +36,24 @@
     --color-border-strong: #555f6e;
 
     /* Chart marks, which are a separate question from text. A mark needs 3:1
-       against the surface and enough separation from its neighbour for a reader
-       with a colour vision deficiency. Red against green fails that badly, so
-       the pair is red against blue, checked with the palette validator at
-       deuteran delta E 18 rather than 6.6 */
+       against the surface and enough separation from its neighbours for a
+       reader with a colour vision deficiency, measured as OKLab delta E under a
+       simulation rather than judged by eye.
+
+       Three marks appear on one screen: the download series, and the two
+       directions of a factor bar. Red against green fails a deuteranope, so the
+       two directions are red against a third hue. That hue is purple rather
+       than a second blue or a teal: a teal reaches delta E 13 against the pale
+       series blue of the dark theme, below the floor of 15, while the purple
+       holds 19.8 and 19.7 under normal vision and 15.6 at worst under a
+       simulation, in both themes.
+
+       The two are named for the direction a factor moved the score rather than
+       for the sign of its contribution. Red is the one that raised the risk,
+       which is the unwelcome direction and the one red is read as */
     --chart-series: #1a5490;
-    --chart-positive: #a02b1c;
-    --chart-negative: #1a5490;
+    --chart-raised: #a02b1c;
+    --chart-lowered: #846ce0;
     --chart-grid: #e4e8ed;
 
     /* Type scale */
@@ -124,8 +135,8 @@
         --color-border-strong: #a8b2c0;
 
         --chart-series: #7db3e8;
-        --chart-positive: #d8705c;
-        --chart-negative: #5a96cf;
+        --chart-raised: #d8705c;
+        --chart-lowered: #7b67cc;
         --chart-grid: #232b35;
 
         --shadow-sm: 0 1px 2px rgb(0 0 0 / 40%);
@@ -153,8 +164,8 @@
     --color-border-strong: #a8b2c0;
 
     --chart-series: #7db3e8;
-    --chart-positive: #d8705c;
-    --chart-negative: #5a96cf;
+    --chart-raised: #d8705c;
+    --chart-lowered: #7b67cc;
     --chart-grid: #232b35;
 
     --shadow-sm: 0 1px 2px rgb(0 0 0 / 40%);

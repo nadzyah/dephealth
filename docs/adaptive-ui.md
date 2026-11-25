@@ -160,9 +160,14 @@ clicked because they had `pointer-events: none`, and the failure and empty
 screens beginning at `h3` with no `h1` above them. All three are fixed.
 
 The chart palette was validated for colour vision deficiency rather than chosen
-by eye. The first dark-theme pair failed deuteranopia simulation, and the
-replacement separates its two series by hue against blue instead of by red
-against green.
+by eye. The first dark-theme pair failed deuteranopia simulation, and red
+against green was rejected for the same reason. A later check found the
+remaining weakness: the mark for a factor that lowered the risk was the same
+blue as the download series in the light theme and within delta E 9.4 of it in
+the dark one, so the two carried no difference a reader could use. It is now
+purple, which holds delta E 15.6 or better against both of the other marks in
+both themes under a simulation, where the floor is 8. A teal was measured first
+and rejected at delta E 13.0 against the pale series blue of the dark theme.
 
 ## Known Limitations
 

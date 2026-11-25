@@ -56,9 +56,7 @@ export function FactorBars({ factors }: { factors: Factor[] }) {
                         </div>
 
                         <div className="factor-foot small">
-                            <span className={raised ? "raised-text" : "lowered-text"}>
-                                {factor.direction}
-                            </span>
+                            <span>{factor.direction}</span>
                             <span className="numeric muted">
                                 {signed.format(factor.contribution)}
                             </span>

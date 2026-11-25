@@ -76,7 +76,7 @@ describe.each(Object.entries(themes))("%s theme", (name, tokens) => {
 
     // A mark is not text, so WCAG 1.4.11 applies rather than 1.4.3. Separation
     // between the two diverging marks is the palette validator's business
-    it.each(["chart-series", "chart-positive", "chart-negative"])(
+    it.each(["chart-series", "chart-raised", "chart-lowered"])(
         "draws %s at 3:1 or better against the surface",
         (token) => {
             expect(ratio(tokens[token], tokens["color-surface"])).toBeGreaterThanOrEqual(3);
