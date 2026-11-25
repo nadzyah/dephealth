@@ -6,87 +6,179 @@
       {
         "ordinal": 0,
         "name": "package_name!",
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_package_assessment",
+            "name": "package_name"
+          }
+        }
       },
       {
         "ordinal": 1,
         "name": "latest_version",
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_package_assessment",
+            "name": "latest_version"
+          }
+        }
       },
       {
         "ordinal": 2,
         "name": "repository_url",
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_package_assessment",
+            "name": "repository_url"
+          }
+        }
       },
       {
         "ordinal": 3,
         "name": "is_resolved!",
-        "type_info": "Bool"
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_package_assessment",
+            "name": "is_resolved"
+          }
+        }
       },
       {
         "ordinal": 4,
         "name": "resolution_label!",
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_package_assessment",
+            "name": "resolution_label"
+          }
+        }
       },
       {
         "ordinal": 5,
         "name": "resolution_remedy!",
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_package_assessment",
+            "name": "resolution_remedy"
+          }
+        }
       },
       {
         "ordinal": 6,
         "name": "risk_probability",
-        "type_info": "Float8"
+        "type_info": "Float8",
+        "origin": "Expression"
       },
       {
         "ordinal": 7,
         "name": "risk_horizon_days",
-        "type_info": "Int4"
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_package_assessment",
+            "name": "risk_horizon_days"
+          }
+        }
       },
       {
         "ordinal": 8,
         "name": "forecast_point_downloads",
-        "type_info": "Float8"
+        "type_info": "Float8",
+        "origin": "Expression"
       },
       {
         "ordinal": 9,
         "name": "forecast_horizon_months",
-        "type_info": "Int4"
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_package_assessment",
+            "name": "forecast_horizon_months"
+          }
+        }
       },
       {
         "ordinal": 10,
         "name": "insufficient_history",
-        "type_info": "Bool"
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_package_assessment",
+            "name": "insufficient_history"
+          }
+        }
       },
       {
         "ordinal": 11,
         "name": "distinct_contributors",
-        "type_info": "Int4"
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_package_assessment",
+            "name": "distinct_contributors"
+          }
+        }
       },
       {
         "ordinal": 12,
         "name": "contributor_count_withheld!",
-        "type_info": "Bool"
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_package_assessment",
+            "name": "contributor_count_withheld"
+          }
+        }
       },
       {
         "ordinal": 13,
         "name": "days_since_last_event",
-        "type_info": "Int4"
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_package_assessment",
+            "name": "days_since_last_event"
+          }
+        }
       },
       {
         "ordinal": 14,
         "name": "is_abandoned",
-        "type_info": "Bool"
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_package_assessment",
+            "name": "is_abandoned"
+          }
+        }
       },
       {
         "ordinal": 15,
         "name": "registry_data_as_of",
-        "type_info": "Date"
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_package_assessment",
+            "name": "registry_data_as_of"
+          }
+        }
       },
       {
         "ordinal": 16,
         "name": "events_data_as_of",
-        "type_info": "Date"
+        "type_info": "Date",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_package_assessment",
+            "name": "events_data_as_of"
+          }
+        }
       }
     ],
     "parameters": {

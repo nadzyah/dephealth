@@ -412,8 +412,9 @@ BEGIN
 
     IF in_status = 'succeeded' THEN
         BEGIN
-            -- a failed refresh leaves stale data served, which NFR3 allows.
-            -- Losing the run record would not
+            -- a failed refresh leaves the previous figures served, which is
+            -- acceptable because every response states their date. Losing the
+            -- run record would not be
             REFRESH MATERIALIZED VIEW CONCURRENTLY dephealth.mv_package_current_assessment;
         EXCEPTION WHEN OTHERS THEN
             RAISE WARNING 'run % recorded, serving view not refreshed: %',
@@ -775,10 +776,10 @@ COMMENT ON TABLE dephealth.download_daily IS 'Downloads per package per day. The
 --
 
 CREATE TABLE dephealth.download_daily_2014 (
-    package_id bigint NOT NULL,
-    day date NOT NULL,
-    downloads bigint NOT NULL,
-    run_id bigint NOT NULL,
+    package_id bigint CONSTRAINT download_daily_package_id_not_null NOT NULL,
+    day date CONSTRAINT download_daily_day_not_null NOT NULL,
+    downloads bigint CONSTRAINT download_daily_downloads_not_null NOT NULL,
+    run_id bigint CONSTRAINT download_daily_run_id_not_null NOT NULL,
     CONSTRAINT download_daily_downloads_check CHECK ((downloads >= 0))
 );
 
@@ -788,10 +789,10 @@ CREATE TABLE dephealth.download_daily_2014 (
 --
 
 CREATE TABLE dephealth.download_daily_2015 (
-    package_id bigint NOT NULL,
-    day date NOT NULL,
-    downloads bigint NOT NULL,
-    run_id bigint NOT NULL,
+    package_id bigint CONSTRAINT download_daily_package_id_not_null NOT NULL,
+    day date CONSTRAINT download_daily_day_not_null NOT NULL,
+    downloads bigint CONSTRAINT download_daily_downloads_not_null NOT NULL,
+    run_id bigint CONSTRAINT download_daily_run_id_not_null NOT NULL,
     CONSTRAINT download_daily_downloads_check CHECK ((downloads >= 0))
 );
 
@@ -801,10 +802,10 @@ CREATE TABLE dephealth.download_daily_2015 (
 --
 
 CREATE TABLE dephealth.download_daily_2016 (
-    package_id bigint NOT NULL,
-    day date NOT NULL,
-    downloads bigint NOT NULL,
-    run_id bigint NOT NULL,
+    package_id bigint CONSTRAINT download_daily_package_id_not_null NOT NULL,
+    day date CONSTRAINT download_daily_day_not_null NOT NULL,
+    downloads bigint CONSTRAINT download_daily_downloads_not_null NOT NULL,
+    run_id bigint CONSTRAINT download_daily_run_id_not_null NOT NULL,
     CONSTRAINT download_daily_downloads_check CHECK ((downloads >= 0))
 );
 
@@ -814,10 +815,10 @@ CREATE TABLE dephealth.download_daily_2016 (
 --
 
 CREATE TABLE dephealth.download_daily_2017 (
-    package_id bigint NOT NULL,
-    day date NOT NULL,
-    downloads bigint NOT NULL,
-    run_id bigint NOT NULL,
+    package_id bigint CONSTRAINT download_daily_package_id_not_null NOT NULL,
+    day date CONSTRAINT download_daily_day_not_null NOT NULL,
+    downloads bigint CONSTRAINT download_daily_downloads_not_null NOT NULL,
+    run_id bigint CONSTRAINT download_daily_run_id_not_null NOT NULL,
     CONSTRAINT download_daily_downloads_check CHECK ((downloads >= 0))
 );
 
@@ -827,10 +828,10 @@ CREATE TABLE dephealth.download_daily_2017 (
 --
 
 CREATE TABLE dephealth.download_daily_2018 (
-    package_id bigint NOT NULL,
-    day date NOT NULL,
-    downloads bigint NOT NULL,
-    run_id bigint NOT NULL,
+    package_id bigint CONSTRAINT download_daily_package_id_not_null NOT NULL,
+    day date CONSTRAINT download_daily_day_not_null NOT NULL,
+    downloads bigint CONSTRAINT download_daily_downloads_not_null NOT NULL,
+    run_id bigint CONSTRAINT download_daily_run_id_not_null NOT NULL,
     CONSTRAINT download_daily_downloads_check CHECK ((downloads >= 0))
 );
 
@@ -840,10 +841,10 @@ CREATE TABLE dephealth.download_daily_2018 (
 --
 
 CREATE TABLE dephealth.download_daily_2019 (
-    package_id bigint NOT NULL,
-    day date NOT NULL,
-    downloads bigint NOT NULL,
-    run_id bigint NOT NULL,
+    package_id bigint CONSTRAINT download_daily_package_id_not_null NOT NULL,
+    day date CONSTRAINT download_daily_day_not_null NOT NULL,
+    downloads bigint CONSTRAINT download_daily_downloads_not_null NOT NULL,
+    run_id bigint CONSTRAINT download_daily_run_id_not_null NOT NULL,
     CONSTRAINT download_daily_downloads_check CHECK ((downloads >= 0))
 );
 
@@ -853,10 +854,10 @@ CREATE TABLE dephealth.download_daily_2019 (
 --
 
 CREATE TABLE dephealth.download_daily_2020 (
-    package_id bigint NOT NULL,
-    day date NOT NULL,
-    downloads bigint NOT NULL,
-    run_id bigint NOT NULL,
+    package_id bigint CONSTRAINT download_daily_package_id_not_null NOT NULL,
+    day date CONSTRAINT download_daily_day_not_null NOT NULL,
+    downloads bigint CONSTRAINT download_daily_downloads_not_null NOT NULL,
+    run_id bigint CONSTRAINT download_daily_run_id_not_null NOT NULL,
     CONSTRAINT download_daily_downloads_check CHECK ((downloads >= 0))
 );
 
@@ -866,10 +867,10 @@ CREATE TABLE dephealth.download_daily_2020 (
 --
 
 CREATE TABLE dephealth.download_daily_2021 (
-    package_id bigint NOT NULL,
-    day date NOT NULL,
-    downloads bigint NOT NULL,
-    run_id bigint NOT NULL,
+    package_id bigint CONSTRAINT download_daily_package_id_not_null NOT NULL,
+    day date CONSTRAINT download_daily_day_not_null NOT NULL,
+    downloads bigint CONSTRAINT download_daily_downloads_not_null NOT NULL,
+    run_id bigint CONSTRAINT download_daily_run_id_not_null NOT NULL,
     CONSTRAINT download_daily_downloads_check CHECK ((downloads >= 0))
 );
 
@@ -879,10 +880,10 @@ CREATE TABLE dephealth.download_daily_2021 (
 --
 
 CREATE TABLE dephealth.download_daily_2022 (
-    package_id bigint NOT NULL,
-    day date NOT NULL,
-    downloads bigint NOT NULL,
-    run_id bigint NOT NULL,
+    package_id bigint CONSTRAINT download_daily_package_id_not_null NOT NULL,
+    day date CONSTRAINT download_daily_day_not_null NOT NULL,
+    downloads bigint CONSTRAINT download_daily_downloads_not_null NOT NULL,
+    run_id bigint CONSTRAINT download_daily_run_id_not_null NOT NULL,
     CONSTRAINT download_daily_downloads_check CHECK ((downloads >= 0))
 );
 
@@ -892,10 +893,10 @@ CREATE TABLE dephealth.download_daily_2022 (
 --
 
 CREATE TABLE dephealth.download_daily_2023 (
-    package_id bigint NOT NULL,
-    day date NOT NULL,
-    downloads bigint NOT NULL,
-    run_id bigint NOT NULL,
+    package_id bigint CONSTRAINT download_daily_package_id_not_null NOT NULL,
+    day date CONSTRAINT download_daily_day_not_null NOT NULL,
+    downloads bigint CONSTRAINT download_daily_downloads_not_null NOT NULL,
+    run_id bigint CONSTRAINT download_daily_run_id_not_null NOT NULL,
     CONSTRAINT download_daily_downloads_check CHECK ((downloads >= 0))
 );
 
@@ -905,10 +906,10 @@ CREATE TABLE dephealth.download_daily_2023 (
 --
 
 CREATE TABLE dephealth.download_daily_2024 (
-    package_id bigint NOT NULL,
-    day date NOT NULL,
-    downloads bigint NOT NULL,
-    run_id bigint NOT NULL,
+    package_id bigint CONSTRAINT download_daily_package_id_not_null NOT NULL,
+    day date CONSTRAINT download_daily_day_not_null NOT NULL,
+    downloads bigint CONSTRAINT download_daily_downloads_not_null NOT NULL,
+    run_id bigint CONSTRAINT download_daily_run_id_not_null NOT NULL,
     CONSTRAINT download_daily_downloads_check CHECK ((downloads >= 0))
 );
 
@@ -918,10 +919,10 @@ CREATE TABLE dephealth.download_daily_2024 (
 --
 
 CREATE TABLE dephealth.download_daily_2025 (
-    package_id bigint NOT NULL,
-    day date NOT NULL,
-    downloads bigint NOT NULL,
-    run_id bigint NOT NULL,
+    package_id bigint CONSTRAINT download_daily_package_id_not_null NOT NULL,
+    day date CONSTRAINT download_daily_day_not_null NOT NULL,
+    downloads bigint CONSTRAINT download_daily_downloads_not_null NOT NULL,
+    run_id bigint CONSTRAINT download_daily_run_id_not_null NOT NULL,
     CONSTRAINT download_daily_downloads_check CHECK ((downloads >= 0))
 );
 
@@ -931,10 +932,10 @@ CREATE TABLE dephealth.download_daily_2025 (
 --
 
 CREATE TABLE dephealth.download_daily_2026 (
-    package_id bigint NOT NULL,
-    day date NOT NULL,
-    downloads bigint NOT NULL,
-    run_id bigint NOT NULL,
+    package_id bigint CONSTRAINT download_daily_package_id_not_null NOT NULL,
+    day date CONSTRAINT download_daily_day_not_null NOT NULL,
+    downloads bigint CONSTRAINT download_daily_downloads_not_null NOT NULL,
+    run_id bigint CONSTRAINT download_daily_run_id_not_null NOT NULL,
     CONSTRAINT download_daily_downloads_check CHECK ((downloads >= 0))
 );
 
@@ -944,10 +945,10 @@ CREATE TABLE dephealth.download_daily_2026 (
 --
 
 CREATE TABLE dephealth.download_daily_2027 (
-    package_id bigint NOT NULL,
-    day date NOT NULL,
-    downloads bigint NOT NULL,
-    run_id bigint NOT NULL,
+    package_id bigint CONSTRAINT download_daily_package_id_not_null NOT NULL,
+    day date CONSTRAINT download_daily_day_not_null NOT NULL,
+    downloads bigint CONSTRAINT download_daily_downloads_not_null NOT NULL,
+    run_id bigint CONSTRAINT download_daily_run_id_not_null NOT NULL,
     CONSTRAINT download_daily_downloads_check CHECK ((downloads >= 0))
 );
 
@@ -957,10 +958,10 @@ CREATE TABLE dephealth.download_daily_2027 (
 --
 
 CREATE TABLE dephealth.download_daily_unexpected (
-    package_id bigint NOT NULL,
-    day date NOT NULL,
-    downloads bigint NOT NULL,
-    run_id bigint NOT NULL,
+    package_id bigint CONSTRAINT download_daily_package_id_not_null NOT NULL,
+    day date CONSTRAINT download_daily_day_not_null NOT NULL,
+    downloads bigint CONSTRAINT download_daily_downloads_not_null NOT NULL,
+    run_id bigint CONSTRAINT download_daily_run_id_not_null NOT NULL,
     CONSTRAINT download_daily_downloads_check CHECK ((downloads >= 0))
 );
 

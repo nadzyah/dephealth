@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { MAX_BYTES, tokenFromLink, validateFile } from "./manifest";
+import { MAX_BYTES, projectName, tokenFromLink, validateFile } from "./manifest";
 
 function fileOf(name: string, contents: string, size?: number): File {
     const file = new File([contents], name, { type: "text/plain" });
@@ -11,6 +11,12 @@ function fileOf(name: string, contents: string, size?: number): File {
 }
 
 describe("validateFile", () => {
+    it("names the right file when the manifest is chosen instead of the lockfile", () => {
+        const rejection = validateFile(new File(["[package]"], "Cargo.toml"));
+        expect(rejection?.reason).toBe("wrong-kind");
+        expect(rejection?.message).toContain("Cargo.lock");
+    });
+
     it("accepts a Cargo lockfile", () => {
         expect(validateFile(fileOf("Cargo.lock", "version = 4"))).toBeUndefined();
     });
@@ -59,5 +65,34 @@ describe("tokenFromLink", () => {
         for (const value of ["", "   ", "not-a-token", token.slice(0, 63), `${token}ff`, "/r/"]) {
             expect(tokenFromLink(value)).toBeUndefined();
         }
+    });
+});
+
+describe("the project a lockfile belongs to", () => {
+    const lockfile = [
+        "version = 4",
+        "",
+        "[[package]]",
+        'name = "aho-corasick"',
+        'version = "1.1.5"',
+        'source = "registry+https://github.com/rust-lang/crates.io-index"',
+        "",
+        "[[package]]",
+        'name = "my-service"',
+        'version = "0.1.0"',
+        'dependencies = ["aho-corasick"]',
+    ].join("\n");
+
+    it("is the package the file resolves locally rather than from a registry", () => {
+        expect(projectName(lockfile)).toBe("my-service");
+    });
+
+    it("is absent when every package came from a registry", () => {
+        const registryOnly = lockfile.split("[[package]]").slice(0, 2).join("[[package]]");
+        expect(projectName(registryOnly)).toBeUndefined();
+    });
+
+    it("is absent for a file that holds no packages", () => {
+        expect(projectName("version = 4\n")).toBeUndefined();
     });
 });

@@ -1,8 +1,11 @@
 import type { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 
-import { BookIcon, PaletteIcon, TreeIcon, UploadIcon } from "../ui/icons";
+import { ExternalLink } from "../ui/ExternalLink";
+import { TreeIcon, UploadIcon } from "../ui/icons";
 import { Appearance } from "./Appearance";
+import { aboutPages } from "./about";
+import { NavMenu } from "./NavMenu";
 import { Notices } from "./Notices";
 
 import "./AppShell.css";
@@ -16,8 +19,6 @@ import "./AppShell.css";
 const destinations = [
     { to: "/", label: "Assess", icon: UploadIcon, end: true },
     { to: "/packages", label: "Packages", icon: TreeIcon, end: false },
-    { to: "/method", label: "Method", icon: BookIcon, end: false },
-    { to: "/design-system", label: "Design", icon: PaletteIcon, end: false },
 ];
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -40,6 +41,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                                 {label}
                             </NavLink>
                         ))}
+                        <NavMenu label="About" items={aboutPages} variant="header" />
                     </nav>
 
                     <Appearance />
@@ -52,11 +54,8 @@ export function AppShell({ children }: { children: ReactNode }) {
 
             <footer className="app-footer">
                 <div className="container row between small muted">
-                    <span>
-                        Adoption forecasts and maintenance risk for Cargo dependencies. Diploma
-                        project, European Humanities University.
-                    </span>
-                    <a href="https://github.com/nadzyah/dephealth">Source</a>
+                    <span>Adoption forecasts and maintenance risk for Cargo dependencies.</span>
+                    <ExternalLink href="https://github.com/nadzyah/dephealth">Source</ExternalLink>
                 </div>
             </footer>
 
@@ -67,6 +66,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                         <span>{label}</span>
                     </NavLink>
                 ))}
+                <NavMenu label="About" items={aboutPages} variant="bar" />
             </nav>
 
             <Notices />

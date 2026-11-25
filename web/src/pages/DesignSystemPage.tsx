@@ -11,6 +11,7 @@
 import { useEffect, useState } from "react";
 
 import { contrastRatio, tokenValue } from "../lib/contrast";
+import { SectionNav } from "../components/layout/SectionNav";
 import type { Factor } from "../api/types";
 import { DownloadChart } from "../components/charts/DownloadChart";
 import { FactorBars } from "../components/charts/FactorBars";
@@ -32,7 +33,7 @@ const textTokens = [
     "--color-risk-low",
 ];
 
-const markTokens = ["--chart-series", "--chart-positive", "--chart-negative"];
+const markTokens = ["--chart-series", "--chart-raised", "--chart-lowered"];
 
 const typeScale = [
     ["--text-3xl", "Display"],
@@ -86,7 +87,7 @@ const exampleProblem = new ApiProblem({
     type: "/problems/report-not-found",
     title: "No such report",
     status: 404,
-    detail: "The link has never addressed a report on this deployment.",
+    detail: "No report exists for this link.",
 });
 
 /** Reads the tokens after paint, so the figures follow the chosen theme. */
@@ -94,17 +95,23 @@ function useContrastTable(tokens: string[], against: string) {
     const [rows, setRows] = useState<{ token: string; value: string; ratio: number }[]>([]);
 
     useEffect(() => {
-        const surface = tokenValue(against);
-        setRows(
-            tokens.map((token) => {
-                const value = tokenValue(token);
-                return {
-                    token,
-                    value,
-                    ratio: value && surface ? contrastRatio(value, surface) : 0,
-                };
-            }),
-        );
+        // After the next paint, so the figures describe the theme now applied
+        // to the document rather than the one being replaced
+        const frame = requestAnimationFrame(() => {
+            const surface = tokenValue(against);
+            setRows(
+                tokens.map((token) => {
+                    const value = tokenValue(token);
+                    return {
+                        token,
+                        value,
+                        ratio: value && surface ? contrastRatio(value, surface) : 0,
+                    };
+                }),
+            );
+        });
+
+        return () => cancelAnimationFrame(frame);
     }, [tokens, against]);
 
     return rows;
@@ -117,16 +124,22 @@ export default function DesignSystemPage() {
     return (
         <div className="stack">
             <section>
-                <h1>Design system</h1>
+                <h1>Design System</h1>
                 <p>
-                    One palette, one type scale, one spacing scale and one set of components, used
-                    at every width. The figures below are computed from the tokens in force as you
-                    read them, so switching the theme in the header changes them.
+                    The tokens and components the client is built from, in every state they occupy.
+                    Contrast ratios are computed from the tokens currently in force and follow the
+                    theme selected in the header.
                 </p>
             </section>
 
-            <Card title="Colour, and what it is checked against">
-                <h3>Text, which WCAG 2.1 AA holds to 4.5:1</h3>
+            <SectionNav />
+
+            <Card title="Colour">
+                <h3>Text Contrast</h3>
+                <p className="muted small">
+                    Every pair below is held to the 4.5:1 that WCAG 2.1 AA requires of body text,
+                    and the ratio is computed from the tokens in force.
+                </p>
                 <ul className="swatches">
                     {textRows.map((row) => (
                         <li key={row.token}>
@@ -145,11 +158,14 @@ export default function DesignSystemPage() {
                     ))}
                 </ul>
 
-                <h3>Chart marks, which 1.4.11 holds to 3:1</h3>
+                <h3>Non-Text Contrast</h3>
                 <p className="muted small">
-                    A separate pair from the risk text colours. Red against green fails for a reader
-                    with deuteranopia, so the diverging pair is red against blue, which the palette
-                    validator puts at delta E 18 rather than 6.6.
+                    Control edges and chart marks are held to the 3:1 of WCAG 1.4.11 rather than to
+                    the ratio required of text. The three marks also have to be told apart from one
+                    another, since a download series and the two directions of a factor bar can
+                    share a screen. Red against green is lost to deuteranopia, so a factor bar is
+                    red against purple, and no two marks come closer than delta E 15.6 under a
+                    colour vision simulation, where the floor is 8.
                 </p>
                 <ul className="swatches">
                     {markRows.map((row) => (
@@ -171,7 +187,7 @@ export default function DesignSystemPage() {
             </Card>
 
             <div className="grid two">
-                <Card title="Type scale">
+                <Card title="Type Scale">
                     <ul className="type-scale">
                         {typeScale.map(([token, label]) => (
                             <li key={token} style={{ fontSize: `var(${token})` }}>
@@ -194,7 +210,7 @@ export default function DesignSystemPage() {
                 </Card>
             </div>
 
-            <Card title="Buttons, in every state">
+            <Card title="Buttons">
                 <table className="states-table">
                     <thead>
                         <tr>
@@ -206,7 +222,7 @@ export default function DesignSystemPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {(["primary", "secondary", "ghost", "danger"] as const).map((variant) => (
+                        {(["primary", "secondary", "danger"] as const).map((variant) => (
                             <tr key={variant}>
                                 <td data-label="Variant">
                                     <code className="small">{variant}</code>
@@ -244,7 +260,7 @@ export default function DesignSystemPage() {
             </Card>
 
             <div className="grid two">
-                <Card title="Risk bands">
+                <Card title="Risk Bands">
                     <div className="row">
                         <RiskBadge probability={0.971} horizonDays={365} />
                         <RiskBadge probability={0.412} horizonDays={365} />
@@ -252,8 +268,8 @@ export default function DesignSystemPage() {
                         <RiskBadge probability={null} />
                     </div>
                     <p className="muted small">
-                        Where the bands fall is a presentation choice, so the figure is always
-                        beside the word and the word is never the only thing carrying it.
+                        Where the bands fall is a presentation choice. The figure always appears
+                        beside the word, and the word never carries the meaning alone.
                     </p>
                 </Card>
 
@@ -284,7 +300,7 @@ export default function DesignSystemPage() {
                     <TableSkeleton label="Loading rows" rows={3} />
                 </Card>
                 <Card title="Empty">
-                    <Empty title="Nothing matches">
+                    <Empty title="No Matches">
                         <p className="muted">No package in the snapshot has that name.</p>
                     </Empty>
                 </Card>
@@ -294,7 +310,7 @@ export default function DesignSystemPage() {
             </div>
 
             <Card title="Charts">
-                <h3>A measure over time</h3>
+                <h3>Time Series</h3>
                 <DownloadChart points={exampleSeries} label="Daily downloads, example series" />
                 <h3 style={{ marginTop: "var(--space-5)" }}>Polarity</h3>
                 <FactorBars factors={exampleFactors} />

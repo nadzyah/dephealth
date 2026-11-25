@@ -24,7 +24,10 @@
     border-color: var(--color-risk-high);
 }
 
-.file-drop svg {
+/* The decorative icon only. A descendant selector here would also catch the
+   icon inside the button, where the text is light on the accent and a muted
+   grey is close to invisible */
+.file-drop > svg {
     color: var(--color-text-muted);
 }
 
@@ -47,5 +50,15 @@
 @media (min-width: 48rem) {
     .file-drop {
         padding: var(--space-7) var(--space-6);
+    }
+}
+
+/* The label opens the file dialog, so it is a target like any button and has
+   to be as large as one where the pointer is a finger */
+@media (pointer: coarse) {
+    .file-drop-label {
+        display: inline-flex;
+        align-items: center;
+        min-height: var(--touch-target);
     }
 }

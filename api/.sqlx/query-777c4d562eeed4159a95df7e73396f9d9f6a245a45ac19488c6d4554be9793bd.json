@@ -6,7 +6,8 @@
       {
         "ordinal": 0,
         "name": "previous_report_of",
-        "type_info": "Bytea"
+        "type_info": "Bytea",
+        "origin": "Expression"
       }
     ],
     "parameters": {

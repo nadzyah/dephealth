@@ -65,8 +65,8 @@ SELECT s.source,
 COMMENT ON VIEW dephealth.v_data_age IS
     'Age of each source and the outcome of its last attempt. Read on every request, since no score may be shown without the age of the data behind it.';
 
--- One indexed read instead of three newest-row lookups per package, which is
--- what makes NFR1 compatible with a useful model
+-- One indexed read instead of three newest-row lookups per package. The latency
+-- budget for a report does not survive the second form
 
 CREATE MATERIALIZED VIEW dephealth.mv_package_current_assessment AS
 WITH current_risk AS (

@@ -19,6 +19,8 @@ const ReportPage = lazy(() => import("./pages/ReportPage"));
 const PackagePage = lazy(() => import("./pages/PackagePage"));
 const ChangesPage = lazy(() => import("./pages/ChangesPage"));
 const PackagesPage = lazy(() => import("./pages/PackagesPage"));
+const RegistryPackagePage = lazy(() => import("./pages/RegistryPackagePage"));
+const AboutPage = lazy(() => import("./pages/AboutPage"));
 const MethodPage = lazy(() => import("./pages/MethodPage"));
 const DesignSystemPage = lazy(() => import("./pages/DesignSystemPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
@@ -36,6 +38,8 @@ export default function App() {
                         <Route path="/r/:token/changes" element={<ChangesPage />} />
                         <Route path="/r/:token/p/:name" element={<PackagePage />} />
                         <Route path="/packages" element={<PackagesPage />} />
+                        <Route path="/p/:name" element={<RegistryPackagePage />} />
+                        <Route path="/about" element={<AboutPage />} />
                         <Route path="/method" element={<MethodPage />} />
                         <Route path="/design-system" element={<DesignSystemPage />} />
                         <Route path="*" element={<NotFoundPage />} />

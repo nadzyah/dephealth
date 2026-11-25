@@ -17,6 +17,7 @@ import { FactorBars } from "../components/charts/FactorBars";
 import { formatProbability } from "../lib/risk";
 import { Badge, RiskBadge } from "../components/ui/Badge";
 import { Card, Stat, StatRow } from "../components/ui/Card";
+import { ExternalLink } from "../components/ui/ExternalLink";
 import { Failure, Skeleton } from "../components/ui/States";
 
 const compact = new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 });
@@ -41,8 +42,16 @@ export default function PackagePage() {
 
     if (detail.status === "failed" && detail.problem) {
         return (
-            <Failure problem={detail.problem} onRetry={detail.reload} level={1}>
-                <Link to={`/r/${token}`}>Back to the tree</Link>
+            <Failure
+                problem={detail.problem}
+                onRetry={detail.problem.isRetryable ? detail.reload : undefined}
+                level={1}
+            >
+                {!detail.problem.isRetryable && (
+                    <Link to={`/r/${token}`} className="button secondary touchable">
+                        Back to the tree
+                    </Link>
+                )}
             </Failure>
         );
     }
@@ -69,15 +78,15 @@ export default function PackagePage() {
                     />
                     <Badge tone="neutral">{entry.relation}</Badge>
                     {live?.repository_url && (
-                        <a href={live.repository_url} className="small">
+                        <ExternalLink href={live.repository_url} className="small">
                             Repository
-                        </a>
+                        </ExternalLink>
                     )}
                 </div>
             </section>
 
             {entry.risk && (
-                <Card title="The score">
+                <Card title="Score">
                     <StatRow>
                         <Stat
                             label="Risk that maintenance ceases"
@@ -101,7 +110,7 @@ export default function PackagePage() {
                             <Stat
                                 label="Abandoned by the definition"
                                 value={live.is_abandoned ? "yes" : "no"}
-                                hint="see the method"
+                                hint={<Link to="/method">Learn more</Link>}
                             />
                         )}
                     </StatRow>
@@ -119,7 +128,7 @@ export default function PackagePage() {
             </Card>
 
             <div className="grid two">
-                <Card title="Contributor activity">
+                <Card title="Contributor Activity">
                     {activity ? (
                         <StatRow>
                             <Stat
@@ -130,9 +139,14 @@ export default function PackagePage() {
                                         : (activity.distinct_contributors ?? "unknown")
                                 }
                                 hint={
-                                    activity.contributor_count_withheld
-                                        ? "below the disclosure threshold"
-                                        : "in the window"
+                                    activity.contributor_count_withheld ? (
+                                        <>
+                                            Below the disclosure threshold.{" "}
+                                            <Link to="/method">Learn more</Link>
+                                        </>
+                                    ) : (
+                                        "in the window"
+                                    )
                                 }
                             />
                             <Stat
@@ -142,19 +156,19 @@ export default function PackagePage() {
                         </StatRow>
                     ) : (
                         <p className="muted small">
-                            No activity was stored for this entry, which is the case for one that
-                            carries no score.
+                            No activity was stored for this entry. Entries without a score have
+                            none.
                         </p>
                     )}
                 </Card>
 
-                <Card title="What moved the score">
+                <Card title="Contributing Factors">
                     <FactorBars factors={factors} />
                 </Card>
             </div>
 
             {entry.unresolved && (
-                <Card title="Why this entry has no score">
+                <Card title="Unscored Entry">
                     <p>
                         <strong>{entry.unresolved.label}</strong>
                     </p>

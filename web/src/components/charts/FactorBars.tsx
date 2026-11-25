@@ -22,8 +22,7 @@ export function FactorBars({ factors }: { factors: Factor[] }) {
     if (factors.length === 0) {
         return (
             <p className="muted small">
-                No factor decomposition was stored for this entry, which is the case for an entry
-                that carries no score.
+                No factor decomposition was stored for this entry. Only scored entries have one.
             </p>
         );
     }
@@ -57,9 +56,7 @@ export function FactorBars({ factors }: { factors: Factor[] }) {
                         </div>
 
                         <div className="factor-foot small">
-                            <span className={raised ? "raised-text" : "lowered-text"}>
-                                {factor.direction}
-                            </span>
+                            <span>{factor.direction}</span>
                             <span className="numeric muted">
                                 {signed.format(factor.contribution)}
                             </span>

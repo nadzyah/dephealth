@@ -226,8 +226,8 @@ SELECT e.report_id,
   FROM dephealth.report_entry e
   LEFT JOIN dephealth.resolution_outcome o ON o.status = e.unresolved_reason;
 
--- US11 compares a resubmission with the assessment that preceded it, which
--- means recognising the same manifest without having kept it
+-- Comparing a resubmission with the assessment before it means recognising the
+-- same manifest without having kept it
 CREATE FUNCTION dephealth.previous_report_of(
     in_token_digest bytea
 ) RETURNS bytea

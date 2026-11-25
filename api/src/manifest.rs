@@ -49,10 +49,39 @@ struct LockPackage {
 /// Parse a `Cargo.lock`. The error carries the line, since a client that cannot
 /// see where the file stopped parsing has to guess.
 pub fn parse_lockfile(text: &str) -> Result<Vec<Entry>, ManifestError> {
-    let lockfile: Lockfile = toml::from_str(text).map_err(|e| ManifestError::Unreadable {
-        detail: e.message().to_owned(),
+    // Parsed as a document first, so that a file which is valid TOML but not a
+    // lockfile is told apart from one that is not TOML at all. The deserialiser
+    // phrases the difference as a type mismatch between a map and a sequence,
+    // which describes the parser rather than the file the submitter chose
+    let document: toml::Value = toml::from_str(text).map_err(|e| ManifestError::Unreadable {
+        detail: format!(
+            "The file is not valid TOML, so it cannot be a Cargo lockfile: {}.",
+            e.message()
+        ),
         line: e.span().map(|span| line_of(text, span.start)),
     })?;
+
+    // A manifest declares one package as a table. A lockfile lists the resolved
+    // set as an array of tables, which is the whole difference between the two
+    // files a submitter is likely to confuse
+    if document.get("package").is_some_and(toml::Value::is_table) {
+        return Err(ManifestError::Unreadable {
+            detail: "This is a Cargo manifest rather than a lockfile. Submit the Cargo.lock \
+                     beside it, which lists the versions Cargo resolved."
+                .into(),
+            line: None,
+        });
+    }
+
+    let lockfile: Lockfile =
+        document
+            .try_into()
+            .map_err(|_: toml::de::Error| ManifestError::Unreadable {
+                detail: "The file is TOML, but not in the shape of a Cargo lockfile. A lockfile \
+                     holds a [[package]] entry for every resolved dependency."
+                    .into(),
+                line: None,
+            })?;
 
     let packages = &lockfile.package;
     if packages.is_empty() {
@@ -230,6 +259,52 @@ fn line_of(text: &str, offset: usize) -> usize {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// A submitter who picks the wrong file picks the one beside it, so the
+    /// message has to name the right one rather than describe the parser.
+    #[test]
+    fn a_cargo_manifest_is_refused_by_name_rather_than_by_type() {
+        const MANIFEST: &str = r#"
+[package]
+name = "my-service"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+serde = "1"
+"#;
+
+        let error = parse_lockfile(MANIFEST).expect_err("a refusal");
+        let ManifestError::Unreadable { detail, .. } = error else {
+            panic!("expected an unreadable manifest");
+        };
+
+        assert!(detail.contains("Cargo.lock"), "{detail}");
+        assert!(
+            !detail.contains("sequence"),
+            "no parser vocabulary: {detail}"
+        );
+    }
+
+    #[test]
+    fn toml_that_is_not_a_lockfile_says_what_a_lockfile_holds() {
+        let error =
+            parse_lockfile("title = \"not a lockfile\"\npackage = 3\n").expect_err("a refusal");
+        let ManifestError::Unreadable { detail, .. } = error else {
+            panic!("expected an unreadable manifest");
+        };
+        assert!(detail.contains("[[package]]"), "{detail}");
+    }
+
+    #[test]
+    fn a_file_that_is_not_toml_reports_the_line_and_says_so() {
+        let error = parse_lockfile("version = 4\n[[package\n").expect_err("a refusal");
+        let ManifestError::Unreadable { detail, line } = error else {
+            panic!("expected an unreadable manifest");
+        };
+        assert!(detail.starts_with("The file is not valid TOML"), "{detail}");
+        assert_eq!(line, Some(2));
+    }
 
     const LOCKFILE: &str = r#"
 version = 4

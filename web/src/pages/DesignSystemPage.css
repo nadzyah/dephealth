@@ -7,13 +7,20 @@
     list-style: none;
 }
 
+/* Narrow, or zoomed far in, the four parts of a row wrap onto as many lines as
+   they need. A grid of two columns put the third part back under the swatch,
+   in a column 1.5rem wide, where it ran over the part beside it. */
 .swatches li {
-    display: grid;
-    grid-template-columns: 1.5rem minmax(0, 1fr);
+    display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: var(--space-2) var(--space-3);
     padding-block: var(--space-2);
     border-bottom: 1px solid var(--color-border);
+}
+
+.swatches li > code {
+    flex: 1 1 10rem;
 }
 
 .swatch {
@@ -70,9 +77,15 @@
     letter-spacing: 0.04em;
 }
 
+/* With room, the parts line up in columns across every row */
 @media (min-width: 48rem) {
     .swatches li {
+        display: grid;
         grid-template-columns: 1.5rem 14rem 6rem minmax(0, 1fr);
+    }
+
+    .swatches li > code {
+        flex: none;
     }
 }
 

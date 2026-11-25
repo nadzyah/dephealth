@@ -75,3 +75,33 @@ test("the theme can be chosen and is remembered", async ({ page }) => {
     await page.reload();
     await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
 });
+
+test("rows in the design system stay apart when the text is doubled", async ({ page }) => {
+    await page.goto("/design-system");
+
+    // Doubling the root font size is how a browser applies zoom, and it is the
+    // case where a fixed grid column puts one part of a row over another
+    await page.addStyleTag({ content: "html { font-size: 200% }" });
+
+    const overlapping = await page.evaluate(() => {
+        const found: string[] = [];
+        for (const row of document.querySelectorAll(".swatches li")) {
+            const parts = [...row.children].map((part) => part.getBoundingClientRect());
+            parts.forEach((a, i) =>
+                parts.slice(i + 1).forEach((b) => {
+                    if (
+                        a.left < b.right &&
+                        b.left < a.right &&
+                        a.top < b.bottom &&
+                        b.top < a.bottom
+                    ) {
+                        found.push((row.textContent ?? "").trim().slice(0, 24));
+                    }
+                }),
+            );
+        }
+        return found;
+    });
+
+    expect(overlapping).toEqual([]);
+});

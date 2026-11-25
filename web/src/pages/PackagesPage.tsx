@@ -5,13 +5,14 @@
  */
 
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { api } from "../api/client";
 import { useAsync } from "../hooks/useAsync";
 import { RiskBadge } from "../components/ui/Badge";
 import { Card } from "../components/ui/Card";
 import { Empty, Failure, TableSkeleton } from "../components/ui/States";
-import { SearchIcon } from "../components/ui/icons";
+import { SearchField } from "../components/ui/SearchField";
 
 import "./PackagesPage.css";
 
@@ -37,24 +38,19 @@ export default function PackagesPage() {
             <section>
                 <h1>Packages</h1>
                 <p>
-                    Everything the last ingestion run assessed, highest risk first. These are the
-                    current figures, which is what makes them different from the ones a stored
-                    report holds.
+                    The packages assessed by the most recent ingestion run, highest risk first.
+                    These are current figures rather than the stored figures a report holds.
                 </p>
             </section>
 
-            <div className="tree-search packages-search">
-                <SearchIcon size="1.1em" />
-                <input
-                    type="search"
-                    value={query}
-                    onChange={(event) => setQuery(event.target.value)}
-                    placeholder="Search by name"
-                    aria-label="Search packages by name"
-                />
-            </div>
+            <SearchField
+                value={query}
+                onChange={setQuery}
+                label="Search packages by name"
+                className="packages-search"
+            />
 
-            <Card title="Assessed packages">
+            <Card title="Assessed Packages">
                 {page.status === "loading" && <TableSkeleton label="Searching" rows={5} />}
 
                 {page.status === "failed" && page.problem && (
@@ -62,7 +58,7 @@ export default function PackagesPage() {
                 )}
 
                 {page.status === "ready" && page.data && page.data.items.length === 0 && (
-                    <Empty title="Nothing matches">
+                    <Empty title="No Matches">
                         <p className="muted">No package in the snapshot has {query} in its name.</p>
                     </Empty>
                 )}
@@ -71,10 +67,17 @@ export default function PackagesPage() {
                     <ul className="packages">
                         {page.data.items.map((item) => (
                             <li key={item.package_name}>
-                                <span className="package-name">
-                                    {item.package_name}
+                                <span className="package-id">
+                                    <Link
+                                        to={`/p/${encodeURIComponent(item.package_name)}`}
+                                        className="package-name touchable"
+                                    >
+                                        {item.package_name}
+                                    </Link>
                                     {item.latest_version && (
-                                        <span className="muted small"> {item.latest_version}</span>
+                                        <span className="package-version muted small">
+                                            {item.latest_version}
+                                        </span>
                                     )}
                                 </span>
                                 <RiskBadge probability={item.risk_probability} />

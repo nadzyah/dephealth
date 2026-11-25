@@ -61,7 +61,10 @@ SELECT string_agg(section, E'\n' ORDER BY sort_kind, relname)
                                            replace(pg_get_constraintdef(con.oid), '|', '\|'),
                                            E'\n' ORDER BY con.contype, con.conname))
                    FROM pg_constraint con
-                  WHERE con.conrelid = r.oid), ''),
+                  -- From 18 a NOT NULL is a catalog constraint of its own.
+                  -- The column table above already states nullability, so
+                  -- listing them again says nothing twice per column
+                  WHERE con.conrelid = r.oid AND con.contype <> 'n'), ''),
                E'\n',
                coalesce((SELECT concat(E'\n**Indexes**\n\n',
                                 string_agg('- ' || replace(pg_get_indexdef(i.indexrelid), '|', '\|'),

@@ -1,14 +1,15 @@
 -- 0004 stored reports
 
--- A snapshot rather than a view over the live scores. UC2 needs the figures
--- the report held when it was generated, and each run overwrites those
+-- A snapshot rather than a view over the live scores. A report has to keep the
+-- figures that held when it was generated, and each ingestion run overwrites
+-- the live ones
 CREATE TABLE dephealth.report (
     id                      bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 
     -- digest only, so a dump of this table yields no working links
     token_digest            bytea NOT NULL UNIQUE,
 
-    -- recognises a resubmission for US11 without keeping the manifest
+    -- recognises a resubmission of the same manifest without keeping it
     manifest_fingerprint    bytea,
 
     created_at              timestamptz NOT NULL DEFAULT now(),

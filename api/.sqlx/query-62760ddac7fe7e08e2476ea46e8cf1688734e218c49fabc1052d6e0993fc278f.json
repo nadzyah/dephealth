@@ -6,87 +6,174 @@
       {
         "ordinal": 0,
         "name": "ordinal!",
-        "type_info": "Int4"
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_report_entry",
+            "name": "ordinal"
+          }
+        }
       },
       {
         "ordinal": 1,
         "name": "package_name!",
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_report_entry",
+            "name": "package_name"
+          }
+        }
       },
       {
         "ordinal": 2,
         "name": "package_version!",
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_report_entry",
+            "name": "package_version"
+          }
+        }
       },
       {
         "ordinal": 3,
         "name": "depth!",
-        "type_info": "Int4"
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_report_entry",
+            "name": "depth"
+          }
+        }
       },
       {
         "ordinal": 4,
         "name": "is_direct!",
-        "type_info": "Bool"
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_report_entry",
+            "name": "is_direct"
+          }
+        }
       },
       {
         "ordinal": 5,
         "name": "resolved!",
-        "type_info": "Bool"
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_report_entry",
+            "name": "resolved"
+          }
+        }
       },
       {
         "ordinal": 6,
         "name": "unresolved_reason",
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": "Expression"
       },
       {
         "ordinal": 7,
         "name": "unresolved_label",
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_report_entry",
+            "name": "unresolved_label"
+          }
+        }
       },
       {
         "ordinal": 8,
         "name": "unresolved_remedy",
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_report_entry",
+            "name": "unresolved_remedy"
+          }
+        }
       },
       {
         "ordinal": 9,
         "name": "risk_probability",
-        "type_info": "Float8"
+        "type_info": "Float8",
+        "origin": "Expression"
       },
       {
         "ordinal": 10,
         "name": "risk_horizon_days",
-        "type_info": "Int4"
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_report_entry",
+            "name": "risk_horizon_days"
+          }
+        }
       },
       {
         "ordinal": 11,
         "name": "forecast_point_downloads",
-        "type_info": "Float8"
+        "type_info": "Float8",
+        "origin": "Expression"
       },
       {
         "ordinal": 12,
         "name": "forecast_horizon_months",
-        "type_info": "Int4"
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_report_entry",
+            "name": "forecast_horizon_months"
+          }
+        }
       },
       {
         "ordinal": 13,
         "name": "insufficient_history!",
-        "type_info": "Bool"
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_report_entry",
+            "name": "insufficient_history"
+          }
+        }
       },
       {
         "ordinal": 14,
         "name": "distinct_contributors",
-        "type_info": "Int4"
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_report_entry",
+            "name": "distinct_contributors"
+          }
+        }
       },
       {
         "ordinal": 15,
         "name": "days_since_last_event",
-        "type_info": "Int4"
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_report_entry",
+            "name": "days_since_last_event"
+          }
+        }
       },
       {
         "ordinal": 16,
         "name": "contributor_count_withheld!",
-        "type_info": "Bool"
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "dephealth.v_report_entry",
+            "name": "contributor_count_withheld"
+          }
+        }
       }
     ],
     "parameters": {

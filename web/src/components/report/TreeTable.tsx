@@ -12,7 +12,8 @@ import { Link } from "react-router-dom";
 
 import type { ReportEntry } from "../../api/types";
 import { RiskBadge } from "../ui/Badge";
-import { SearchIcon } from "../ui/icons";
+import { SearchField } from "../ui/SearchField";
+import { SortAscendingIcon, SortDescendingIcon } from "../ui/icons";
 
 import "./TreeTable.css";
 
@@ -23,7 +24,7 @@ const filters: { value: Filter; label: string }[] = [
     { value: "all", label: "All" },
     { value: "scored", label: "Scored" },
     { value: "unresolved", label: "Unresolved" },
-    { value: "direct", label: "Direct only" },
+    { value: "direct", label: "Direct Only" },
 ];
 
 const columns: { key: SortKey; label: string; numeric?: boolean }[] = [
@@ -97,16 +98,11 @@ export function TreeTable({ entries, token }: TreeTableProps) {
     return (
         <div className="tree">
             <div className="tree-controls">
-                <div className="tree-search">
-                    <SearchIcon size="1.1em" />
-                    <input
-                        type="search"
-                        value={query}
-                        onChange={(event) => setQuery(event.target.value)}
-                        placeholder="Search by name"
-                        aria-label="Search the tree by package name"
-                    />
-                </div>
+                <SearchField
+                    value={query}
+                    onChange={setQuery}
+                    label="Search the tree by package name"
+                />
 
                 <div className="tree-filters" role="group" aria-label="Filter the tree">
                     {filters.map(({ value, label }) => (
@@ -159,14 +155,25 @@ export function TreeTable({ entries, token }: TreeTableProps) {
                                         onClick={() => toggle(column.key)}
                                     >
                                         {column.label}
-                                        <span aria-hidden="true" className="tree-sort-mark">
-                                            {sort === column.key ? (ascending ? "▲" : "▼") : ""}
-                                        </span>
+                                        {sort === column.key &&
+                                            (ascending ? (
+                                                <SortAscendingIcon
+                                                    size="0.9em"
+                                                    className="tree-sort-mark"
+                                                />
+                                            ) : (
+                                                <SortDescendingIcon
+                                                    size="0.9em"
+                                                    className="tree-sort-mark"
+                                                />
+                                            ))}
                                     </button>
                                 </th>
                             ))}
-                            <th scope="col" role="columnheader">
-                                Why
+                            {/* No sort button, so the padding the others get from
+                                theirs has to come from the cell */}
+                            <th scope="col" role="columnheader" className="tree-head-plain">
+                                Reason
                             </th>
                         </tr>
                     </thead>
@@ -211,7 +218,7 @@ export function TreeTable({ entries, token }: TreeTableProps) {
                                 </td>
 
                                 <td role="cell">
-                                    <CellLabel>Why</CellLabel>
+                                    <CellLabel>Reason</CellLabel>
                                     {entry.resolved ? (
                                         <span className="muted small">
                                             {entry.forecast?.insufficient_history

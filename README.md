@@ -13,9 +13,9 @@ series.
 You upload a dependency file and get the dependency tree ranked by risk, with a
 forecast and an explanation for each library.
 
-Diploma project at European Humanities University, 2026/27.
+Diploma project, 2026/27.
 
-PostgreSQL 17 serves requests, DuckDB derives the features from the raw
+PostgreSQL 19 serves requests, DuckDB derives the features from the raw
 sources, an HTTP service in Rust exposes them, and a
 [React](https://www.npmjs.com/package/react) client presents them.
 
@@ -38,9 +38,9 @@ captured responses rather than live scores.
 
 Docker alone is enough to run everything. To work on a tier rather than run it:
 
-- PostgreSQL 17 and [sqlx-cli](https://crates.io/crates/sqlx-cli) for the schema
-- Rust 1.98 for the API
-- Node 22 for the browser application
+- PostgreSQL 19 and [sqlx-cli](https://crates.io/crates/sqlx-cli) for the schema
+- Rust 1.98 or newer for the API
+- Node 24 or newer for the browser application
 - [DuckDB](https://duckdb.org) for the analytical tier
 - `psql` and GNU make
 

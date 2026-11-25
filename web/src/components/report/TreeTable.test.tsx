@@ -107,7 +107,7 @@ describe("TreeTable", () => {
     it("filters to the direct dependencies", async () => {
         renderTable();
 
-        await userEvent.click(screen.getByRole("radio", { name: "Direct only" }));
+        await userEvent.click(screen.getByRole("radio", { name: "Direct Only" }));
 
         expect(rowNames()).toHaveLength(2);
         expect(rowNames().every((name) => !name.includes("failure"))).toBe(true);

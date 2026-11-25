@@ -25,8 +25,23 @@
     border-bottom: 0;
 }
 
-.package-name {
+/* The version is beside the name rather than inside the link, so the link
+   names the package and nothing else. A gap holds them apart: a space in the
+   markup would not, since a touch target is laid out as a flex item, and the
+   whitespace around one is dropped */
+.package-id {
+    display: flex;
     flex: 1 1 12rem;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-1) var(--space-2);
+}
+
+.package-name {
     font-weight: var(--weight-medium);
     overflow-wrap: anywhere;
+}
+
+.package-version {
+    white-space: nowrap;
 }

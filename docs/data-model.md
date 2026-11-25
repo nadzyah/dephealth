@@ -14,7 +14,7 @@ Diagrams ([Mermaid](https://www.npmjs.com/package/mermaid) sources in
 
 ## Choice of Database Engines
 
-PostgreSQL 17 serves requests. DuckDB derives the features.
+PostgreSQL 19 serves requests. DuckDB derives the features.
 
 Serving a submission means resolving a few hundred lockfile entries, reading
 one row per package and ranking them. It is small, indexed and latency bound,

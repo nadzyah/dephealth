@@ -20,7 +20,7 @@ flowchart TB
     CHANGES -->|"404, first report<br/>for this dependency set"| FIRST["Stated as a first assessment<br/>rather than an error"]
     REPORT -->|"how is this computed"| METHOD["/method<br/>Definitions and data age"]
     REPORT -->|"browse the registry"| PACKAGES["/packages<br/>Search, filter, sort"]
-    PACKAGES --> PACKAGE
+    PACKAGES -->|"selects a package"| REGISTRY["/p/:name<br/>Current score and forecast"]
 
     RETURN(["Returns later"]) --> OPEN{"Has the link?"}
     OPEN -->|"from this browser"| SUBMIT
@@ -29,4 +29,10 @@ flowchart TB
     RESOLVE -->|"404, never existed"| LOST["Not found<br/>a token cannot be recovered"]
     RESOLVE -->|"200"| REPORT
 
-    REVIEW(["Reviews the design"]) --> DESIGN["/design-system<br/>Every component in every state"]
+    REVIEW(["Looks into the project"]) --> MENU["About, a menu in the navigation"]
+    MENU --> OVERVIEW["/about<br/>What is assessed, and what becomes of a file"]
+    MENU --> METHOD
+    MENU --> DESIGN["/design-system<br/>Every component in every state"]
+    OVERVIEW -->|"row at the top of each page"| METHOD
+    METHOD --> DESIGN
+    DESIGN --> OVERVIEW

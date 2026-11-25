@@ -24,5 +24,9 @@
         "noFallthroughCasesInSwitch": true,
         "noUncheckedSideEffectImports": true
     },
-    "include": ["src"]
+    "include": ["src"],
+
+    // The suites have their own project, since they run under Node and the
+    // application must not be type-checked as though it did
+    "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx", "src/test"]
 }

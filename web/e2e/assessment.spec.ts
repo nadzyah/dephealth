@@ -9,7 +9,7 @@ test("a submitted manifest becomes a ranked tree with evidence behind each entry
 }) => {
     await page.goto("/");
 
-    await expect(page.getByRole("heading", { name: "Assess a dependency tree" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Dependency Assessment" })).toBeVisible();
 
     // The control takes a file rather than a path, so the file is supplied in
     // memory rather than from the repository
@@ -35,10 +35,16 @@ test("a submitted manifest becomes a ranked tree with evidence behind each entry
 
     // The report opens at its permanent link
     await expect(page).toHaveURL(/\/r\/demo$/);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("dependencies");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Dependencies");
+
+    // The lockfile names the project it belongs to, so the list of reports this
+    // browser has opened is titled by it rather than by a date alone
+    await page.goto("/");
+    await expect(page.getByRole("link", { name: /my-service/ })).toBeVisible();
+    await page.goBack();
 
     // The age of both sources travels with the figures
-    await expect(page.getByText("Data behind these figures")).toBeVisible();
+    await expect(page.getByText("Source Data")).toBeVisible();
     await expect(page.getByText("Repository events")).toBeVisible();
 
     // Ranked, so the worst entry is the first row of the body. The header row
@@ -84,6 +90,60 @@ test("a link that addresses no report is refused with a reason, not a blank page
 
     const alert = page.getByRole("alert");
     await expect(alert).toContainText("No such report");
-    await expect(alert).toContainText("report-not-found");
-    await expect(page.getByRole("link", { name: /assess a manifest/i })).toBeVisible();
+
+    // The problem identifier belongs in the response and the log. On the screen
+    // it is a code the reader can neither act on nor look up
+    await expect(alert).not.toContainText("report-not-found");
+
+    // One action. Repeating a request for a link that addresses nothing cannot
+    // change the answer, so no retry is offered beside it
+    await expect(page.getByRole("link", { name: /go to home page/i })).toBeVisible();
+    await expect(page.getByRole("button", { name: /try again/i })).toHaveCount(0);
+});
+
+test("a package in the list opens its current assessment", async ({ page }) => {
+    await page.goto("/packages");
+
+    // The list is the only route to a package that is not in a report, so a row
+    // that does not address one is a dead end
+    const first = page.locator("ul.packages a").first();
+
+    // From the address rather than the text, which is the package name as it
+    // was submitted and may carry characters the address escapes
+    const href = (await first.getAttribute("href")) ?? "";
+    const name = decodeURIComponent(href.split("/p/")[1] ?? "");
+    await first.click();
+
+    await expect(page).toHaveURL(new RegExp(`/p/${name}$`));
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(name);
+    await expect(page.getByRole("heading", { name: "Downloads" })).toBeVisible();
+
+    // The screen states which figures these are, since a report holds different ones
+    await expect(page.getByText("The figures on this screen are the current ones")).toBeVisible();
+});
+
+test("the pages describing the project are reached through the About menu", async ({ page }) => {
+    await page.goto("/");
+
+    // The header carries the menu from tablet width up and the bar at the foot
+    // of a phone carries the same one below it, so exactly one is on the screen
+    const menu = page.locator("details.nav-menu").filter({ visible: true });
+    await expect(menu).toHaveCount(1);
+
+    await menu.getByText("About").click();
+    await menu.getByRole("link", { name: "Method" }).click();
+
+    await expect(page).toHaveURL(/\/method$/);
+
+    // A details element stays open by itself, which would leave the menu
+    // hanging over the page the reader has just opened
+    await expect(menu.getByRole("link", { name: "Method" })).toBeHidden();
+
+    // Method is also reached from a report, so its siblings are on the page
+    // itself rather than only in the menu
+    const section = page.getByRole("navigation", { name: "About" });
+    await section.getByRole("link", { name: "Design System" }).click();
+
+    await expect(page).toHaveURL(/\/design-system$/);
+    await expect(page.getByRole("heading", { level: 1, name: "Design System" })).toBeVisible();
 });

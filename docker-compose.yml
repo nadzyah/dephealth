@@ -5,7 +5,7 @@
 #   make db-up migrate seed
 services:
   db:
-    image: postgres:17-alpine
+    image: postgres:19-alpine
     container_name: dephealth-db
     environment:
       POSTGRES_DB: ${POSTGRES_DB:?set it in .env}
@@ -27,7 +27,9 @@ services:
     ports:
       - "${POSTGRES_PORT:-55432}:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      # From 18 the image keeps its data in a major-version subdirectory, so
+      # the mount is the parent rather than the data directory itself
+      - pgdata:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 2s
@@ -53,7 +55,7 @@ services:
   # migration. Idempotent, and it uses the database image because that is what
   # has psql in it
   roles:
-    image: postgres:17-alpine
+    image: postgres:19-alpine
     entrypoint: ["psql"]
     command:
       - "-v"
@@ -84,7 +86,7 @@ services:
   #
   #   docker compose --profile fixture run --rm seed
   seed:
-    image: postgres:17-alpine
+    image: postgres:19-alpine
     profiles: ["fixture"]
     entrypoint: ["psql"]
     command:

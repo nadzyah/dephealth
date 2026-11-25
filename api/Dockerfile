@@ -6,7 +6,7 @@
 # SQLX_OFFLINE makes the build use the committed query data in api/.sqlx rather
 # than a live database, which is what lets the image build anywhere.
 
-FROM rust:1.98-bookworm AS build
+FROM rust:1.100-trixie AS build
 
 WORKDIR /src
 
@@ -24,7 +24,7 @@ COPY docs/api/index.html ./docs/api/index.html
 ENV SQLX_OFFLINE=true
 RUN cd api && cargo build --release --locked --bin dephealth-api --bin migrate
 
-FROM debian:bookworm-slim AS runtime
+FROM debian:trixie-slim AS runtime
 
 # Certificates for the TLS a managed database requires, since a deployment
 # connects with sslmode=verify-full and needs a trust store. curl is here for

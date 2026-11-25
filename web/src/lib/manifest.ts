@@ -29,6 +29,19 @@ export function validateFile(file: File): FileRejection | undefined {
     }
 
     const name = file.name.toLowerCase();
+
+    // The two files sit side by side and carry similar names, so the one a
+    // submitter is most likely to pick by mistake is named here rather than
+    // sent for the service to refuse
+    if (name === "cargo.toml") {
+        return {
+            reason: "wrong-kind",
+            message:
+                "Cargo.toml is the manifest. Submit Cargo.lock from the same directory, " +
+                "which lists the versions Cargo resolved.",
+        };
+    }
+
     const looksRight =
         ACCEPTED_NAMES.includes(name) ||
         ACCEPTED_EXTENSIONS.some((extension) => name.endsWith(extension));
@@ -40,6 +53,27 @@ export function validateFile(file: File): FileRejection | undefined {
         };
     }
 
+    return undefined;
+}
+
+/**
+ * The project a lockfile belongs to, when the file says. A package with no
+ * `source` is resolved locally rather than from a registry, which is the
+ * submitting project or a member of its workspace. Cargo lists packages
+ * alphabetically, so a workspace of several is named by its first member.
+ *
+ * This is the one thing read from the file in the browser, and it is read for
+ * a label rather than for the assessment. Whether the contents are a lockfile
+ * remains the service's judgement.
+ */
+export function projectName(lockfile: string): string | undefined {
+    for (const block of lockfile.split(/^\[\[package\]\]/m).slice(1)) {
+        const body = block.split(/^\[/m)[0];
+        if (/^\s*source\s*=/m.test(body)) continue;
+
+        const name = /^\s*name\s*=\s*"([^"]+)"/m.exec(body);
+        if (name) return name[1];
+    }
     return undefined;
 }
 

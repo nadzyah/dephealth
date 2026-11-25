@@ -1,0 +1,10 @@
+.external-link {
+    /* The mark stays on the same line as the last word, so a wrapped link does
+       not leave the icon stranded on a line of its own */
+    white-space: nowrap;
+}
+
+.external-link-mark {
+    margin-left: 0.25em;
+    vertical-align: baseline;
+}

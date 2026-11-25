@@ -29,6 +29,11 @@ db-up: ## start the local Postgres and wait for it
 db-down: ## stop the local Postgres, keeping its data
 	docker compose stop db
 
+.PHONY: db-reset
+db-reset: ## delete the local database and rebuild it from the migrations, losing its data
+	docker compose down -v
+	$(MAKE) db-up migrate roles seed
+
 .PHONY: db-destroy
 db-destroy: ## stop the local Postgres and delete its data
 	docker compose down -v

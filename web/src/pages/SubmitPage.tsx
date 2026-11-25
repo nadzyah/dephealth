@@ -4,15 +4,17 @@
  */
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { DEMO, api } from "../api/client";
 import { useSubmit } from "../hooks/useAsync";
-import { tokenFromLink } from "../lib/manifest";
+import { projectName, tokenFromLink } from "../lib/manifest";
 import { useAppStore, selectRecent } from "../store/useAppStore";
 import { FileDrop } from "../components/FileDrop";
 import { Card } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
+
+import "./SubmitPage.css";
 
 export default function SubmitPage() {
     const navigate = useNavigate();
@@ -35,6 +37,7 @@ export default function SubmitPage() {
             token,
             assessedOn: report.assessed_on,
             entries: report.counts.entries,
+            project: projectName(text),
         });
 
         notify({
@@ -62,11 +65,12 @@ export default function SubmitPage() {
     return (
         <div className="stack">
             <section>
-                <h1>Assess a dependency tree</h1>
+                <h1>Dependency Assessment</h1>
                 <p>
-                    Submit a <code>Cargo.lock</code> and get the tree ranked by the risk that
-                    maintenance ceases, with an adoption forecast and the evidence behind every
-                    score. No account, and the file is discarded once it has been read.
+                    A submitted <code>Cargo.lock</code> is resolved to its transitive tree and
+                    ranked by the risk that maintenance ceases, with an adoption forecast and the
+                    evidence behind each score. No account is required, and the file is discarded
+                    once it has been read.
                 </p>
             </section>
 
@@ -89,13 +93,13 @@ export default function SubmitPage() {
 
             {submission.problem?.field<number>("line") !== undefined && (
                 <p className="small muted">
-                    The service stopped reading at line {submission.problem.field<number>("line")}.
-                    Nothing was assessed, because a partial tree would understate the exposure.
+                    Reading stopped at line {submission.problem.field<number>("line")}, so nothing
+                    was assessed.
                 </p>
             )}
 
             <div className="grid two">
-                <Card title="Open a stored report">
+                <Card title="Report Link">
                     <form onSubmit={onOpenLink} className="stack tight">
                         <label htmlFor="report-link" className="small muted">
                             Paste the permanent link, or the token from it
@@ -125,22 +129,21 @@ export default function SubmitPage() {
                     </form>
                 </Card>
 
-                <Card title="Opened from this browser">
+                <Card title="Recent Reports">
                     {recent.length === 0 ? (
                         <p className="muted small">
-                            Nothing yet. A report you open is remembered here, in this browser only.
+                            Nothing yet. Reports you open appear here, and stay in this browser.
                         </p>
                     ) : (
-                        <ul className="stack tight" style={{ listStyle: "none", padding: 0 }}>
+                        <ul className="recent">
                             {recent.map((report) => (
                                 <li key={report.token}>
-                                    <Button
-                                        variant="ghost"
-                                        size="small"
-                                        onClick={() => navigate(`/r/${report.token}`)}
-                                    >
-                                        {`${report.assessedOn}, ${report.entries} entries`}
-                                    </Button>
+                                    <Link to={`/r/${report.token}`} className="touchable">
+                                        {report.project ?? "Lockfile"}
+                                    </Link>{" "}
+                                    <span className="muted small">
+                                        {report.assessedOn}, {report.entries} entries
+                                    </span>
                                 </li>
                             ))}
                         </ul>

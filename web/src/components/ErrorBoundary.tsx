@@ -44,12 +44,12 @@ export class ErrorBoundary extends Component<Props, State> {
             <div className="container">
                 <div className="state failure" role="alert">
                     <WarningIcon size="1.75em" />
-                    <h1>Something in this page broke</h1>
+                    <h1>Unexpected Error</h1>
                     <p>
                         The fault is in the application rather than in your request, and it has been
                         logged to the browser console. Reloading usually clears it.
                     </p>
-                    <div className="row">
+                    <div className="row state-actions">
                         <Button variant="primary" onClick={() => window.location.reload()}>
                             Reload the page
                         </Button>
